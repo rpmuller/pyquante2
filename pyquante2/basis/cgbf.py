@@ -53,20 +53,12 @@ class cgbf:
 
     def normalize(self):
         from math import sqrt
+        from pyquante2.ints.one import Sc
         Saa = Sc(self,self)
         Saa_sqrt = sqrt(Saa)
         for i in xrange(len(self.coefs)):
             self.coefs[i] /= Saa_sqrt
         return
-
-# Sketch of what could be the contracted version of overlap. Move to one.py when done
-def Sc(a,b):
-    from pyquante2.ints.one import S
-    return sum(ca*cb*S(pa,pb) for (ca,pa) in a for (cb,pb) in b)
-
-# Alternatively, I could define pgbf.__getitem__  as [(1,pgbf)] and use the above S for all fns.
-# Could be appealing to have a single S,T,V, etc.
-# Probably dont want to use this trick for ERIs, though.
 
 if __name__ == '__main__':
     import doctest
