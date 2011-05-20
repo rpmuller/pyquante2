@@ -8,5 +8,6 @@ setup(name='pyquante2',
       author='Rick Muller',
       author_email='rpmuller@gmail.com',
       url='http://pyquante.sourceforge.net',
+      #install_requires=["numpy>=1.1"], # only works with setuptools, I guess.
       packages=['pyquante2'],
       )
