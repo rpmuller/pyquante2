@@ -17,13 +17,15 @@
 """
 
 from math import sqrt,pi,pow,exp
-from pyquante2.utils import fact2,dist2
+from pyquante2.utils import fact2,dist2,almostequal
 
 class pgbf:
     """
     Construct a primitive gaussian basis functions.
     >>> s = pgbf(1.0)
-    >>> s(0,0,0)           # s-function
+    >>> almostequal(s(0,0,0),0.7127054703549901) # s-function
+    True
+    >>> s(0,0,0)     # s-function
     0.7127054703549901
     >>> px = pgbf(1.0,powers=(1,0,0))
     >>> px(0,0,0)

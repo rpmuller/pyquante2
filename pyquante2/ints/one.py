@@ -1,6 +1,18 @@
 from math import pi,exp,floor,factorial
 from pyquante2.utils import dist2, binomial, fact2, Fgamma
 
+# Notes:
+# The versions S,T,V include the normalization constants
+# The version overlap,kinetic,nuclear_attraction do not.
+# This is so, for example, the kinetic routines can call the potential routines
+#  without the normalization constants getting in the way.
+
+def contract(f,a,b):
+    """
+    Can be used to evaluate S,T,V over contracted basis functions.
+    """
+    return sum(ca*cb*S(pa,pb) for (ca,pa) in a for (cb,pb) in b)
+
 def S(a,b):
     """
     The simple interface to the overlap function, using only primitive basis functions as the arguments.
@@ -10,8 +22,6 @@ def S(a,b):
     0.9999999999999997
     """
     return a.norm*b.norm*overlap(a.exponent,a.powers,a.origin,b.exponent,b.powers,b.origin)
-# Contracted version: must be a better way
-def Sc(a,b): return sum(ca*cb*S(pa,pb) for (ca,pa) in a for (cb,pb) in b)
 
 def T(a,b):
     """
@@ -22,8 +32,6 @@ def T(a,b):
     1.4999999999999996
     """
     return a.norm*b.norm*kinetic(a.exponent,a.powers,a.origin,b.exponent,b.powers,b.origin)
-# Contracted version: must be a better way
-def Tc(a,b): return sum(ca*cb*T(pa,pb) for (ca,pa) in a for (cb,pb) in b)
 
 def V(a,b,C):
     """
@@ -35,8 +43,6 @@ def V(a,b,C):
     """
     return a.norm*b.norm*nuclear_attraction(a.exponent,a.powers,a.origin,
                                             b.exponent,b.powers,b.origin,C)
-# Contracted version: must be a better way
-def Vc(a,b,C): return sum(ca*cb*V(pa,pb,C) for (ca,pa) in a for (cb,pb) in b)
 
 def overlap(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
     """

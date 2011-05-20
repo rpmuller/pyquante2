@@ -5,6 +5,20 @@ utils.py - Simple utilility funtions used in pyquante2.
 
 from math import sqrt,factorial,log,exp
 
+def almostequal(a,b,places=7):
+    """
+    A copy of the PyUnit assertAlmostEqual function:
+    >>> almostequal(1.1234,1.0,1)
+    False
+    >>> almostequal(1.1234,1.1,1)
+    True
+    >>> almostequal(1.1234,1.1,2)
+    False
+    >>> almostequal(1.1234,1.12,2)
+    True
+    """
+    return round(abs(a-b),places) == 0
+
 def fact2(n):
     """
     fact2(n) - n!!, double factorial of n

@@ -12,11 +12,13 @@ if __name__ == '__main__':
 
     # Add all doctests
     from pyquante2 import utils
-    from pyquante2.ints import one
-    from pyquante2.basis import pgbf
+    from pyquante2.ints import one,two
+    from pyquante2.basis import pgbf,cgbf
     testSuite.addTest(doctest.DocTestSuite(utils))
     testSuite.addTest(doctest.DocTestSuite(one))
+    testSuite.addTest(doctest.DocTestSuite(two))
     testSuite.addTest(doctest.DocTestSuite(pgbf))
+    testSuite.addTest(doctest.DocTestSuite(cgbf))
 
     # Run the suite
     unittest.TextTestRunner(verbosity=2).run(testSuite)
