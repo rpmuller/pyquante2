@@ -30,6 +30,29 @@ def contr_coulomb(aexps,acoefs,anorms,xyza,powa,
                     Jij = Jij + acoefs[i]*bcoefs[j]*ccoefs[k]*dcoefs[l]*incr
     return Jij
 
+def contract(f,a,b,c,d):
+    """
+    A simpler interface to a contracted coulomb integral
+    >>> from pyquante2.basis.cgbf import cgbf
+    >>> s = cgbf(exps=[1],coefs=[1])
+    >>> contract(ERI,s,s,s,s)
+    1.128379167095515
+    """
+    return sum(ca*cb*cc*cd*f(pa,pb,pc,pd) for (ca,pa) in a
+               for (cb,pb) in b for (cc,pc) in c for (cd,pd) in d)
+
+def ERI(a,b,c,d):
+    """
+    >>> from pyquante2.basis.pgbf import pgbf
+    >>> s = pgbf(1)
+    >>> ERI(s,s,s,s)
+    1.128379167095514
+    """ 
+    return coulomb_repulsion(a.origin,a.norm,a.powers,a.exponent,
+                             b.origin,b.norm,b.powers,b.exponent,
+                             c.origin,c.norm,c.powers,c.exponent,
+                             d.origin,d.norm,d.powers,d.exponent)
+
 def coulomb_repulsion((xa,ya,za),norma,(la,ma,na),alphaa,
                       (xb,yb,zb),normb,(lb,mb,nb),alphab,
                       (xc,yc,zc),normc,(lc,mc,nc),alphac,
