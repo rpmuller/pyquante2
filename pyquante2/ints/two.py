@@ -2,6 +2,7 @@ from math import factorial,pi,sqrt,exp
 from pyquante2.utils import dist2, Fgamma
 from pyquante2.ints.one import gaussian_product_center, binomial_prefactor
 
+
 def contr_coulomb(aexps,acoefs,anorms,xyza,powa,
                   bexps,bcoefs,bnorms,xyzb,powb,
                   cexps,ccoefs,cnorms,xyzc,powc,
@@ -116,6 +117,13 @@ def B_array(l1,l2,l3,l4,p,a,b,q,c,d,g1,g2,delta):
 def fB(i,l1,l2,P,A,B,r,g): return binomial_prefactor(i,l1,l2,P-A,P-B)*B0(i,r,g)
 def B0(i,r,g): return fact_ratio2(i,r)*pow(4*g,r-i)
 def fact_ratio2(a,b): return factorial(a)/factorial(b)/factorial(a-2*b)
+
+def method(**kwargs):
+    """
+    method returns a two-electron integral method based on either kwargs or
+    defaults.
+    """
+    return ERI # currently only one choice
 
 if __name__ == '__main__':
     import doctest; doctest.testmod()
