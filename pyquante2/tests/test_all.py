@@ -12,13 +12,21 @@ if __name__ == '__main__':
 
     # Add all doctests
     from pyquante2 import utils
-    from pyquante2.ints import one,two
-    from pyquante2.basis import pgbf,cgbf
     testSuite.addTest(doctest.DocTestSuite(utils))
+
+    from pyquante2.ints import one,two
     testSuite.addTest(doctest.DocTestSuite(one))
     testSuite.addTest(doctest.DocTestSuite(two))
+
+    from pyquante2.basis import pgbf,cgbf,basisset
     testSuite.addTest(doctest.DocTestSuite(pgbf))
     testSuite.addTest(doctest.DocTestSuite(cgbf))
+    testSuite.addTest(doctest.DocTestSuite(basisset))
+
+    from pyquante2.geo import atom, molecule, samples
+    testSuite.addTest(doctest.DocTestSuite(atom))
+    testSuite.addTest(doctest.DocTestSuite(molecule))
+    testSuite.addTest(doctest.DocTestSuite(samples))
 
     # Run the suite
     unittest.TextTestRunner(verbosity=2).run(testSuite)

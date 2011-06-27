@@ -38,8 +38,13 @@ class cgbf:
             self.normalize()
         return
 
+    def exps(self): return [p.exponent for p in self.pgbfs]
+
     def __getitem__(self,item): return zip(self.coefs,self.pgbfs).__getitem__(item)
     def __call__(self,x,y,z): return sum(c*p(x,y,z) for c,p in self)
+    def as_tuple(self): return (tuple(self.origin),self.powers,zip(self.exps(),self.coefs))
+    def __repr__(self): return repr(self.as_tuple())
+
 
     def add_pgbf(self,expn,coef,renormalize=False):
         from pyquante2.basis.pgbf import pgbf

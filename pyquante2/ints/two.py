@@ -122,6 +122,8 @@ def method(**kwargs):
     """
     method returns a two-electron integral method based on either kwargs or
     defaults.
+
+    This can be extended as a dispatch table to return different integration methods
     """
     return ERI # currently only one choice
 
