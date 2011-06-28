@@ -18,8 +18,8 @@ def S(a,b):
     The simple interface to the overlap function, using only primitive basis functions as the arguments.
     >>> from pyquante2.basis.pgbf import pgbf
     >>> s = pgbf(1)
-    >>> S(s,s)
-    0.9999999999999997
+    >>> round(S(s,s),10)
+    1.0
     """
     return a.norm*b.norm*overlap(a.exponent,a.powers,a.origin,b.exponent,b.powers,b.origin)
 
@@ -28,8 +28,8 @@ def T(a,b):
     Simple interface to the kinetic function.
     >>> from pyquante2.basis.pgbf import pgbf
     >>> s = pgbf(1)
-    >>> T(s,s)
-    1.4999999999999996
+    >>> round(T(s,s),10)
+    1.5
     """
     return a.norm*b.norm*kinetic(a.exponent,a.powers,a.origin,b.exponent,b.powers,b.origin)
 
@@ -38,8 +38,8 @@ def V(a,b,C):
     Simple interface to the nuclear attraction function.
     >>> from pyquante2.basis.pgbf import pgbf
     >>> s = pgbf(1)
-    >>> V(s,s,(0,0,0))
-    -1.5957691216057328
+    >>> round(V(s,s,(0,0,0)),10)
+    -1.5957691216
     """
     return a.norm*b.norm*nuclear_attraction(a.exponent,a.powers,a.origin,
                                             b.exponent,b.powers,b.origin,C)
@@ -47,8 +47,8 @@ def V(a,b,C):
 def overlap(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
     """
     Full form of the overlap integral. Taken from THO eq. 2.12
-    >>> overlap(1,(0,0,0),(0,0,0),1,(0,0,0),(0,0,0))
-    1.9687012432153024
+    >>> round(overlap(1,(0,0,0),(0,0,0),1,(0,0,0),(0,0,0)),10)
+    1.9687012432
     """
     rab2 = dist2(A,B)
     gamma = alpha1+alpha2
@@ -64,8 +64,8 @@ def overlap(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
 def overlap1d(l1,l2,PAx,PBx,gamma):
     """
     The one-dimensional component of the overlap integral. Taken from THO eq. 2.12
-    >>> overlap1d(0,0,0,0,1)
-    1
+    >>> round(overlap1d(0,0,0,0,1),10)
+    1.0
     """
     total = 0
     for i in xrange(1+int(floor(0.5*(l1+l2)))):
@@ -100,8 +100,8 @@ def binomial_prefactor(s,ia,ib,xpa,xpb):
 def kinetic(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
     """
     The full form of the kinetic energy integral
-    >>> kinetic(1,(0,0,0),(0,0,0),1,(0,0,0),(0,0,0))
-    5.906103729645907
+    >>> round(kinetic(1,(0,0,0),(0,0,0),1,(0,0,0),(0,0,0)),10)
+    5.9061037296
     """
     term0 = alpha2*(2*(l2+m2+n2)+3)*\
             overlap(alpha1,(l1,m1,n1),A,\
@@ -122,24 +122,28 @@ def kinetic(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
     return term0+term1+term2
 
 def nuclear_attraction(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B,C):
+    """
+    Full form of the nuclear attraction integral
+    >>> round(nuclear_attraction(1,(0,0,0),(0,0,0),1,(0,0,0),(0,0,0),(0,0,0)),10)
+    -3.1415926536
+    """
+    gamma = alpha1+alpha2
 
-        gamma = alpha1+alpha2
+    P = gaussian_product_center(alpha1,A,alpha2,B)
+    rab2 = dist2(A,B)
+    rcp2 = dist2(C,P)
 
-        P = gaussian_product_center(alpha1,A,alpha2,B)
-        rab2 = dist2(A,B)
-        rcp2 = dist2(C,P)
+    Ax = A_array(l1,l2,P[0]-A[0],P[0]-B[0],P[0]-C[0],gamma)
+    Ay = A_array(m1,m2,P[1]-A[1],P[1]-B[1],P[1]-C[1],gamma)
+    Az = A_array(n1,n2,P[2]-A[2],P[2]-B[2],P[2]-C[2],gamma)
 
-        Ax = A_array(l1,l2,P[0]-A[0],P[0]-B[0],P[0]-C[0],gamma)
-        Ay = A_array(m1,m2,P[1]-A[1],P[1]-B[1],P[1]-C[1],gamma)
-        Az = A_array(n1,n2,P[2]-A[2],P[2]-B[2],P[2]-C[2],gamma)
-
-        total = 0.
-        for I in xrange(l1+l2+1):
-            for J in xrange(m1+m2+1):
-                for K in xrange(n1+n2+1):
-                    total += Ax[I]*Ay[J]*Az[K]*Fgamma(I+J+K,rcp2*gamma)
-
-        return -2*pi/gamma*exp(-alpha1*alpha2*rab2/gamma)*total
+    total = 0.
+    for I in xrange(l1+l2+1):
+        for J in xrange(m1+m2+1):
+            for K in xrange(n1+n2+1):
+                total += Ax[I]*Ay[J]*Az[K]*Fgamma(I+J+K,rcp2*gamma)
+                
+    return -2*pi/gamma*exp(-alpha1*alpha2*rab2/gamma)*total
 
 def A_term(i,r,u,l1,l2,PAx,PBx,CPx,gamma):
     "THO eq. 2.18"

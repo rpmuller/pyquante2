@@ -11,7 +11,6 @@ setup(name='pyquante2',
       #install_requires=["numpy>=1.1"], # only works with setuptools, I guess.
       packages=['pyquante2',
                 'pyquante2.basis',
-                'pyquante2.basis.data',
                 'pyquante2.geo',
                 'pyquante2.ints',
                 ],

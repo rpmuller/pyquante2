@@ -17,18 +17,16 @@
 """
 
 from math import sqrt,pi,pow,exp
-from pyquante2.utils import fact2,dist2,almostequal
+from pyquante2.utils import fact2,dist2
 
 class pgbf:
     """
     Construct a primitive gaussian basis functions.
     >>> s = pgbf(1.0)
-    >>> almostequal(s(0,0,0),0.7127054703549901) # s-function
-    True
-    >>> s(0,0,0)     # s-function
-    0.7127054703549901
+    >>> round(s(0,0,0),10)
+    0.7127054704
     >>> px = pgbf(1.0,powers=(1,0,0))
-    >>> px(0,0,0)
+    >>> round(px(0,0,0),10)
     0.0
     """
     def __init__(self,exponent,origin=(0,0,0),powers=(0,0,0)):

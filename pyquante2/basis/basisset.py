@@ -14,13 +14,14 @@ Copyright (c) 2004, Richard P. Muller. All Rights Reserved.
 """
 
 from pyquante2 import settings
+from pyquante2.basis import data
 from pyquante2.basis.cgbf import cgbf
-from pyquante2.basis.tools import get_basis_data,sym2pow
+from pyquante2.basis.tools import sym2pow
 
 class basisset:
     def __init__(self,atoms,name,**kwargs):
         self.bfs = []
-        basis_data = get_basis_data(name)
+        basis_data = getattr(data,name)
         omit_f = kwargs.get('omit_f',settings.omit_f)
         for atom in atoms:
             for sym,prims in basis_data[atom.atno]:

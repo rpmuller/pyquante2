@@ -14,10 +14,10 @@ def contr_coulomb(aexps,acoefs,anorms,xyza,powa,
     >>> p1 = (0.,0.,0.)
     >>> p2 = (0.,0.,1.)
     >>> lmn = (0,0,0)
-    >>> contr_coulomb([1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn)
-    4.373354581906223
-    >>> contr_coulomb([1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p2,lmn,[1.],[1.],[1.],p2,lmn)
-    3.2661267317941505
+    >>> round(contr_coulomb([1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn),10)
+    4.3733545819
+    >>> round(contr_coulomb([1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p2,lmn,[1.],[1.],[1.],p2,lmn),10)
+    3.2661267318
     """
     Jij = 0.
     for i in xrange(len(aexps)):
@@ -36,8 +36,8 @@ def contract(f,a,b,c,d):
     A simpler interface to a contracted coulomb integral
     >>> from pyquante2.basis.cgbf import cgbf
     >>> s = cgbf(exps=[1],coefs=[1])
-    >>> contract(ERI,s,s,s,s)
-    1.128379167095515
+    >>> round(contract(ERI,s,s,s,s),10)
+    1.1283791671
     """
     return sum(ca*cb*cc*cd*f(pa,pb,pc,pd) for (ca,pa) in a
                for (cb,pb) in b for (cc,pc) in c for (cd,pd) in d)
@@ -46,8 +46,8 @@ def ERI(a,b,c,d):
     """
     >>> from pyquante2.basis.pgbf import pgbf
     >>> s = pgbf(1)
-    >>> ERI(s,s,s,s)
-    1.128379167095514
+    >>> round(ERI(s,s,s,s),10)
+    1.1283791671
     """ 
     return coulomb_repulsion(a.origin,a.norm,a.powers,a.exponent,
                              b.origin,b.norm,b.powers,b.exponent,
@@ -64,10 +64,10 @@ def coulomb_repulsion((xa,ya,za),norma,(la,ma,na),alphaa,
     >>> p1 = (0.,0.,0.)
     >>> p2 = (0.,0.,1.)
     >>> lmn = (0,0,0)
-    >>> coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p1,1.,lmn,1.,p1,1.,lmn,1.)
-    4.373354581906223
-    >>> coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p2,1.,lmn,1.,p2,1.,lmn,1.)
-    3.2661267317941505
+    >>> round(coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p1,1.,lmn,1.,p1,1.,lmn,1.),10)
+    4.3733545819
+    >>> round(coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p2,1.,lmn,1.,p2,1.,lmn,1.),10)
+    3.2661267318
     """
 
     rab2 = dist2((xa,ya,za),(xb,yb,zb))
@@ -125,7 +125,8 @@ def method(**kwargs):
 
     This can be extended as a dispatch table to return different integration methods
     """
-    return ERI # currently only one choice
+    return None
+    # Consider using the factory class in http://stackoverflow.com/questions/6140542/set-defaults-at-runtime to do this.
 
 if __name__ == '__main__':
     import doctest; doctest.testmod()

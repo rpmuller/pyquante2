@@ -18,8 +18,8 @@ class cgbf:
     Class for a contracted Gaussian basis function
 
     >>> s = cgbf(exps=[1],coefs=[1])
-    >>> s(0,0,0)
-    0.7127054703549902
+    >>> round(s(0,0,0),10)
+    0.7127054704
     """
     def __init__(self,origin=(0,0,0),powers=(0,0,0),exps=[],coefs=[]):
         assert len(origin)==3
