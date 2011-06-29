@@ -24,8 +24,8 @@ class pgbf:
     Construct a primitive gaussian basis functions.
     >>> from pyquante2.utils import isnear
     >>> s = pgbf(1.0)
-    >>> round(s(0,0,0),10)
-    0.7127054704
+    >>> isnear(s(0,0,0),0.7127054704)
+    True
     >>> px = pgbf(1.0,powers=(1,0,0))
     >>> isnear(px(0,0,0),0)
     True
