@@ -11,13 +11,14 @@ def contr_coulomb(aexps,acoefs,anorms,xyza,powa,
     """
     Return the coulomb repulsion as in the coulomb_repulsion routine, but
     allow lists of exponents and normalization constants.
+    >>> from pyquante2.utils import isnear
     >>> p1 = (0.,0.,0.)
     >>> p2 = (0.,0.,1.)
     >>> lmn = (0,0,0)
-    >>> round(contr_coulomb([1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn),10)
-    4.3733545819
-    >>> round(contr_coulomb([1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p2,lmn,[1.],[1.],[1.],p2,lmn),10)
-    3.2661267318
+    >>> isnear(contr_coulomb([1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn),4.3733545819)
+    True
+    >>> isnear(contr_coulomb([1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p2,lmn,[1.],[1.],[1.],p2,lmn),3.2661267318)
+    True
     """
     Jij = 0.
     for i in xrange(len(aexps)):
@@ -34,20 +35,22 @@ def contr_coulomb(aexps,acoefs,anorms,xyza,powa,
 def contract(f,a,b,c,d):
     """
     A simpler interface to a contracted coulomb integral
+    >>> from pyquante2.utils import isnear
     >>> from pyquante2.basis.cgbf import cgbf
     >>> s = cgbf(exps=[1],coefs=[1])
-    >>> round(contract(ERI,s,s,s,s),10)
-    1.1283791671
+    >>> isnear(contract(ERI,s,s,s,s),1.1283791671)
+    True
     """
     return sum(ca*cb*cc*cd*f(pa,pb,pc,pd) for (ca,pa) in a
                for (cb,pb) in b for (cc,pc) in c for (cd,pd) in d)
 
 def ERI(a,b,c,d):
     """
+    >>> from pyquante2.utils import isnear
     >>> from pyquante2.basis.pgbf import pgbf
     >>> s = pgbf(1)
-    >>> round(ERI(s,s,s,s),10)
-    1.1283791671
+    >>> isnear(ERI(s,s,s,s),1.1283791671)
+    True
     """ 
     return coulomb_repulsion(a.origin,a.norm,a.powers,a.exponent,
                              b.origin,b.norm,b.powers,b.exponent,
@@ -61,13 +64,14 @@ def coulomb_repulsion((xa,ya,za),norma,(la,ma,na),alphaa,
     """
     Return the coulomb repulsion between four primitive gaussians a,b,c,d with the given origin
     x,y,z, normalization constants norm, angular momena l,m,n, and exponent alpha.
+    >>> from pyquante2.utils import isnear
     >>> p1 = (0.,0.,0.)
     >>> p2 = (0.,0.,1.)
     >>> lmn = (0,0,0)
-    >>> round(coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p1,1.,lmn,1.,p1,1.,lmn,1.),10)
-    4.3733545819
-    >>> round(coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p2,1.,lmn,1.,p2,1.,lmn,1.),10)
-    3.2661267318
+    >>> isnear(coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p1,1.,lmn,1.,p1,1.,lmn,1.),4.3733545819)
+    True
+    >>> isnear(coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p2,1.,lmn,1.,p2,1.,lmn,1.),3.2661267318)
+    True
     """
 
     rab2 = dist2((xa,ya,za),(xb,yb,zb))

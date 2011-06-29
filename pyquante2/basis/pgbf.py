@@ -22,12 +22,13 @@ from pyquante2.utils import fact2,dist2
 class pgbf:
     """
     Construct a primitive gaussian basis functions.
+    >>> from pyquante2.utils import isnear
     >>> s = pgbf(1.0)
     >>> round(s(0,0,0),10)
     0.7127054704
     >>> px = pgbf(1.0,powers=(1,0,0))
-    >>> round(px(0,0,0),10)
-    0.0
+    >>> isnear(px(0,0,0),0)
+    True
     """
     def __init__(self,exponent,origin=(0,0,0),powers=(0,0,0)):
         assert len(origin) == 3
