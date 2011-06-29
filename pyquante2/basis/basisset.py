@@ -19,6 +19,7 @@ from pyquante2.basis.cgbf import cgbf
 from pyquante2.basis.tools import sym2pow
 
 class basisset:
+
     def __init__(self,atoms,name,**kwargs):
         self.bfs = []
         basis_data = getattr(data,name)
