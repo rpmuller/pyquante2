@@ -1,6 +1,6 @@
 from numpy import array,pi,sqrt,exp
 from math import factorial
-from pyquante2.utils import Fgamma, norm2
+from pyquante2.utils import Fgamma, norm2, isnear
 from pyquante2.ints.one import gaussian_product_center, binomial_prefactor
 
 
@@ -11,6 +11,7 @@ def ERI(a,b,c,d):
     >>> s = pgbf(1)
     >>> isnear(ERI(s,s,s,s),1.1283791671)
     True
+    >>> from pyquante2.basis.cgbf import cgbf
     >>> s = cgbf(exps=[1],coefs=[1])
     >>> isnear(ERI(s,s,s,s),1.1283791671)
     True

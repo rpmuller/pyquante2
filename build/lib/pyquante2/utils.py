@@ -6,6 +6,8 @@ utils.py - Simple utilility funtions used in pyquante2.
 from numpy import sqrt,log,exp,dot
 from math import factorial,gamma,lgamma
 
+def isnear(a,b,tol=1e-9): return abs(a-b)<tol
+
 def fact2(n):
     """
     fact2(n) - n!!, double factorial of n

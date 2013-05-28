@@ -49,7 +49,7 @@ def V(a,b,C):
 def overlap(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
     """
     Full form of the overlap integral. Taken from THO eq. 2.12
-    >>> isnear(overlap(1,(0,0,0),(0,0,0),1,(0,0,0),(0,0,0)),1.9687012432)
+    >>> isnear(overlap(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d')),1.9687012432)
     True
     """
     rab2 = norm2(A-B)
@@ -99,7 +99,7 @@ def binomial_prefactor(s,ia,ib,xpa,xpb):
 def kinetic(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
     """
     The full form of the kinetic energy integral
-    >>> isnear(kinetic(1,(0,0,0),(0,0,0),1,(0,0,0),(0,0,0)),2.9530518648)
+    >>> isnear(kinetic(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d')),2.9530518648)
     True
     """
     term0 = alpha2*(2*(l2+m2+n2)+3)*\
@@ -123,7 +123,7 @@ def kinetic(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
 def nuclear_attraction(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B,C):
     """
     Full form of the nuclear attraction integral
-    >>> isnear(nuclear_attraction(1,(0,0,0),(0,0,0),1,(0,0,0),(0,0,0),(0,0,0)),-3.1415926536)
+    >>> isnear(nuclear_attraction(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d'),array((0,0,0),'d')),-3.1415926536)
     True
     """
     gamma = alpha1+alpha2
