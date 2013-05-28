@@ -1,2 +1,17 @@
-pyquante2 is an experimental refactoring of the Python quantum chemistry package PyQuante.
+# PyQuante2
+
+[PyQuante](http://pyquante.sf.net) is a Quantum Chemistry Suite
+written in Python. Over the years, there are many things that I'm
+growing increasingly unsatisfied with:
+
+* I learned Python (essentially) as I was writing PyQuante, which
+  means that I wasn't as good a programmer when I did most of the
+  writing of the core modules as I am now.
+* Python was only at version 1.4-2.0 when I started writing. Many
+  aspects of the language have changed substantially since then,
+  especially the maturity of the numpy module.
+
+I'm playing with PyQuante2 as a way of exploring more intelligent
+design. I'm slowly moving components over from PyQuante into
+PyQuante2. 
 
