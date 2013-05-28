@@ -23,6 +23,10 @@ PyQuante2. My goals are:
   - Written only in Cython
   - Not required for base code to function
 
+Of course, it would be nice if this code were also much faster than
+PyQuante, but I'd be surprised if this happened automatically, and I'm
+prepared to deal with code performance at a later time.
+
 Feel free to fork this if it interests you. The PyQuante code is still
 around, so I'm not rushing through the process, I'm just taking as
 much time as I feel I need to do this properly.
