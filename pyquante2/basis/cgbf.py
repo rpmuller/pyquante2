@@ -18,10 +18,10 @@ from numpy import array
 class cgbf:
     """
     Class for a contracted Gaussian basis function
-
+    >>> from pyquante2.utils import isnear
     >>> s = cgbf(exps=[1],coefs=[1])
-    >>> round(s(0,0,0),10)
-    0.7127054704
+    >>> isnear(s(0,0,0),0.7127054704,1e-9)
+    True
     """
     contracted = True
     def __init__(self,origin=(0,0,0),powers=(0,0,0),exps=[],coefs=[]):
