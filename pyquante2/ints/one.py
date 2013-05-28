@@ -1,17 +1,12 @@
-from math import pi,exp,floor,factorial
-from pyquante2.utils import dist2, binomial, fact2, Fgamma
+from numpy import pi,exp,floor,array
+from math import factorial
+from pyquante2.utils import binomial, fact2, Fgamma, norm2
 
 # Notes:
 # The versions S,T,V include the normalization constants
 # The version overlap,kinetic,nuclear_attraction do not.
 # This is so, for example, the kinetic routines can call the potential routines
 #  without the normalization constants getting in the way.
-
-def contract(f,a,b):
-    """
-    Can be used to evaluate S,T,V over contracted basis functions.
-    """
-    return sum(ca*cb*S(pa,pb) for (ca,pa) in a for (cb,pb) in b)
 
 def S(a,b):
     """
@@ -21,6 +16,8 @@ def S(a,b):
     >>> round(S(s,s),10)
     1.0
     """
+    if b.contracted:
+        return sum(cb*S(pb,a) for (cb,pb) in b)
     return a.norm*b.norm*overlap(a.exponent,a.powers,a.origin,b.exponent,b.powers,b.origin)
 
 def T(a,b):
@@ -31,6 +28,8 @@ def T(a,b):
     >>> round(T(s,s),10)
     1.5
     """
+    if b.contracted:
+        return sum(cb*T(pb,a) for (cb,pb) in b)
     return a.norm*b.norm*kinetic(a.exponent,a.powers,a.origin,b.exponent,b.powers,b.origin)
 
 def V(a,b,C):
@@ -41,16 +40,18 @@ def V(a,b,C):
     >>> round(V(s,s,(0,0,0)),10)
     -1.5957691216
     """
+    if b.contracted:
+        return sum(cb*V(pb,a,C) for (cb,pb) in b)
     return a.norm*b.norm*nuclear_attraction(a.exponent,a.powers,a.origin,
                                             b.exponent,b.powers,b.origin,C)
 
 def overlap(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
     """
     Full form of the overlap integral. Taken from THO eq. 2.12
-    >>> round(overlap(1,(0,0,0),(0,0,0),1,(0,0,0),(0,0,0)),10)
+    >>> round(overlap(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d')),10)
     1.9687012432
     """
-    rab2 = dist2(A,B)
+    rab2 = norm2(A-B)
     gamma = alpha1+alpha2
     P = gaussian_product_center(alpha1,A,alpha2,B)
 
@@ -76,13 +77,10 @@ def overlap1d(l1,l2,PAx,PBx,gamma):
 def gaussian_product_center(alpha1,A,alpha2,B):
     """
     The center of the Gaussian resulting from the product of two Gaussians:
-    >>> gaussian_product_center(1,(0,0,0),1,(0,0,0))
-    (0, 0, 0)
+    >>> gaussian_product_center(1,array((0,0,0),'d'),1,array((0,0,0),'d'))
+    array([ 0.,  0.,  0.])
     """
-    gamma = alpha1+alpha2
-    return (alpha1*A[0]+alpha2*B[0])/gamma,\
-           (alpha1*A[1]+alpha2*B[1])/gamma,\
-           (alpha1*A[2]+alpha2*B[2])/gamma
+    return (alpha1*A+alpha2*B)/(alpha1+alpha2)
 
 def binomial_prefactor(s,ia,ib,xpa,xpb):
     """
@@ -100,8 +98,8 @@ def binomial_prefactor(s,ia,ib,xpa,xpb):
 def kinetic(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
     """
     The full form of the kinetic energy integral
-    >>> round(kinetic(1,(0,0,0),(0,0,0),1,(0,0,0),(0,0,0)),10)
-    5.9061037296
+    >>> round(kinetic(1,(0,0,0),array((0.,0.,0.),'d'),1,(0,0,0),array((0.,0.,0.),'d')),10)
+    2.9530518648
     """
     term0 = alpha2*(2*(l2+m2+n2)+3)*\
             overlap(alpha1,(l1,m1,n1),A,\
@@ -124,18 +122,22 @@ def kinetic(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
 def nuclear_attraction(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B,C):
     """
     Full form of the nuclear attraction integral
-    >>> round(nuclear_attraction(1,(0,0,0),(0,0,0),1,(0,0,0),(0,0,0),(0,0,0)),10)
+    >>> round(nuclear_attraction(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),(0,0,0),array((0,0,0),'d')),10)
     -3.1415926536
     """
     gamma = alpha1+alpha2
 
     P = gaussian_product_center(alpha1,A,alpha2,B)
-    rab2 = dist2(A,B)
-    rcp2 = dist2(C,P)
+    rab2 = norm2(A-B)
+    rcp2 = norm2(C-P)
 
-    Ax = A_array(l1,l2,P[0]-A[0],P[0]-B[0],P[0]-C[0],gamma)
-    Ay = A_array(m1,m2,P[1]-A[1],P[1]-B[1],P[1]-C[1],gamma)
-    Az = A_array(n1,n2,P[2]-A[2],P[2]-B[2],P[2]-C[2],gamma)
+    dPA = P-A
+    dPB = P-B
+    dPC = P-C
+
+    Ax = A_array(l1,l2,dPA[0],dPB[0],dPC[0],gamma)
+    Ay = A_array(m1,m2,dPA[1],dPB[1],dPC[1],gamma)
+    Az = A_array(n1,n2,dPA[2],dPB[2],dPC[2],gamma)
 
     total = 0.
     for I in xrange(l1+l2+1):

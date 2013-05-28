@@ -16,8 +16,8 @@
  See the LICENSE file for licensing information.
 """
 
-from math import sqrt,pi,pow,exp
-from pyquante2.utils import fact2,dist2
+from numpy import array,sqrt,pi,exp
+from pyquante2.utils import fact2,norm2
 
 class pgbf:
     """
@@ -29,21 +29,22 @@ class pgbf:
     >>> round(px(0,0,0),10)
     0.0
     """
+    contracted = False
     def __init__(self,exponent,origin=(0,0,0),powers=(0,0,0)):
         assert len(origin) == 3
         assert len(powers) == 3
         self.exponent = float(exponent)
-        self.origin = origin
+        self.origin = array(origin,'d')
         self.powers = powers
         self._normalize()
 
-    def __call__(self,x,y,z):
+    def __call__(self,*args):
         "Compute the amplitude of the PGBF at point x,y,z"
         i,j,k = self.powers
-        x0,y0,z0 = self.origin
-        return self.norm*\
-               pow(x-x0,i)*pow(y-y0,j)*pow(z-z0,k)*\
-               exp(-self.exponent*dist2((x,y,z),(x0,y0,z0)))
+        xyz = array(args,'d')
+        d = xyz-self.origin
+        d2 = norm2(d)
+        return self.norm*d[0]**i*d[1]**j*d[2]**k*exp(-self.exponent*d2)
 
     def _normalize(self):
         "Normalize basis function. From THO eq. 2.2"

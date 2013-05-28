@@ -6,3 +6,4 @@ omit_f = True  # Skip adding f-type basis functions (reduces the size of the bas
 # Geometry related defaults
 molecular_charge = 0
 spin_multiplicity = 1
+units = 'bohr'

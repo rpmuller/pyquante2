@@ -18,20 +18,17 @@ class molecule:
         self.atoms = []
         self.charge = int(kwargs.get('charge',settings.molecular_charge))
         self.multiplicity = int(kwargs.get('multiplicity',settings.spin_multiplicity))
+
+        self.units = kwargs.get('units',settings.units).lower()
+
         if atomlist:
-            self.add_atuples(atomlist)
+            for atuple in atomlist:
+                self.atoms.append(atom(*atuple,units=self.units))
         return
 
     def __repr__(self): return repr(self.atoms)
 
     def __getitem__(self,i): return self.atoms.__getitem__(i)
-
-    def add_atuples(self,atuples):
-        for atuple in atuples:
-            self.add_atuple(atuple)
-        return
-
-    def add_atuple(self,atuple): self.atoms.append(atom(*atuple))
 
 if __name__ == '__main__':
     import doctest

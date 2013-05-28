@@ -3,7 +3,8 @@ utils.py - Simple utilility funtions used in pyquante2.
 
 """
 
-from math import sqrt,factorial,log,exp
+from numpy import sqrt,log,exp,dot
+from math import factorial,gamma,lgamma
 
 def fact2(n):
     """
@@ -21,32 +22,7 @@ def fact2(n):
     """
     return reduce(int.__mul__,xrange(n,0,-2),1)
 
-def dist2(a,b):
-    """
-    Square of the cartesian distance.
-    
-    >>> dist2((0,0,0),(1,0,0))
-    1
-    >>> dist2((0,0,0),(0,2,0))
-    4
-    >>> dist2((4,0,0),(0,0,0))
-    16
-    >>> dist2((0,5,0),(0,0,0))
-    25
-    >>> dist2((2,2,2),(0,0,0))
-    12
-    """
-    return (a[0]-b[0])**2 + (a[1]-b[1])**2 + (a[2]-b[2])**2
-
-def dist(a,b):
-    """
-    The Cartesian distance
-    >>> dist((0,0,0),(0,0,0))
-    0.0
-    >>> dist((0,0,0),(1,0,0))
-    1.0
-    """
-    return sqrt(dist2(a,b))
+def norm2(a): return dot(a,a)
 
 def binomial(n,k):
     """
@@ -63,31 +39,12 @@ def binomial(n,k):
 def Fgamma(m,x):
     """
     Incomplete gamma function
-    >>> Fgamma(0,0)
-    1.0000000000000016
+    >>> round(Fgamma(0,0),10)
+    1.0
     """
-    SMALL=1e-15
-    x = max(abs(x),SMALL)
-    val = gamm_inc(m+0.5,x)
-    return 0.5*pow(x,-m-0.5)*val;
-
-def gammln(x):
-    """
-    Numerical recipes, section 6.1
-    >>> gammln(1)
-    0.0
-    """
-    cof = [76.18009172947146,-86.50532032941677,
-           24.01409824083091,-1.231739572450155,
-           0.1208650973866179e-2,-0.5395239384953e-5]
-    y=x
-    tmp=x+5.5
-    tmp = tmp - (x+0.5)*log(tmp)
-    ser=1.000000000190015 # don't you just love these numbers?!
-    for j in xrange(6):
-        y = y+1
-        ser = ser+cof[j]/y
-    return -tmp+log(2.5066282746310005*ser/x);
+    SMALL=1e-12
+    x = max(x,SMALL)
+    return 0.5*pow(x,-m-0.5)*gamm_inc(m+0.5,x)
 
 def gamm_inc(a,x):
     """
@@ -98,7 +55,7 @@ def gamm_inc(a,x):
     
 def gammp(a,x):
     "Returns the incomplete gamma function P(a;x). NumRec sect 6.2."
-    assert (x > 0 and a >= 0), "Invalid arguments in routine gammp"
+    assert (x > 0 and a >= 0), "Invalid arguments in routine gammp: %s,%s" % (x,a)
 
     if x < (a+1.0): #Use the series representation
         gamser,gln = _gser(a,x)
@@ -112,7 +69,7 @@ def _gser(a,x):
     ITMAX=100
     EPS=3.e-7
 
-    gln=gammln(a)
+    gln=lgamma(a)
     assert(x>=0),'x < 0 in gser'
     if x == 0 : return 0,gln
 
@@ -134,7 +91,7 @@ def _gcf(a,x):
     EPS=3.e-7
     FPMIN=1.e-30
 
-    gln=gammln(a)
+    gln=lgamma(a)
     b=x+1.-a
     c=1./FPMIN
     d=1./b
@@ -155,11 +112,6 @@ def _gcf(a,x):
     gammcf=exp(-x+a*log(x)-gln)*h
     return gammcf,gln
     
-    
-def erf(z): 
-    if z==0.0: return 0.0
-    else: return gammp(0.5,z**2)[0]
-
 if __name__ == '__main__':
     import doctest
     doctest.testmod()

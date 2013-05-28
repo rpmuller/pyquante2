@@ -1,80 +1,58 @@
-from math import factorial,pi,sqrt,exp
-from pyquante2.utils import dist2, Fgamma
+from numpy import array,pi,sqrt,exp
+from math import factorial
+from pyquante2.utils import Fgamma, norm2
 from pyquante2.ints.one import gaussian_product_center, binomial_prefactor
 
 
-def contr_coulomb(aexps,acoefs,anorms,xyza,powa,
-                  bexps,bcoefs,bnorms,xyzb,powb,
-                  cexps,ccoefs,cnorms,xyzc,powc,
-                  dexps,dcoefs,dnorms,xyzd,powd):
-
-    """
-    Return the coulomb repulsion as in the coulomb_repulsion routine, but
-    allow lists of exponents and normalization constants.
-    >>> p1 = (0.,0.,0.)
-    >>> p2 = (0.,0.,1.)
-    >>> lmn = (0,0,0)
-    >>> round(contr_coulomb([1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn),10)
-    4.3733545819
-    >>> round(contr_coulomb([1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p1,lmn,[1.],[1.],[1.],p2,lmn,[1.],[1.],[1.],p2,lmn),10)
-    3.2661267318
-    """
-    Jij = 0.
-    for i in xrange(len(aexps)):
-        for j in xrange(len(bexps)):
-            for k in xrange(len(cexps)):
-                for l in xrange(len(dexps)):
-                    incr = coulomb_repulsion(xyza,anorms[i],powa,aexps[i],
-                                             xyzb,bnorms[j],powb,bexps[j],
-                                             xyzc,cnorms[k],powc,cexps[k],
-                                             xyzd,dnorms[l],powd,dexps[l])
-                    Jij = Jij + acoefs[i]*bcoefs[j]*ccoefs[k]*dcoefs[l]*incr
-    return Jij
-
-def contract(f,a,b,c,d):
-    """
-    A simpler interface to a contracted coulomb integral
-    >>> from pyquante2.basis.cgbf import cgbf
-    >>> s = cgbf(exps=[1],coefs=[1])
-    >>> round(contract(ERI,s,s,s,s),10)
-    1.1283791671
-    """
-    return sum(ca*cb*cc*cd*f(pa,pb,pc,pd) for (ca,pa) in a
-               for (cb,pb) in b for (cc,pc) in c for (cd,pd) in d)
-
 def ERI(a,b,c,d):
     """
-    >>> from pyquante2.basis.pgbf import pgbf
+    Electron repulsion integral between four basis functions a,b,c,d. Works for both
+    contracted and primitive functions.
+    >>> from pyquante2 import pgbf,cgbf
     >>> s = pgbf(1)
     >>> round(ERI(s,s,s,s),10)
     1.1283791671
-    """ 
+    >>> s = cgbf(exps=[1],coefs=[1])
+    >>> round(ERI(s,s,s,s),10)
+    1.1283791671
+    >>> s2 = cgbf((0,0,1),(0,0,0),[1],[1])
+    >>> round(ERI(s,s,s2,s2),10)
+    0.84270079
+    """
+    if d.contracted:
+        return sum(cd*ERI(pd,c,a,b) for (cd,pd) in d)
     return coulomb_repulsion(a.origin,a.norm,a.powers,a.exponent,
                              b.origin,b.norm,b.powers,b.exponent,
                              c.origin,c.norm,c.powers,c.exponent,
                              d.origin,d.norm,d.powers,d.exponent)
 
-def coulomb_repulsion((xa,ya,za),norma,(la,ma,na),alphaa,
-                      (xb,yb,zb),normb,(lb,mb,nb),alphab,
-                      (xc,yc,zc),normc,(lc,mc,nc),alphac,
-                      (xd,yd,zd),normd,(ld,md,nd),alphad):
+def coulomb_repulsion(xyza,norma,(la,ma,na),alphaa,
+                      xyzb,normb,(lb,mb,nb),alphab,
+                      xyzc,normc,(lc,mc,nc),alphac,
+                      xyzd,normd,(ld,md,nd),alphad):
     """
     Return the coulomb repulsion between four primitive gaussians a,b,c,d with the given origin
     x,y,z, normalization constants norm, angular momena l,m,n, and exponent alpha.
-    >>> p1 = (0.,0.,0.)
-    >>> p2 = (0.,0.,1.)
+    >>> p1 = array((0.,0.,0.),'d')
+    >>> p2 = array((0.,0.,1.),'d')
     >>> lmn = (0,0,0)
     >>> round(coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p1,1.,lmn,1.,p1,1.,lmn,1.),10)
     4.3733545819
     >>> round(coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p2,1.,lmn,1.,p2,1.,lmn,1.),10)
     3.2661267318
     """
+    xa,ya,za = xyza
+    xb,yb,zb = xyzb
+    xc,yc,zc = xyzc
+    xd,yd,zd = xyzd
 
-    rab2 = dist2((xa,ya,za),(xb,yb,zb))
-    rcd2 = dist2((xc,yc,zc),(xd,yd,zd))
-    xp,yp,zp = gaussian_product_center(alphaa,(xa,ya,za),alphab,(xb,yb,zb))
-    xq,yq,zq = gaussian_product_center(alphac,(xc,yc,zc),alphad,(xd,yd,zd))
-    rpq2 = dist2((xp,yp,zp),(xq,yq,zq))
+    rab2 = norm2(xyza-xyzb)
+    rcd2 = norm2(xyzc-xyzd)
+    xyzp = gaussian_product_center(alphaa,xyza,alphab,xyzb)
+    xp,yp,zp = xyzp
+    xyzq = gaussian_product_center(alphac,xyzc,alphad,xyzd)
+    xq,yq,zq = xyzq
+    rpq2 = norm2(xyzp-xyzq)
     gamma1 = alphaa+alphab
     gamma2 = alphac+alphad
     delta = 0.25*(1/gamma1+1/gamma2)
@@ -117,16 +95,6 @@ def B_array(l1,l2,l3,l4,p,a,b,q,c,d,g1,g2,delta):
 def fB(i,l1,l2,P,A,B,r,g): return binomial_prefactor(i,l1,l2,P-A,P-B)*B0(i,r,g)
 def B0(i,r,g): return fact_ratio2(i,r)*pow(4*g,r-i)
 def fact_ratio2(a,b): return factorial(a)/factorial(b)/factorial(a-2*b)
-
-def method(**kwargs):
-    """
-    method returns a two-electron integral method based on either kwargs or
-    defaults.
-
-    This can be extended as a dispatch table to return different integration methods
-    """
-    return None
-    # Consider using the factory class in http://stackoverflow.com/questions/6140542/set-defaults-at-runtime to do this.
 
 if __name__ == '__main__':
     import doctest; doctest.testmod()
