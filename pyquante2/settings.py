@@ -1,3 +1,5 @@
+## Todo: Move all of this to ConfigParser??
+
 
 # Basis function related defaults
 omit_f = True  # Skip adding f-type basis functions (reduces the size of the basis set)
