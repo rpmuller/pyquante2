@@ -13,5 +13,18 @@ growing increasingly unsatisfied with:
 
 I'm playing with PyQuante2 as a way of exploring more intelligent
 design. I'm slowly moving components over from PyQuante into
-PyQuante2. 
+PyQuante2. My goals are:
+
+* Clean code with a consistent style reflecting Python 2.7;
+* Easily understood code structure;
+* Much better test suite structure, use of nosetests as a matter of
+  course. 
+* Extensions 
+  - Written only in Cython
+  - Not required for base code to function
+
+Feel free to fork this if it interests you. The PyQuante code is still
+around, so I'm not rushing through the process, I'm just taking as
+much time as I feel I need to do this properly.
+
 
