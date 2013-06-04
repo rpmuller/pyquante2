@@ -1,10 +1,22 @@
 import unittest
-from pyquante2.cutils import hello
+from pyquante2 import pgbf,cgbf
+from pyquante2.cone import S,T,V
+from pyquante2.ctwo import ERI
+s = pgbf(1)
+s2 = cgbf(exps=[1],coefs=[1])
+s3 = cgbf((0,0,1),(0,0,0),[1],[1])
 
 class test_cython(unittest.TestCase):
-    def test_hello(self):
-        s = hello()
-        self.assertEqual(s,"Hello, World!")
+    def test_S(self):
+        self.assertAlmostEqual(S(s,s),1)
+    def test_T(self):
+        self.assertAlmostEqual(T(s,s),1.5)
+    def test_V(self):
+        self.assertAlmostEqual(V(s,s,(0,0,0)),-1.5957691216)
+    def test_ERI(self):
+        self.assertAlmostEqual(ERI(s,s,s,s),1.1283791671)
+        self.assertAlmostEqual(ERI(s2,s2,s2,s2),1.1283791671)
+        self.assertAlmostEqual(ERI(s2,s2,s3,s3),0.84270079)
 
 if __name__ == '__main__':
     # Manually make the test suite
