@@ -45,6 +45,17 @@ class cgbf:
     def __call__(self,x,y,z): return sum(c*p(x,y,z) for c,p in self)
     def __repr__(self): return repr(self.as_tuple())
 
+    def cne_lists(self):
+        "Return lists of coefs, norms, and exponents for all prims. Useful for HGP"
+        coefs = []
+        norms = []
+        expns = []
+        for c,p in self:
+            coefs.append(c)
+            norms.append(p.norm)
+            expns.append(p.exponent)
+        return coefs,norms,expns
+
 
     def add_pgbf(self,expn,coef,renormalize=True):
         from pyquante2.basis.pgbf import pgbf

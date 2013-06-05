@@ -32,6 +32,7 @@ class pgbf:
     """
     contracted = False
     def __init__(self,exponent,origin=(0,0,0),powers=(0,0,0)):
+        self.norm = 1
         assert len(origin) == 3
         assert len(powers) == 3
         self.exponent = float(exponent)

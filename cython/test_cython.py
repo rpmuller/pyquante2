@@ -1,7 +1,7 @@
 import unittest
 from pyquante2 import pgbf,cgbf
 from pyquante2.cone import S,T,V
-from pyquante2.ctwo import ERI
+from pyquante2.ctwo import ERI,ERI_hgp
 s = pgbf(1)
 s2 = cgbf(exps=[1],coefs=[1])
 s3 = cgbf((0,0,1),(0,0,0),[1],[1])
@@ -17,6 +17,10 @@ class test_cython(unittest.TestCase):
         self.assertAlmostEqual(ERI(s,s,s,s),1.1283791671)
         self.assertAlmostEqual(ERI(s2,s2,s2,s2),1.1283791671)
         self.assertAlmostEqual(ERI(s2,s2,s3,s3),0.84270079)
+    def test_ERI_hgp(self):
+        self.assertAlmostEqual(ERI_hgp(s,s,s,s),1.1283791671)
+        self.assertAlmostEqual(ERI_hgp(s2,s2,s2,s2),1.1283791671)
+        self.assertAlmostEqual(ERI_hgp(s2,s2,s3,s3),0.84270079)
 
 if __name__ == '__main__':
     # Manually make the test suite

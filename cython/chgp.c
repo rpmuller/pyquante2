@@ -21,6 +21,8 @@
 #include "chgp.h"
 #include <assert.h>
 #include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -38,7 +40,7 @@
 double vrr_terms[MAXAM*MAXAM*MAXAM*MAXAM*MAXAM*MAXAM*MAXMTOT];
 double Fgterms[100];
 
-static double contr_hrr(int lena, double xa, double ya, double za, double *anorms,
+double contr_hrr(int lena, double xa, double ya, double za, double *anorms,
 		 int la, int ma, int na, double *aexps, double *acoefs,
 		 int lenb, double xb, double yb, double zb, double *bnorms,
 		 int lb, int mb, int nb, double *bexps, double *bcoefs,
@@ -107,7 +109,7 @@ static double contr_hrr(int lena, double xa, double ya, double za, double *anorm
 		   lend,xd,yd,zd,dnorms,dexps,dcoefs);
 }
 
-static double contr_vrr(int lena, double xa, double ya, double za,
+double contr_vrr(int lena, double xa, double ya, double za,
 			double *anorms, int la, int ma, int na,
 			double *aexps, double *acoefs,
 			int lenb, double xb, double yb, double zb,
@@ -132,7 +134,7 @@ static double contr_vrr(int lena, double xa, double ya, double za,
 }
 
 
-static double hrr(double xa, double ya, double za, double norma,
+double hrr(double xa, double ya, double za, double norma,
 	   int la, int ma, int na, double alphaa,
 	   double xb, double yb, double zb, double normb,
 	   int lb, int mb, int nb, double alphab,
@@ -204,7 +206,7 @@ static double hrr(double xa, double ya, double za, double norma,
 	     xd,yd,zd,normd,alphad,0);
 }
 
-static double vrr(double xa, double ya, double za, double norma,
+double vrr(double xa, double ya, double za, double norma,
 	   int la, int ma, int na, double alphaa,
 	   double xb, double yb, double zb, double normb, double alphab,
 	   double xc, double yc, double zc, double normc,
@@ -386,7 +388,7 @@ static double vrr(double xa, double ya, double za, double norma,
    of dimension MAXAM^6*mtot. Once this is working I'll look to 
    actually implement the correct size array la*ma*na*lc*mc*nc*mtot */
 
-static int iindex(int la, int ma, int na, int lc, int mc, int nc, int m){
+int iindex(int la, int ma, int na, int lc, int mc, int nc, int m){
   /* Convert the 7-dimensional indices to a 1d iindex */
   int ival=0;
   ival = la + ma*MAXAM + na*MAXAM*MAXAM + lc*MAXAM*MAXAM*MAXAM +
@@ -395,7 +397,7 @@ static int iindex(int la, int ma, int na, int lc, int mc, int nc, int m){
   return ival;
 }
 
-static double vrr_recursive(double xa, double ya, double za, double norma,
+double vrr_recursive(double xa, double ya, double za, double norma,
 	   int la, int ma, int na, double alphaa,
 	   double xb, double yb, double zb, double normb, double alphab,
 	   double xc, double yc, double zc, double normc,
@@ -569,87 +571,6 @@ static double vrr_recursive(double xa, double ya, double za, double norma,
   T = zeta*eta/(zeta+eta)*rpq2;
   val = norma*normb*normc*normd*Kab*Kcd/sqrt(zeta+eta)*Fgamma(m,T);
   return val;
-}
-
-/* util funcs */
-static double dist2(double x1, double y1, double z1, double x2, double y2, double z2){
-  return (x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)+(z1-z2)*(z1-z2);
-}
-static double product_center_1D(double alphaa, double xa, 
-			 double alphab, double xb){
-  return (alphaa*xa+alphab*xb)/(alphaa+alphab);
-}
-static double Fgamma(double m, double x){
-  double val;
-  if (fabs(x) < SMALL) x = SMALL;
-  val = gamm_inc(m+0.5,x);
-  /* if (val < SMALL) return 0.; */ /* Gives a bug for D orbitals. */
-  return 0.5*pow(x,-m-0.5)*val; 
-}
-
-static double gamm_inc(double a, double x){ /* Taken from NR routine gammap */
-  double gamser,gammcf,gln;
-  
-  assert (x >= 0.);
-  assert (a > 0.);
-  if (x < (a+1.0)) {
-    gser(&gamser,a,x,&gln);
-    return exp(gln)*gamser;
-  } else {
-    gcf(&gammcf,a,x,&gln);
-    return exp(gln)*(1.0-gammcf);
-  }
-}
- 
-static void gser(double *gamser, double a, double x, double *gln){
-  int n;
-  double sum,del,ap;
-
-  *gln=lgamma(a);
-  if (x <= 0.0) {
-    assert(x>=0.);
-    *gamser=0.0;
-    return;
-  } else {
-    ap=a;
-    del=sum=1.0/a;
-    for (n=1;n<=ITMAX;n++) {
-      ++ap;
-      del *= x/ap;
-      sum += del;
-      if (fabs(del) < fabs(sum)*EPS) {
-	*gamser=sum*exp(-x+a*log(x)-(*gln));
-	return;
-      }
-    }
-    printf("a too large, ITMAX too small in routine gser");
-    return;
-  }
-}
- 
-static void gcf(double *gammcf, double a, double x, double *gln){
-  int i;
-  double an,b,c,d,del,h;
-  
-  *gln=lgamma(a);
-  b=x+1.0-a;
-  c=1.0/FPMIN;
-  d=1.0/b;
-  h=d;
-  for (i=1;i<=ITMAX;i++) {
-    an = -i*(i-a);
-    b += 2.0;
-    d=an*d+b;
-    if (fabs(d) < FPMIN) d=FPMIN;
-    c=b+an/c;
-    if (fabs(c) < FPMIN) c=FPMIN;
-    d=1.0/d;
-    del=d*c;
-    h *= del;
-    if (fabs(del-1.0) < EPS) break;
-  }
-  assert(i<=ITMAX);
-  *gammcf=exp(-x+a*log(x)-(*gln))*h;
 }
 
 #undef ITMAX
