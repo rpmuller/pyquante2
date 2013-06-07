@@ -1,7 +1,9 @@
 import unittest
+from numpy import array
 from pyquante2 import pgbf,cgbf
 from pyquante2.cone import S,T,V
-from pyquante2.ctwo import ERI,ERI_hgp
+from pyquante2.ctwo import ERI,ERI_hgp,vrr
+from pyquante2.ints.hgp import vrr as pyvrr
 s = pgbf(1)
 s2 = cgbf(exps=[1],coefs=[1])
 s3 = cgbf((0,0,1),(0,0,0),[1],[1])
@@ -21,6 +23,21 @@ class test_cython(unittest.TestCase):
         self.assertAlmostEqual(ERI_hgp(s,s,s,s),1.1283791671)
         self.assertAlmostEqual(ERI_hgp(s2,s2,s2,s2),1.1283791671)
         self.assertAlmostEqual(ERI_hgp(s2,s2,s3,s3),0.84270079)
+
+    def test_vrr(self):
+        zero = array([0,0,0],'d')
+        pyval = pyvrr(zero,1.,(0,0,0),1.,
+                      zero,1.,1.,
+                      zero,1.,(0,0,0),1.,
+                      zero,1.,1.,
+                      0)
+        cval = vrr(0,0,0,1.,0,0,0,1.,
+                   0,0,0,1.,1.,
+                   0,0,0,1.,0,0,0,1.,
+                   0,0,0,1.,1.,
+                   0)
+        print pyval
+        self.assertAlmostEqual(cval,pyval)
 
 if __name__ == '__main__':
     # Manually make the test suite

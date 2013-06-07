@@ -46,3 +46,13 @@ def ERI_hgp(a,b,c,d):
         d.origin[0],d.origin[1],d.origin[2],d.norm,
         d.powers[0],d.powers[1],d.powers[2],d.exponent)
 
+# The following are only for debugging and can be deleted after ERI_hgp works:
+def vrr(xa,ya,za,norma,la,ma,na,alphaa,
+        xb,yb,zb,normb,alphab,
+        xc,yc,zc,normc,lc,mc,nc,alphac,
+        xd,yd,zd,normd,alphad,m):
+    return chgp.vrr(xa,ya,za,norma,la,ma,na,alphaa,
+                    xb,yb,zb,normb,alphab,
+                    xc,yc,zc,normc,lc,mc,nc,alphac,
+                    xd,yd,zd,normd,alphad,m)
+
