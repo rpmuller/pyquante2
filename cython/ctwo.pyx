@@ -56,3 +56,13 @@ def vrr(xa,ya,za,norma,la,ma,na,alphaa,
                     xc,yc,zc,normc,lc,mc,nc,alphac,
                     xd,yd,zd,normd,alphad,m)
 
+def vrr_recursive(
+	xa,ya,za,norma,la,ma,na,alphaa,
+	xb,yb,zb,normb,alphab,
+	xc,yc,zc,normc,lc,mc,nc,alphac,
+	xd,yd,zd,normd,alphad,m):
+        return chgp.vrr(xa,ya,za,norma,la,ma,na,alphaa,
+    	                xb,yb,zb,normb,alphab,
+			xc,yc,zc,normc,lc,mc,nc,alphac,
+			xd,yd,zd,normd,alphad,m)
+

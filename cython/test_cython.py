@@ -2,7 +2,7 @@ import unittest
 from numpy import array
 from pyquante2 import pgbf,cgbf
 from pyquante2.cone import S,T,V
-from pyquante2.ctwo import ERI,ERI_hgp,vrr
+from pyquante2.ctwo import ERI,ERI_hgp,vrr,vrr_recursive
 from pyquante2.ints.hgp import vrr as pyvrr
 s = pgbf(1)
 s2 = cgbf(exps=[1],coefs=[1])
@@ -36,7 +36,12 @@ class test_cython(unittest.TestCase):
                    0,0,0,1.,0,0,0,1.,
                    0,0,0,1.,1.,
                    0)
-        print pyval
+        cval2 = vrr_recursive(0,0,0,1.,0,0,0,1.,
+                              0,0,0,1.,1.,
+                              0,0,0,1.,0,0,0,1.,
+                              0,0,0,1.,1.,
+                              0)
+        self.assertAlmostEqual(cval2,pyval)
         self.assertAlmostEqual(cval,pyval)
 
 if __name__ == '__main__':

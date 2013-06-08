@@ -35,4 +35,12 @@ cdef extern from "chgp.h":
                int lc, int mc, int nc, double alphac,
                double xd, double yd, double zd, double normd, double alphad,
                int m)
+    double vrr_recursive(
+        double xa, double ya, double za, double norma,
+        int la, int ma, int na, double alphaa,
+        double xb, double yb, double zb, double normb, double alphab,
+        double xc, double yc, double zc, double normc,
+        int lc, int mc, int nc, double alphac,
+        double xd, double yd, double zd, double normd, double alphad,
+        int m)
 

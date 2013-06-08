@@ -18,6 +18,7 @@
  *
  **********************************************************************/
 
+#include "cints.h"
 #include "chgp.h"
 #include <assert.h>
 #include <math.h>
