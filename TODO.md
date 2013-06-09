@@ -1,5 +1,18 @@
 # PyQuante 2 Todo List
 
+## Bug!!
+I'm doing something dumb in my cute code that expands the cgbfs into pgbfs in the integral code.
+Everything should work fine if I'm doing all pgbf or all cgbfs, but there's a bug if I have a mixture.
+
+To fix this, I think I need 'else' statements:
+
+    if b.contracted:
+        return sum(cb*S(pb,a) for cb,pb in b)
+    else:
+        return S(b,a)
+
+I don't think this is a big deal for the 1e code, but I think it's a problem for the 2e code.
+
 ## Next steps to take:
 * Allow contr_hrr to be called by fixing the
     Cannot convert Python object to 'double *'
