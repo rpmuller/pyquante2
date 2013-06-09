@@ -37,7 +37,15 @@ double hrr(double xa, double ya, double za, double norma,
 	   double xd, double yd, double zd, double normd,
 	   int ld, int md, int nd, double alphad);
 
-double vrr_recursive(double xa, double ya, double za, double norma,
+double vrr(double xa, double ya, double za, double norma,
+	   int la, int ma, int na, double alphaa,
+	   double xb, double yb, double zb, double normb, double alphab,
+	   double xc, double yc, double zc, double normc,
+	   int lc, int mc, int nc, double alphac,
+	   double xd, double yd, double zd, double normd, double alphad,
+	   int m); 
+
+double vrr_nonrecursive(double xa, double ya, double za, double norma,
 	   int la, int ma, int na, double alphaa,
 	   double xb, double yb, double zb, double normb, double alphab,
 	   double xc, double yc, double zc, double normc,
@@ -45,7 +53,7 @@ double vrr_recursive(double xa, double ya, double za, double norma,
 	   double xd, double yd, double zd, double normd, double alphad,
 	   int m);
 
-double vrr(double xa, double ya, double za, double norma,
+double vrr_recursive(double xa, double ya, double za, double norma,
 	   int la, int ma, int na, double alphaa,
 	   double xb, double yb, double zb, double normb, double alphab,
 	   double xc, double yc, double zc, double normc,

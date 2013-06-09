@@ -214,6 +214,17 @@ double vrr(double xa, double ya, double za, double norma,
 	   int lc, int mc, int nc, double alphac,
 	   double xd, double yd, double zd, double normd, double alphad,
 	   int m){
+  return vrr_recursive(xa,ya,za,norma,la,ma,na,alphaa,xb,yb,zb,normb,alphab,
+		       xc,yc,zc,normc,lc,mc,nc,alphac,xd,yd,zd,normd,alphad,m);
+} 
+
+double vrr_nonrecursive(double xa, double ya, double za, double norma,
+	   int la, int ma, int na, double alphaa,
+	   double xb, double yb, double zb, double normb, double alphab,
+	   double xc, double yc, double zc, double normc,
+	   int lc, int mc, int nc, double alphac,
+	   double xd, double yd, double zd, double normd, double alphad,
+	   int m){
 
   double px,py,pz,qx,qy,qz,zeta,eta,wx,wy,wz,rab2,rcd2,Kcd,rpq2,T,Kab,val;
   /* double *vrr_terms; */
