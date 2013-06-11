@@ -18,69 +18,24 @@ def ERI(a,b,c,d):
     	   d.origin[0],d.origin[1],d.origin[2],d.norm,
 	   d.powers[0],d.powers[1],d.powers[2],d.exponent)
 
-# Having a contracted-only version of the function doesn't help.
-def cERI_hgp(a,b,c,d):
-    cdef array.array acoefs2,anorms2,aexps2
-    cdef array.array bcoefs2,bnorms2,bexps2
-    cdef array.array ccoefs2,cnorms2,cexps2
-    cdef array.array dcoefs2,dnorms2,dexps2
-    acoefs,anorms,aexps = a.cne_list()	    
-    bcoefs,bnorms,bexps = b.cne_list()	    
-    ccoefs,cnorms,cexps = c.cne_list()	    
-    dcoefs,dnorms,dexps = d.cne_list()	    
-    acoefs2 = array.array('d',acoefs)
-    bcoefs2 = array.array('d',bcoefs)
-    ccoefs2 = array.array('d',ccoefs)
-    dcoefs2 = array.array('d',dcoefs)
-    anorms2 = array.array('d',anorms)
-    bnorms2 = array.array('d',bnorms)
-    cnorms2 = array.array('d',cnorms)
-    dnorms2 = array.array('d',dnorms)
-    aexps2 = array.array('d',aexps)
-    bexps2 = array.array('d',bexps)
-    cexps2 = array.array('d',cexps)
-    dexps2 = array.array('d',dexps)
-    return chgp.contr_hrr(len(acoefs),a.origin[0],a.origin[1],a.origin[2],anorms2.data.as_doubles,
-                a.powers[0],a.powers[1],a.powers[2],aexps2.data.as_doubles,acoefs2.data.as_doubles,
-                len(bcoefs),b.origin[0],b.origin[1],b.origin[2],bnorms2.data.as_doubles,
-                b.powers[0],b.powers[1],b.powers[2],bexps2.data.as_doubles,bcoefs2.data.as_doubles,
-                len(ccoefs),c.origin[0],c.origin[1],c.origin[2],cnorms2.data.as_doubles,
-                c.powers[0],c.powers[1],c.powers[2],cexps2.data.as_doubles,ccoefs2.data.as_doubles,
-                len(dcoefs),d.origin[0],d.origin[1],d.origin[2],dnorms2.data.as_doubles,
-                d.powers[0],d.powers[1],d.powers[2],dexps2.data.as_doubles,dcoefs2.data.as_doubles)
-
 def ERI_hgp(a,b,c,d):
-    # This should be faster if I can get it to work, but having trouble passing
-    # in to double *anorms, etc.
-    cdef array.array acoefs2,anorms2,aexps2
-    cdef array.array bcoefs2,bnorms2,bexps2
-    cdef array.array ccoefs2,cnorms2,cexps2
-    cdef array.array dcoefs2,dnorms2,dexps2
+    cdef array.array acoefs,anorms,aexps
+    cdef array.array bcoefs,bnorms,bexps
+    cdef array.array ccoefs,cnorms,cexps
+    cdef array.array dcoefs,dnorms,dexps
     if a.contracted and b.contracted and c.contracted and d.contracted:
         acoefs,anorms,aexps = a.cne_list()	    
         bcoefs,bnorms,bexps = b.cne_list()	    
         ccoefs,cnorms,cexps = c.cne_list()	    
         dcoefs,dnorms,dexps = d.cne_list()	    
-        acoefs2 = array.array('d',acoefs)
-        bcoefs2 = array.array('d',bcoefs)
-        ccoefs2 = array.array('d',ccoefs)
-        dcoefs2 = array.array('d',dcoefs)
-        anorms2 = array.array('d',anorms)
-        bnorms2 = array.array('d',bnorms)
-        cnorms2 = array.array('d',cnorms)
-        dnorms2 = array.array('d',dnorms)
-        aexps2 = array.array('d',aexps)
-        bexps2 = array.array('d',bexps)
-        cexps2 = array.array('d',cexps)
-        dexps2 = array.array('d',dexps)
-        return chgp.contr_hrr(len(acoefs),a.origin[0],a.origin[1],a.origin[2],anorms2.data.as_doubles,
-                    a.powers[0],a.powers[1],a.powers[2],aexps2.data.as_doubles,acoefs2.data.as_doubles,
-                    len(bcoefs),b.origin[0],b.origin[1],b.origin[2],bnorms2.data.as_doubles,
-                    b.powers[0],b.powers[1],b.powers[2],bexps2.data.as_doubles,bcoefs2.data.as_doubles,
-                    len(ccoefs),c.origin[0],c.origin[1],c.origin[2],cnorms2.data.as_doubles,
-                    c.powers[0],c.powers[1],c.powers[2],cexps2.data.as_doubles,ccoefs2.data.as_doubles,
-                    len(dcoefs),d.origin[0],d.origin[1],d.origin[2],dnorms2.data.as_doubles,
-                    d.powers[0],d.powers[1],d.powers[2],dexps2.data.as_doubles,dcoefs2.data.as_doubles)
+        return chgp.contr_hrr(len(acoefs),a.origin[0],a.origin[1],a.origin[2],anorms.data.as_doubles,
+                    a.powers[0],a.powers[1],a.powers[2],aexps.data.as_doubles,acoefs.data.as_doubles,
+                    len(bcoefs),b.origin[0],b.origin[1],b.origin[2],bnorms.data.as_doubles,
+                    b.powers[0],b.powers[1],b.powers[2],bexps.data.as_doubles,bcoefs.data.as_doubles,
+                    len(ccoefs),c.origin[0],c.origin[1],c.origin[2],cnorms.data.as_doubles,
+                    c.powers[0],c.powers[1],c.powers[2],cexps.data.as_doubles,ccoefs.data.as_doubles,
+                    len(dcoefs),d.origin[0],d.origin[1],d.origin[2],dnorms.data.as_doubles,
+                    d.powers[0],d.powers[1],d.powers[2],dexps.data.as_doubles,dcoefs.data.as_doubles)
     if d.contracted:
         return sum(cd*ERI_hgp(pd,c,a,b) for (cd,pd) in d)
     return chgp.hrr(

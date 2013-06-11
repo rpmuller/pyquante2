@@ -13,7 +13,8 @@
  See the LICENSE file for licensing information.
 """
 
-from numpy import array
+import numpy as np
+import array
 
 class cgbf:
     """
@@ -28,11 +29,13 @@ class cgbf:
         assert len(origin)==3
         assert len(powers)==3
 
-        self.origin = array(origin,'d')
+        self.origin = np.asarray(origin,'d')
         self.powers = powers
 
         self.pgbfs = []
-        self.coefs = []
+        self.coefs = array.array('d')
+        self.pnorms = array.array('d')
+        self.pexps = array.array('d')
 
         for expn,coef in zip(exps,coefs):
             self.add_pgbf(expn,coef,False)
@@ -46,21 +49,20 @@ class cgbf:
     def __repr__(self): return repr(self.as_tuple())
 
     def cne_list(self):
-        coefs,norms,exps = [],[],[]
-        for c,p in self:
-            coefs.append(c)
-            norms.append(p.norm)
-            exps.append(p.exponent)
-        return coefs,norms,exps
+        return self.coefs,self.pnorms,self.pexps
 
     def add_pgbf(self,expn,coef,renormalize=True):
         from pyquante2.basis.pgbf import pgbf
 
         self.pgbfs.append(pgbf(expn,self.origin,self.powers))
         self.coefs.append(coef)
-
+        
         if renormalize:
             self.normalize()
+
+        for c,p in self:
+            self.pnorms.append(p.norm)
+            self.pexps.append(p.exponent)
         return
 
     def normalize(self):

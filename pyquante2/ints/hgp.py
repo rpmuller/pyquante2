@@ -39,10 +39,10 @@ def ERI_hgp(a,b,c,d):
     # This should be faster if I can get it to work, but having trouble passing
     # in to double *anorms, etc. 
     if a.contracted and b.contracted and c.contracted and d.contracted:
-        acoefs,anorms,aexps = a.cne_lists()
-        bcoefs,bnorms,bexps = b.cne_lists()
-        ccoefs,cnorms,cexps = c.cne_lists()
-        dcoefs,dnorms,dexps = d.cne_lists()
+        acoefs,anorms,aexps = a.cne_list()
+        bcoefs,bnorms,bexps = b.cne_list()
+        ccoefs,cnorms,cexps = c.cne_list()
+        dcoefs,dnorms,dexps = d.cne_list()
         return contr_hrr(
             a.origin,anorms,a.powers,aexps,acoefs,
             b.origin,bnorms,b.powers,bexps,bcoefs,
