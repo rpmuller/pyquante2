@@ -49,29 +49,27 @@ def ERI_hgp(a,b,c,d):
 	d.powers[0],d.powers[1],d.powers[2],d.exponent)
 
 # The following are only for debugging and can be deleted after ERI_hgp works:
-def vrr(xa,ya,za,norma,la,ma,na,alphaa,
-        xb,yb,zb,normb,alphab,
-        xc,yc,zc,normc,lc,mc,nc,alphac,
-        xd,yd,zd,normd,alphad,m):
+def vrr(double xa,double ya,double za,double norma,int la,int ma,int na,double alphaa,
+        double xb,double yb,double zb,double normb,double alphab,
+        double xc,double yc,double zc,double normc,int lc,int mc,int nc,double alphac,
+        double xd,double yd,double zd,double normd,double alphad,int m):
     return chgp.vrr(xa,ya,za,norma,la,ma,na,alphaa,
                     xb,yb,zb,normb,alphab,
                     xc,yc,zc,normc,lc,mc,nc,alphac,
                     xd,yd,zd,normd,alphad,m)
 
-def vrr_nonrecursive(
-	xa,ya,za,norma,la,ma,na,alphaa,
-	xb,yb,zb,normb,alphab,
-	xc,yc,zc,normc,lc,mc,nc,alphac,
-	xd,yd,zd,normd,alphad,m):
+def vrr_nonrecursive(double xa,double ya,double za,double norma,int la,int ma,int na,double alphaa,
+        double xb,double yb,double zb,double normb,double alphab,
+        double xc,double yc,double zc,double normc,int lc,int mc,int nc,double alphac,
+        double xd,double yd,double zd,double normd,double alphad,int m):
         return chgp.vrr_nonrecursive(xa,ya,za,norma,la,ma,na,alphaa,
 				     xb,yb,zb,normb,alphab,
 				     xc,yc,zc,normc,lc,mc,nc,alphac,
 				     xd,yd,zd,normd,alphad,m)
-def vrr_recursive(
-	xa,ya,za,norma,la,ma,na,alphaa,
-	xb,yb,zb,normb,alphab,
-	xc,yc,zc,normc,lc,mc,nc,alphac,
-	xd,yd,zd,normd,alphad,m):
+def vrr_recursive(double xa,double ya,double za,double norma,int la,int ma,int na,double alphaa,
+        double xb,double yb,double zb,double normb,double alphab,
+        double xc,double yc,double zc,double normc,int lc,int mc,int nc,double alphac,
+        double xd,double yd,double zd,double normd,double alphad,int m):
         return chgp.vrr_recursive(xa,ya,za,norma,la,ma,na,alphaa,
 				  xb,yb,zb,normb,alphab,
 				  xc,yc,zc,normc,lc,mc,nc,alphac,
