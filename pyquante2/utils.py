@@ -7,9 +7,11 @@ utils.py - Simple utilility funtions used in pyquante2.
  license. Please see the file LICENSE that is part of this
  distribution. 
 """
-
-from numpy import sqrt,log,exp,dot
+import numpy as np
 from math import factorial,gamma,lgamma
+from itertools import combinations_with_replacement
+
+def pairs(it): return combinations_with_replacement(it,2)
 
 def isnear(a,b,tol=1e-9): return abs(a-b)<tol
 
@@ -29,7 +31,7 @@ def fact2(n):
     """
     return reduce(int.__mul__,xrange(n,0,-2),1)
 
-def norm2(a): return dot(a,a)
+def norm2(a): return np.dot(a,a)
 
 def binomial(n,k):
     """
@@ -58,7 +60,7 @@ def gamm_inc(a,x):
     Incomple gamma function \gamma; computed from NumRec routine gammp.
     """
     gammap,gln = gammp(a,x)
-    return exp(gln)*gammap
+    return np.exp(gln)*gammap
     
 def gammp(a,x):
     "Returns the incomplete gamma function P(a;x). NumRec sect 6.2."
@@ -89,7 +91,7 @@ def _gser(a,x):
         if abs(delt) < abs(sum)*EPS: break
     else:
         print 'a too large, ITMAX too small in gser'
-    gamser=sum*exp(-x+a*log(x)-gln)
+    gamser=sum*np.exp(-x+a*np.log(x)-gln)
     return gamser,gln
 
 def _gcf(a,x):
@@ -116,8 +118,26 @@ def _gcf(a,x):
         if abs(delt-1.) < EPS: break
     else:
         print 'a too large, ITMAX too small in gcf'
-    gammcf=exp(-x+a*log(x)-gln)*h
+    gammcf=np.exp(-x+a*np.log(x)-gln)*h
     return gammcf,gln
+
+def trace2(A,B):
+    "Return trace(AB) of matrices A and B"
+    return sum(A*B)
+
+def dmat(c,nocc):
+    "Form the density matrix from the first nocc orbitals of c"
+    return np.dot(c[:,:nocc],c[:,:nocc].T)
+
+def simx(A,B):
+    "Similarity transform B^TAB"
+    return np.dot(B.T,dot(A,B))
+
+def geigh(H,S):
+    "Solve the generalized eigensystem Hc = ESc"
+    X = np.inv(np.cholesky(S)).T
+    E,U = np.eigh(simx(H,X))
+    return E,dot(X,U)
     
 if __name__ == '__main__':
     import doctest
