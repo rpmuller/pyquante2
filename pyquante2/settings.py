@@ -1,3 +1,11 @@
+"""
+ Copyright (c) 2004, Richard P. Muller. All Rights Reserved. 
+
+ PyQuante version 2.0 and later is covered by the GPL
+ license. Please see the file LICENSE that is part of this
+ distribution. 
+"""
+
 ## Todo: Move all of this to ConfigParser??
 
 

@@ -4,9 +4,9 @@ Create a molecule for use in pyquante
 >>> h
 [(1, 0.0, 0.0, 0.0)]
 
-Copyright (c) 2004, Richard P. Muller. All Rights Reserved. 
+ Copyright (c) 2004, Richard P. Muller. All Rights Reserved. 
 
- PyQuante version 1.2 and later is covered by the modified BSD
+ PyQuante version 2.0 and later is covered by the GPL
  license. Please see the file LICENSE that is part of this
  distribution. 
 """

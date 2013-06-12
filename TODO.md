@@ -14,6 +14,7 @@ To fix this, I think I need 'else' statements:
 I don't think this is a big deal for the 1e code, but I think it's a problem for the 2e code.
 
 ## Next steps to take:
+* Replace the BSD comment in the text boxes with a GPL comment.
 * Allow contr_hrr to be called by fixing the
     Cannot convert Python object to 'double *'
   error.

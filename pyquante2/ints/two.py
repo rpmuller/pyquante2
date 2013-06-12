@@ -1,3 +1,12 @@
+"""
+ Copyright (c) 2004, Richard P. Muller. All Rights Reserved. 
+
+ PyQuante version 2.0 and later is covered by the GPL
+ license. Please see the file LICENSE that is part of this
+ distribution. 
+
+"""
+
 from numpy import array,pi,sqrt,exp
 from math import factorial
 from pyquante2.utils import Fgamma, norm2, isnear

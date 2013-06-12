@@ -10,7 +10,10 @@
 
  Copyright (c) 2004, Richard P. Muller. All Rights Reserved. 
 
- See the LICENSE file for licensing information.
+ PyQuante version 2.0 and later is covered by the GPL
+ license. Please see the file LICENSE that is part of this
+ distribution. 
+
 """
 
 import numpy as np
