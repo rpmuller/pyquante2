@@ -20,7 +20,10 @@ class cgbf:
     """
     Class for a contracted Gaussian basis function
     >>> from pyquante2.utils import isnear
+    >>> print bfs
     >>> s = cgbf(exps=[1],coefs=[1])
+    >>> print s
+    cgbf((0.0, 0.0, 0.0),(0, 0, 0),[1.0],[1.0000000000000002])
     >>> isnear(s(0,0,0),0.7127054704,1e-9)
     True
     """
@@ -46,7 +49,7 @@ class cgbf:
 
     def __getitem__(self,item): return zip(self.coefs,self.pgbfs).__getitem__(item)
     def __call__(self,x,y,z): return sum(c*p(x,y,z) for c,p in self)
-    def __repr__(self): return repr(self.as_tuple())
+    def __repr__(self): return "cgbf(%s,%s,%s,%s)" % (tuple(self.origin),self.powers,list(self.pexps),list(self.coefs))
 
     def cne_list(self):
         return self.coefs,self.pnorms,self.pexps
@@ -60,9 +63,9 @@ class cgbf:
         if renormalize:
             self.normalize()
 
-        for c,p in self:
-            self.pnorms.append(p.norm)
-            self.pexps.append(p.exponent)
+        p = self.pgbfs[-1]
+        self.pnorms.append(p.norm)
+        self.pexps.append(p.exponent)
         return
 
     def normalize(self):

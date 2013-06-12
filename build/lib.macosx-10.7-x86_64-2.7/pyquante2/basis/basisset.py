@@ -2,7 +2,8 @@
 Basis set constructor
 
 >>> from pyquante2.geo.samples import h
->>> bfs = basisset(h,'sto3g')
+>>> basisset(h,'sto3g')
+    [cgbf((0.0, 0.0, 0.0),(0, 0, 0),[3.42525091, 0.62391373, 0.1688554],[0.1543289707029839, 0.5353281424384733, 0.44463454202535485])]
 
 Haven't figured out how to test the basis set yet. Print it out?
 
@@ -34,6 +35,7 @@ class basisset:
 
     def __getitem__(self,i): return self.bfs.__getitem__(i)
     def __repr__(self): return repr(self.bfs)
+    def __len__(self): return len(self.bfs)
 
 # Can define shellbasisset here, which is essentially a normal basis set, but has the functions
 # shorted into shells. Overload the normal basis set.

@@ -40,6 +40,8 @@ class pgbf:
         self.powers = powers
         self._normalize()
 
+    def __repr__(self): return "pgbf(%f,%s,%s)" % (self.exponent,tuple(self.origin),self.powers)
+
     def __call__(self,*args):
         "Compute the amplitude of the PGBF at point x,y,z"
         i,j,k = self.powers
