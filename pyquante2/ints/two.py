@@ -9,24 +9,23 @@
 
 from numpy import array,pi,sqrt,exp
 from math import factorial
-from pyquante2.utils import Fgamma, norm2, isnear
+from pyquante2.utils import Fgamma, norm2
 from pyquante2.ints.one import gaussian_product_center, binomial_prefactor
 
 
 def ERI(a,b,c,d):
     """
-    >>> from pyquante2.utils import isnear
     >>> from pyquante2.basis.pgbf import pgbf
     >>> s = pgbf(1)
-    >>> isnear(ERI(s,s,s,s),1.1283791671)
-    True
+    >>> round(ERI(s,s,s,s),6)
+    1.128379
     >>> from pyquante2.basis.cgbf import cgbf
     >>> s = cgbf(exps=[1],coefs=[1])
-    >>> isnear(ERI(s,s,s,s),1.1283791671)
-    True
+    >>> round(ERI(s,s,s,s),6)
+    1.128379
     >>> s2 = cgbf((0,0,1),(0,0,0),[1],[1])
-    >>> isnear(ERI(s,s,s2,s2),0.84270079)
-    True
+    >>> round(ERI(s,s,s2,s2),6)
+    0.842701
     """ 
     if d.contracted:
         return sum(cd*ERI(pd,c,a,b) for (cd,pd) in d)
@@ -45,10 +44,10 @@ def coulomb_repulsion(xyza,norma,(la,ma,na),alphaa,
     >>> p1 = array((0.,0.,0.),'d')
     >>> p2 = array((0.,0.,1.),'d')
     >>> lmn = (0,0,0)
-    >>> isnear(coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p1,1.,lmn,1.,p1,1.,lmn,1.),4.3733545819)
-    True
-    >>> isnear(coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p2,1.,lmn,1.,p2,1.,lmn,1.),3.2661267318)
-    True
+    >>> round(coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p1,1.,lmn,1.,p1,1.,lmn,1.),6)
+    4.373355
+    >>> round(coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p2,1.,lmn,1.,p2,1.,lmn,1.),6)
+    3.266127
     """
     xa,ya,za = xyza
     xb,yb,zb = xyzb

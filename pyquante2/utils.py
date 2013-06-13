@@ -14,8 +14,6 @@ from itertools import combinations_with_replacement,combinations
 def pairs(it): return combinations_with_replacement(it,2)
 def upairs(it): return combinations(it,2)
 
-def isnear(a,b,tol=1e-9): return abs(a-b)<tol
-
 def fact2(n):
     """
     fact2(n) - n!!, double factorial of n

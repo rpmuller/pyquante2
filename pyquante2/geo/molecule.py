@@ -13,13 +13,13 @@ Create a molecule for use in pyquante
 import numpy as np
 from pyquante2 import settings
 from pyquante2.geo.atom import atom
-from pyquante2.utils import upairs,norm2,isnear
+from pyquante2.utils import upairs,norm2
 
 class molecule:
     """
     >>> from pyquante2.geo.samples import h2
-    >>> isnear(h2.nuclear_repulsion(), 0.72236003670251858,1e-6)
-    True
+    >>> round(h2.nuclear_repulsion(), 6)
+    0.72236
     >>> h2.nel()
     2
     >>> h2.nocc()

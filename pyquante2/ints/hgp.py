@@ -23,18 +23,17 @@ from pyquante2.ints.one import gaussian_product_center
 
 def ERI_hgp(a,b,c,d):
     """
-    >>> from pyquante2.utils import isnear
     >>> from pyquante2.basis.pgbf import pgbf
     >>> s = pgbf(1)
-    >>> isnear(ERI_hgp(s,s,s,s),1.1283791671)
-    True
+    >>> round(ERI_hgp(s,s,s,s),6)
+    1.128379
     >>> from pyquante2.basis.cgbf import cgbf
     >>> s = cgbf(exps=[1],coefs=[1])
-    >>> isnear(ERI_hgp(s,s,s,s),1.1283791671)
-    True
+    >>> round(ERI_hgp(s,s,s,s),6)
+    1.128379
     >>> s2 = cgbf((0,0,1),(0,0,0),[1],[1])
-    >>> isnear(ERI_hgp(s,s,s2,s2),0.84270079)
-    True
+    >>> round(ERI_hgp(s,s,s2,s2),6)
+    0.842701
     """ 
     # This should be faster if I can get it to work, but having trouble passing
     # in to double *anorms, etc. 

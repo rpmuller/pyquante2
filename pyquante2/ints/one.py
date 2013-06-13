@@ -9,7 +9,7 @@
 
 from numpy import pi,exp,floor,array
 from math import factorial
-from pyquante2.utils import binomial, fact2, Fgamma, norm2, isnear
+from pyquante2.utils import binomial, fact2, Fgamma, norm2
 
 # Notes:
 # The versions S,T,V include the normalization constants
@@ -22,8 +22,8 @@ def S(a,b):
     The simple interface to the overlap function, using only primitive basis functions as the arguments.
     >>> from pyquante2.basis.pgbf import pgbf
     >>> s = pgbf(1)
-    >>> isnear(S(s,s),1)
-    True
+    >>> round(S(s,s),6)
+    1.0
     """
     if b.contracted:
         return sum(cb*S(pb,a) for (cb,pb) in b)
@@ -34,8 +34,8 @@ def T(a,b):
     Simple interface to the kinetic function.
     >>> from pyquante2.basis.pgbf import pgbf
     >>> s = pgbf(1)
-    >>> isnear(T(s,s),1.5)
-    True
+    >>> round(T(s,s),6)
+    1.5
     """
     if b.contracted:
         return sum(cb*T(pb,a) for (cb,pb) in b)
@@ -44,11 +44,10 @@ def T(a,b):
 def V(a,b,C):
     """
     Simple interface to the nuclear attraction function.
-    >>> from pyquante2.utils import isnear
     >>> from pyquante2.basis.pgbf import pgbf
     >>> s = pgbf(1)
-    >>> isnear(V(s,s,(0,0,0)),-1.5957691216)
-    True
+    >>> round(V(s,s,(0,0,0)),6)
+    -1.595769
     """
     if b.contracted:
         return sum(cb*V(pb,a,C) for (cb,pb) in b)
@@ -58,8 +57,8 @@ def V(a,b,C):
 def overlap(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
     """
     Full form of the overlap integral. Taken from THO eq. 2.12
-    >>> isnear(overlap(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d')),1.9687012432)
-    True
+    >>> round(overlap(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d')),6)
+    1.968701
     """
     rab2 = norm2(A-B)
     gamma = alpha1+alpha2
@@ -75,8 +74,8 @@ def overlap(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
 def overlap1d(l1,l2,PAx,PBx,gamma):
     """
     The one-dimensional component of the overlap integral. Taken from THO eq. 2.12
-    >>> isnear(overlap1d(0,0,0,0,1),1.0)
-    True
+    >>> round(overlap1d(0,0,0,0,1),6)
+    1.0
     """
     total = 0
     for i in xrange(1+int(floor(0.5*(l1+l2)))):
@@ -108,8 +107,8 @@ def binomial_prefactor(s,ia,ib,xpa,xpb):
 def kinetic(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
     """
     The full form of the kinetic energy integral
-    >>> isnear(kinetic(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d')),2.9530518648)
-    True
+    >>> round(kinetic(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d')),6)
+    2.953052
     """
     term0 = alpha2*(2*(l2+m2+n2)+3)*\
             overlap(alpha1,(l1,m1,n1),A,\
@@ -132,8 +131,8 @@ def kinetic(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
 def nuclear_attraction(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B,C):
     """
     Full form of the nuclear attraction integral
-    >>> isnear(nuclear_attraction(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d'),array((0,0,0),'d')),-3.1415926536)
-    True
+    >>> round(nuclear_attraction(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d'),array((0,0,0),'d')),6)
+    -3.141593
     """
     gamma = alpha1+alpha2
 
