@@ -34,3 +34,10 @@ I don't think this is a big deal for the 1e code, but I think it's a problem for
   can use the math.erf function in py27?
 * Should we consider doing everything in Cython?
 
+## Things I'd like more of
+* Itertools
+* NamedTuples
+* Cython
+* Speed
+
+
