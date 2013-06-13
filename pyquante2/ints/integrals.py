@@ -18,6 +18,7 @@ except:
     from pyquante2.ints.one import S,T,V
 
 from pyquante2.utils import pairs
+from itertools import product
 import numpy as np
 
 # The most time-consuming parts of the code are here. Tread carefully!
@@ -28,9 +29,6 @@ class twoe_integrals:
     >>> bfs = basisset(h,'sto3g')
     >>> twoe_integrals(bfs)
     array([ 0.77460594])
-
-    Earlier got array([ 1.76093193]) as the result: don't yet know
-    what's right.
     """
     def __init__(self,bfs):
         nbf = self.nbf = len(bfs)
@@ -47,10 +45,9 @@ class twoe_integrals:
         nbf = self.nbf
         temp = np.empty(nbf**2,'d')
         kl = 0
-        for k in xrange(nbf):
-            for l in xrange(nbf):
-                temp[kl] = 2*self[i,j,k,l]-self[i,k,j,l]
-                kl += 1
+        for k,l in product(xrange(nbf),repeat=2):
+            temp[kl] = 2*self[i,j,k,l]-self[i,k,j,l]
+            kl += 1
         return temp
 
     def jk(self,D):
