@@ -20,6 +20,7 @@ except:
 from pyquante2.utils import pairs
 import numpy as np
 
+# The most time-consuming parts of the code are here. Tread carefully!
 class twoe_integrals:
     """
     >>> from pyquante2.geo.samples import h
@@ -42,6 +43,24 @@ class twoe_integrals:
     def __getitem__(self,pos): return self._2e_ints[index(*pos)]
     def __repr__(self): return repr(self._2e_ints)
 
+    def fetchjk(self,i,j):
+        nbf = self.nbf
+        temp = np.empty(nbf**2,'d')
+        kl = 0
+        for k in xrange(nbf):
+            for l in xrange(nbf):
+                temp[kl] = 2*self[i,j,k,l]-self[i,k,j,l]
+        return temp
+
+    def jk(self,D):
+        nbf = self.nbf
+        D1 = np.reshape(D,(nbf*nbf,))
+        G = np.empty((nbf,nbf),'d')
+        for i,j in pairs(xrange(nbf)):
+            temp = self.fetchjk(i,j)
+            G[i,j] = G[j,i] = np.dot(D1,temp)
+        return G
+                    
 class onee_integrals:
     """
     >>> from pyquante2.geo.samples import h
