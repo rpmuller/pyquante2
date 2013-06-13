@@ -23,7 +23,6 @@ class cgbf:
     """
     Class for a contracted Gaussian basis function
     >>> from pyquante2.utils import isnear
-    >>> print bfs
     >>> s = cgbf(exps=[1],coefs=[1])
     >>> print s
     cgbf((0.0, 0.0, 0.0),(0, 0, 0),[1.0],[1.0000000000000002])

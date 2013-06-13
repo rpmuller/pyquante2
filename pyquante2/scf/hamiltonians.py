@@ -1,3 +1,4 @@
+from pyquante2.utils import isnear
 from pyquante2.ints.integrals import onee_integrals,twoe_integrals
 import numpy as np
 
@@ -17,8 +18,8 @@ class rhf:
     >>> bfs = basisset(h2,'sto3g')
     >>> h2_rhf = rhf(h2,bfs)
     >>> ens = h2_rhf.converge(simple)
-    >>> h2_rhf.energy()
-    -1.1170995786238218
+    >>> isnear(h2_rhf.energy(),-1.1170995786238218,1e-6)
+    True
     """
     def __init__(self,geo,bfs):
         self.geo = geo

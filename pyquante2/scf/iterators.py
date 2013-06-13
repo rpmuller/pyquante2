@@ -3,7 +3,7 @@ from pyquante2.scf.hamiltonians import mock
 def simple(H,c=None,tol=1e-5,maxiters=100):
     """
     Simplest possible iterator for SCF.
-    >>> list(simple(MockH()))
+    >>> list(simple(mock()))
     [0.1, 0.01, 0.001, 0.0001, 1e-05]
     """
     Eold = 0
@@ -19,7 +19,7 @@ def simple(H,c=None,tol=1e-5,maxiters=100):
 def averaging(H,c=None,fraction=0.5,tol=1e-5,maxiters=100):
     """
     Simple orbital averaging.
-    >>> list(simple(MockH()))
+    >>> list(simple(mock()))
     [0.1, 0.01, 0.001, 0.0001, 1e-05]
     """
     Eold = 0
