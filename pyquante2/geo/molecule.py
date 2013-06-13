@@ -13,9 +13,18 @@ Create a molecule for use in pyquante
 import numpy as np
 from pyquante2 import settings
 from pyquante2.geo.atom import atom
-from pyquante2.utils import pairs,norm2
+from pyquante2.utils import upairs,norm2,isnear
 
 class molecule:
+    """
+    >>> from pyquante2.geo.samples import h2
+    >>> isnear(h2.nuclear_repulsion(), 0.72236003670251858,1e-6)
+    True
+    >>> h2.nel()
+    2
+    >>> h2.nocc()
+    1
+    """
     def __init__(self,atomlist=[],**kwargs):
         self.atoms = []
         self.charge = int(kwargs.get('charge',settings.molecular_charge))
@@ -32,11 +41,7 @@ class molecule:
     def __getitem__(self,i): return self.atoms.__getitem__(i)
 
     def nuclear_repulsion(self):
-        enuke = 0
-        for i,ati in enumerate(self.atoms):
-            for atj in self.atoms[:i]:
-                enuke += ati.atno*atj.atno/np.sqrt(norm2(ati.r-atj.r))
-        return enuke
+        return sum(ati.atno*atj.atno/np.sqrt(norm2(ati.r-atj.r)) for ati,atj in upairs(self.atoms))
 
     def nel(self):
         "Number of electrons of the molecule"
