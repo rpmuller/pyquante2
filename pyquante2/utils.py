@@ -131,13 +131,13 @@ def dmat(c,nocc):
 
 def simx(A,B):
     "Similarity transform B^TAB"
-    return np.dot(B.T,dot(A,B))
+    return np.dot(B.T,np.dot(A,B))
 
 def geigh(H,S):
     "Solve the generalized eigensystem Hc = ESc"
-    X = np.inv(np.cholesky(S)).T
-    E,U = np.eigh(simx(H,X))
-    return E,dot(X,U)
+    X = np.linalg.inv(np.linalg.cholesky(S)).T
+    E,U = np.linalg.eigh(simx(H,X))
+    return E,np.dot(X,U)
     
 if __name__ == '__main__':
     import doctest
