@@ -50,6 +50,7 @@ class twoe_integrals:
         for k in xrange(nbf):
             for l in xrange(nbf):
                 temp[kl] = 2*self[i,j,k,l]-self[i,k,j,l]
+                kl += 1
         return temp
 
     def jk(self,D):
