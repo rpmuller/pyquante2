@@ -11,12 +11,12 @@ class mock:
 
 class rhf:
     """
-    >>> from pyquante2.geo.samples import h
+    >>> from pyquante2.geo.samples import h2
     >>> from pyquante2.basis.basisset import basisset
     >>> from pyquante2.scf.iterators import averaging
-    >>> bfs = basisset(h,'sto3g')
-    >>> h_rhf = rhf(h,bfs)
-    >>> h.converge(averaging)
+    >>> bfs = basisset(h2,'sto3g')
+    >>> h2_rhf = rhf(h2,bfs)
+    >>> h2_rhf.converge(averaging)
     """
     def __init__(self,geo,bfs):
         self.geo = geo
@@ -24,26 +24,32 @@ class rhf:
         self.i1 = onee_integrals(bfs,geo)
         self.i2 = twoe_integrals(bfs)
 
-    def converge(self,iterator): self.scf_energies = list(iterator(self))
+    def converge(self,iterator,verbose=False):
+        c = self.update(None)
+        print self.i1.T
+        print self.i1.V
+        print self.energy()
+        #return list(iterator(self))
 
     def update(self,c):
         from pyquante2.utils import geigh,dmat,trace2
         S = self.i1.S
 
         if c is None:
-            E,c = np.eigh(S)
+            E,c = np.linalg.eigh(S)
 
-        D = dmat(c,geo.nocc)
+        D = dmat(c,self.geo.nocc())
         H = self.i1.T + self.i1.V
         self.e0 = trace2(H,D)
 
-        J,K = self.i2.jk(D)
-        H += 2*J-K
+        JK = self.i2.jk(D)
+        H += JK
         self.e1 = trace2(H,D)
         E,c = geigh(H,S)
         return c
         
-    def energy(self): return self.e0+self.e1
+    def energy(self):
+        return self.e0+self.e1
 
 if __name__ == '__main__':
     import doctest; doctest.testmod()
