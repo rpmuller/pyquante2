@@ -10,8 +10,10 @@ Create a molecule for use in pyquante
  license. Please see the file LICENSE that is part of this
  distribution. 
 """
+import numpy as np
 from pyquante2 import settings
 from pyquante2.geo.atom import atom
+from pyquante2.utils import pairs,norm2
 
 class molecule:
     def __init__(self,atomlist=[],**kwargs):
@@ -28,6 +30,13 @@ class molecule:
 
     def __repr__(self): return repr(self.atoms)
     def __getitem__(self,i): return self.atoms.__getitem__(i)
+
+    def nuclear_repulsion(self):
+        enuke = 0
+        for i,ati in enumerate(self.atoms):
+            for atj in self.atoms[:i]:
+                enuke += ati.atno*atj.atno/np.sqrt(norm2(ati.r-atj.r))
+        return enuke
 
     def nel(self):
         "Number of electrons of the molecule"
