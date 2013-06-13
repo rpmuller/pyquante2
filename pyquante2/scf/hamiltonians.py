@@ -16,7 +16,9 @@ class rhf:
     >>> from pyquante2.scf.iterators import simple,averaging
     >>> bfs = basisset(h2,'sto3g')
     >>> h2_rhf = rhf(h2,bfs)
-    >>> h2_rhf.converge(simple)
+    >>> ens = h2_rhf.converge(simple)
+    >>> h2_rhf.energy()
+    -1.1170995786238218
     """
     def __init__(self,geo,bfs):
         self.geo = geo
