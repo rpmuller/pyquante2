@@ -13,10 +13,10 @@ class rhf:
     """
     >>> from pyquante2.geo.samples import h2
     >>> from pyquante2.basis.basisset import basisset
-    >>> from pyquante2.scf.iterators import averaging
+    >>> from pyquante2.scf.iterators import simple,averaging
     >>> bfs = basisset(h2,'sto3g')
     >>> h2_rhf = rhf(h2,bfs)
-    >>> h2_rhf.converge(averaging)
+    >>> h2_rhf.converge(simple)
     """
     def __init__(self,geo,bfs):
         self.geo = geo
@@ -25,11 +25,7 @@ class rhf:
         self.i2 = twoe_integrals(bfs)
 
     def converge(self,iterator,verbose=False):
-        c = self.update(None)
-        print self.i1.T
-        print self.i1.V
-        print self.energy()
-        #return list(iterator(self))
+        return list(iterator(self))
 
     def update(self,c):
         from pyquante2.utils import geigh,dmat,trace2
@@ -38,18 +34,18 @@ class rhf:
         if c is None:
             E,c = np.linalg.eigh(S)
 
+        self._energy = self.geo.nuclear_repulsion()
         D = dmat(c,self.geo.nocc())
         H = self.i1.T + self.i1.V
-        self.e0 = trace2(H,D)
+        self._energy += trace2(H,D)
 
         JK = self.i2.jk(D)
-        H += JK
-        self.e1 = trace2(H,D)
+        H = H + JK
+        self._energy += trace2(H,D)
         E,c = geigh(H,S)
         return c
         
-    def energy(self):
-        return self.e0+self.e1
+    def energy(self): return self._energy
 
 if __name__ == '__main__':
     import doctest; doctest.testmod()
