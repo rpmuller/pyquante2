@@ -27,8 +27,20 @@ class molecule:
         return
 
     def __repr__(self): return repr(self.atoms)
-
     def __getitem__(self,i): return self.atoms.__getitem__(i)
+
+    def nel(self):
+        "Number of electrons of the molecule"
+        return sum(atom.atno for atom in self) - self.charge
+    
+    def nocc(self,assert_closed=False):
+        "Number of occupied orbitals"
+        c,o = divmod(self.nel(),2)
+        if assert_closed:
+            assert o==0, "Molecule should be closed shell"
+        return c+o
+        
+
 
 if __name__ == '__main__':
     import doctest
