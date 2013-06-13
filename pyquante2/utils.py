@@ -123,7 +123,7 @@ def _gcf(a,x):
 
 def trace2(A,B):
     "Return trace(AB) of matrices A and B"
-    return sum(A*B)
+    return np.sum(A*B)
 
 def dmat(c,nocc):
     "Form the density matrix from the first nocc orbitals of c"
