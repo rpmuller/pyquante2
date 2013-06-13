@@ -41,7 +41,7 @@ class molecule:
     def __getitem__(self,i): return self.atoms.__getitem__(i)
 
     def nuclear_repulsion(self):
-        return sum(ati.atno*atj.atno/np.sqrt(norm2(ati.r-atj.r)) for ati,atj in upairs(self.atoms))
+        return sum(ati.atno*atj.atno/np.sqrt(norm2(ati.r-atj.r)) for ati,atj in upairs(self))
 
     def nel(self):
         "Number of electrons of the molecule"
