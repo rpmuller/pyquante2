@@ -9,9 +9,10 @@ utils.py - Simple utilility funtions used in pyquante2.
 """
 import numpy as np
 from math import factorial,gamma,lgamma
-from itertools import combinations_with_replacement
+from itertools import combinations_with_replacement,combinations
 
 def pairs(it): return combinations_with_replacement(it,2)
+def upairs(it): return combinations(it,2)
 
 def isnear(a,b,tol=1e-9): return abs(a-b)<tol
 
