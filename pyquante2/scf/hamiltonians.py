@@ -30,29 +30,6 @@ class rhf:
     def converge(self,iterator,verbose=False):
         return list(iterator(self))
 
-    def iterate(self,tol=1e-4,maxit=10): # for debugging only; move to an iterator afterwards
-        Eold = 0
-        S = self.i1.S
-        orbe,c = np.linalg.eigh(S)
-        nocc = self.geo.nocc()
-        print "Nocc = ",nocc
-        Enuke = self.geo.nuclear_repulsion()
-        h = self.i1.T + self.i1.V
-
-        for i in xrange(maxit):
-            D = dmat(c,self.geo.nocc())
-            JK = self.i2.jk(D)
-            F = h + JK
-            E = Enuke + trace2(D,h) + trace2(D,F)
-            print i+1,E
-            orbe,c = geigh(F,S)
-            if abs(E-Eold) < tol: break
-            Eold = E
-        else:
-            print "Too many iterations in iterate"
-        return E,c
-        
-
     def update(self,c):
         from pyquante2.utils import geigh,dmat,trace2
         S = self.i1.S
