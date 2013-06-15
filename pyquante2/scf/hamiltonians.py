@@ -1,14 +1,7 @@
 from pyquante2.ints.integrals import onee_integrals,twoe_integrals
 from pyquante2.utils import dmat,trace2,geigh
+from pyquante2.scf.iterators import simple
 import numpy as np
-
-class mock:
-    """
-    A mock Hamiltonian for testing purposes. Implements energy() and update()
-    """
-    def __init__(self,*args): self.i = 0
-    def update(self,*args): self.i += 1
-    def energy(self): return 1.0/pow(10,self.i)
 
 class rhf:
     """
@@ -27,8 +20,8 @@ class rhf:
         self.i1 = onee_integrals(bfs,geo)
         self.i2 = twoe_integrals(bfs)
 
-    def converge(self,iterator,verbose=False):
-        return list(iterator(self))
+    def converge(self,iterator=simple,**kwargs):
+        return list(iterator(self,**kwargs))
 
     def update(self,c):
         from pyquante2.utils import geigh,dmat,trace2
