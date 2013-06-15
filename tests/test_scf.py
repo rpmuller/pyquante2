@@ -30,9 +30,8 @@ class test_scf(unittest.TestCase):
         self.assertAlmostEqual(h4_rhf.energy(),-2.234185653441159)
         # This is not quite equal to 2x the h2 energy, but very close
 
-    # def test_h2o(self):
-    #     bfs = basisset(h2o,'sto3g')
-    #     h2o_rhf = rhf(h2o,bfs)
-    #     ens = h2o_rhf.converge(averaging)
-    #     print ens
-    #     self.assertAlmostEqual(h2o_rhf.energy(),-1.117099582955609)
+    def test_h2o(self):
+        bfs = basisset(h2o,'sto3g')
+        h2o_rhf = rhf(h2o,bfs)
+        ens = h2o_rhf.converge(simple)
+        self.assertAlmostEqual(h2o_rhf.energy(),-74.959856073494194)
