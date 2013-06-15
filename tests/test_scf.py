@@ -16,6 +16,13 @@ class test_scf(unittest.TestCase):
         ens = lih_rhf.converge(simple)
         self.assertAlmostEqual(lih_rhf.energy(),-7.8607437) # Jaguar energy for 6-31G**
 
+    def test_lih_averaging(self):
+        bfs = basisset(lih,'sto3g')
+        lih_rhf = rhf(lih,bfs)
+        #E,c = lih_rhf.iterate()
+        ens = lih_rhf.converge(averaging)
+        self.assertAlmostEqual(lih_rhf.energy(),-7.8607437244557961)
+
     def test_h4(self):
         h4 = molecule([
             (1,  0.00000000,     0.00000000,     0.36628549),
@@ -34,4 +41,10 @@ class test_scf(unittest.TestCase):
         bfs = basisset(h2o,'sto3g')
         h2o_rhf = rhf(h2o,bfs)
         ens = h2o_rhf.converge(simple)
+        self.assertAlmostEqual(h2o_rhf.energy(),-74.959856073494194)
+
+    def test_h2o_averaging(self):
+        bfs = basisset(h2o,'sto3g')
+        h2o_rhf = rhf(h2o,bfs)
+        ens = h2o_rhf.converge(averaging)
         self.assertAlmostEqual(h2o_rhf.energy(),-74.959856073494194)
