@@ -1,4 +1,10 @@
-from pyquante2.scf.hamiltonians import mock
+class mock:
+    """
+    A mock Hamiltonian for testing purposes. Implements energy() and update()
+    """
+    def __init__(self,*args): self.i = 0
+    def update(self,*args): self.i += 1
+    def energy(self): return 1.0/pow(10,self.i)
 
 def simple(H,c=None,tol=1e-5,maxiters=100):
     """
