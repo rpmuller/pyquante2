@@ -9,33 +9,12 @@ class test_scf(unittest.TestCase):
         ens = h2_rhf.converge(simple)
         self.assertAlmostEqual(h2_rhf.energy(),-1.117099582955609)
 
-    def test_h2y(self):
-        h2 = molecule([
-            (1,  0.00000000,     0.36628549,     0.00000000),
-            (1,  0.00000000,    -0.36628549,     0.00000000),
-            ],
-                      units='Angstrom')
-        bfs = basisset(h2,'sto3g')
-        h2_rhf = rhf(h2,bfs)
-        ens = h2_rhf.converge(simple)
-        self.assertAlmostEqual(h2_rhf.energy(),-1.117099582955609)
-
-    def test_h2x(self):
-        h2 = molecule([
-            (1,     0.36628549,  0.00000000,     0.00000000),
-            (1,    -0.36628549,  0.00000000,     0.00000000),
-            ],
-                      units='Angstrom')
-        bfs = basisset(h2,'sto3g')
-        h2_rhf = rhf(h2,bfs)
-        ens = h2_rhf.converge(simple)
-        self.assertAlmostEqual(h2_rhf.energy(),-1.117099582955609)
-
     def test_lih(self):
         bfs = basisset(lih,'sto3g')
         lih_rhf = rhf(lih,bfs)
-        E,c = lih_rhf.iterate()
-        self.assertAlmostEqual(E,-7.981340) # Jaguar energy for 6-31G**
+        #E,c = lih_rhf.iterate()
+        ens = lih_rhf.converge(simple)
+        self.assertAlmostEqual(lih_rhf.energy(),-7.8607437) # Jaguar energy for 6-31G**
 
     def test_h4(self):
         h4 = molecule([
