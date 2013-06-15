@@ -1,5 +1,5 @@
 from pyquante2.ints.integrals import onee_integrals,twoe_integrals
-from pyquante2.utils import dmat,trace2,geigh
+from pyquante2.utils import trace2,geigh
 from pyquante2.scf.iterators import simple
 import numpy as np
 
@@ -23,22 +23,16 @@ class rhf:
     def converge(self,iterator=simple,**kwargs):
         return list(iterator(self,**kwargs))
 
-    def update(self,c):
+    def update(self,D):
         from pyquante2.utils import geigh,dmat,trace2
-        S = self.i1.S
-
-        if c is None:
-            E,c = np.linalg.eigh(S)
-
         self._energy = self.geo.nuclear_repulsion()
-        D = dmat(c,self.geo.nocc())
         H = self.i1.T + self.i1.V
         self._energy += trace2(H,D)
 
         JK = self.i2.jk(D)
         H = H + JK
         self._energy += trace2(H,D)
-        E,c = geigh(H,S)
+        E,c = geigh(H,self.i1.S)
         return c
         
     def energy(self): return self._energy

@@ -1,3 +1,5 @@
+import numpy as np
+from pyquante2.utils import dmat
 class mock:
     """
     A mock Hamiltonian for testing purposes. Implements energy() and update()
@@ -13,8 +15,10 @@ def simple(H,c=None,tol=1e-5,maxiters=100):
     [0.1, 0.01, 0.001, 0.0001, 1e-05]
     """
     Eold = 0
+    orbe,c = np.linalg.eigh(H.i1.S)
     for i in xrange(maxiters):
-        c = H.update(c)
+        D = dmat(c,H.geo.nocc())
+        c = H.update(D)
         E = H.energy()
         if abs(E-Eold) < tol:
             break
@@ -24,17 +28,19 @@ def simple(H,c=None,tol=1e-5,maxiters=100):
 
 def averaging(H,c=None,fraction=0.5,tol=1e-5,maxiters=100):
     """
-    Simple orbital averaging.
-    >>> list(simple(mock()))
+    Simplest possible iterator for SCF.
+    >>> list(averaging(mock()))
     [0.1, 0.01, 0.001, 0.0001, 1e-05]
     """
     Eold = 0
+    orbe,c = np.linalg.eigh(H.i1.S)
+    Dold = None
     for i in xrange(maxiters):
-        cnew = H.update(c)
-        if c is None:
-            c = cnew
+        if Dold is not None:
+            D = (1-fraction)*Dold + fraction*dmat(c,H.geo.nocc())
         else:
-            c = (1-fraction)*c + fraction*cnew
+            D = dmat(c,H.geo.nocc())
+        c = H.update(D)
         E = H.energy()
         if abs(E-Eold) < tol:
             break
