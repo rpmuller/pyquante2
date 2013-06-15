@@ -66,3 +66,5 @@ build/lib.macosx-10.7-x86_64-2.7/pyquante2/scf/__init__.py
 build/lib.macosx-10.7-x86_64-2.7/pyquante2/scf/hamiltonians.py
 
 build/lib.macosx-10.7-x86_64-2.7/pyquante2/scf/iterators.py
+
+build/lib.macosx-10.7-x86_64-2.7/pyquante2/__init__.py
