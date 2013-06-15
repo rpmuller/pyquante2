@@ -1,5 +1,5 @@
 import unittest
-from pyquante2 import molecule,rhf,h2,h2o,basisset
+from pyquante2 import molecule,rhf,h2,h2o,lih,basisset
 from pyquante2.scf.iterators import simple,averaging
 
 class test_scf(unittest.TestCase):
@@ -30,6 +30,12 @@ class test_scf(unittest.TestCase):
         h2_rhf = rhf(h2,bfs)
         ens = h2_rhf.converge(simple)
         self.assertAlmostEqual(h2_rhf.energy(),-1.117099582955609)
+
+    def test_lih(self):
+        bfs = basisset(lih,'sto3g')
+        lih_rhf = rhf(lih,bfs)
+        E,c = lih_rhf.iterate()
+        self.assertAlmostEqual(E,-7.981340) # Jaguar energy for 6-31G**
 
     def test_h4(self):
         h4 = molecule([
