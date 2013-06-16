@@ -18,7 +18,7 @@ from pyquante2.basis.cgbf import cgbf
 from pyquante2.basis.tools import sym2pow
 
 class basisset:
-    def __init__(self,atoms,name,**kwargs):
+    def __init__(self,atoms,name='sto3g',**kwargs):
         self.bfs = []
         basis_data = getattr(data,name)
         omit_f = kwargs.get('omit_f',settings.omit_f)
