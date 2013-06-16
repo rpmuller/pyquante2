@@ -4,6 +4,7 @@
 * Graphics module with lineplot, contour plot, etc, for bfs and orbital
 * VTK plotting
 * _repr_html_ for hamiltonians
+* Units for molecule._repr_html_
 * 6-31G** basis set
 * Change iterators from generator expression, so we can print them after they're done, also using _repr_html_
 
