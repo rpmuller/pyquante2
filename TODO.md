@@ -1,5 +1,12 @@
 # PyQuante 2 Todo List
 
+## Easy stuff to add:
+* Graphics module with lineplot, contour plot, etc, for bfs and orbital
+* VTK plotting
+* _repr_html_ for atoms, hamiltonians
+* 6-31G** basis set
+* Change iterators from generator expression, so we can print them after they're done, also using _repr_html_
+
 ## Bug!!
 I'm doing something dumb in my cute code that expands the cgbfs into pgbfs in the integral code.
 Everything should work fine if I'm doing all pgbf or all cgbfs, but there's a bug if I have a mixture.
@@ -30,5 +37,5 @@ I don't think this is a big deal for the 1e code, but I think it's a problem for
 * NamedTuples
 * Cython
 * Speed
-
-
+* _repr_html_
+* nosetests
