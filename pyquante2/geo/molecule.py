@@ -63,6 +63,15 @@ class molecule:
         else:
             print record
         return
+
+    def pyquante1(self,name="pyq2 molecule"):
+        """
+        Make a PyQuante1 Molecule object that can be passed into that program for
+        testing/debugging purposes.
+        """
+        from PyQuante import Molecule
+        atuples = [(a.atno,tuple(a.r)) for a in self.atoms]
+        return Molecule(name,atuples,charge=self.charge,multiplicity=self.multiplicity)
                  
         
         
