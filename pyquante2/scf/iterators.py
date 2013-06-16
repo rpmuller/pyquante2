@@ -6,33 +6,48 @@ def simple(H,c=None,tol=1e-5,maxiters=100):
     Simple SCF iterator.
     """
     Eold = 0
-    orbe,c = np.linalg.eigh(H.i1.S)
+    if c is None:
+        orbe,c = np.linalg.eigh(H.i1.S)
     for i in xrange(maxiters):
         D = dmat(c,H.geo.nocc())
         c = H.update(D)
-        E = H.energy()
+        E = H.energy
         if abs(E-Eold) < tol:
             break
         Eold = E
         yield E
     return
 
+def usimple(H,c=None,tol=1e-5,maxiters=100):
+    Eold = 0
+    if c is None:
+        orbe,cup = np.linalg.eigh(H.i1.S)
+        cdown = cup
+    nup,ndown = H.geo.nup(),H.geo.ndown()
+    for i in xrange(maxiters):
+        Dup = dmat(cup,nup)
+        Ddown = dmat(cdown,ndown)
+        cup,cdown = H.update(Dup,Ddown)
+        E = H.energy
+        if abs(E-Eold) < tol:
+            break
+        Eold = E
+        yield E
+    return
+    
 def averaging(H,c=None,fraction=0.5,tol=1e-5,maxiters=100):
     """
-    Simplest possible iterator for SCF.
-    >>> list(averaging(mock()))
-    [0.1, 0.01, 0.001, 0.0001, 1e-05]
+    Density matrix averaging iterator.
     """
     Eold = 0
-    orbe,c = np.linalg.eigh(H.i1.S)
-    Dold = None
+    if c is None:
+        orbe,c = np.linalg.eigh(H.i1.S)
+    Dold = dmat(c,H.geo.nocc())
     for i in xrange(maxiters):
-        if Dold is not None:
-            D = (1-fraction)*Dold + fraction*dmat(c,H.geo.nocc())
-        else:
-            D = dmat(c,H.geo.nocc())
+        D = (1-fraction)*Dold + fraction*dmat(c,H.geo.nocc())
+        Dold = D
         c = H.update(D)
-        E = H.energy()
+        E = H.energy
         if abs(E-Eold) < tol:
             break
         Eold = E
