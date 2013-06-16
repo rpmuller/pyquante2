@@ -18,15 +18,6 @@ I don't think this is a big deal for the 1e code, but I think it's a problem for
 * Wrap libxc
 
 ## Questions to answer
-* What should the imports look like? 
-    - Should we expect everything to be importable from
-      from pyquante2 import *
-    - Or should we have each module have broad imports:
-        from pyquante2.ints import *
-        from pyquante2.cints import *
-      and have broad modules for ints, geo, basis, scf, etc.
-    - Or should we do what we're doing now, where we have low-level imports, with a few modules
-      importable from the top level?
 * Should gaussian product center be in utils? should binomial whatever
 * Make it possible for __call__ in basis functions to be a ufunc, so that we can evaluate 
   wave functions along a set of points by just passing in a matrix??
