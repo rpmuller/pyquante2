@@ -52,6 +52,18 @@ class molecule:
     def nopen(self): return divmod(self.nel(),2)[1]
     def nup(self): return self.nocc()
     def ndown(self): return self.nclosed()
+
+    def xyz(self,title="XYZ format from PyQuante",fobj=None):
+        lines = ["%d" % len(self.atoms),"%s" % title]
+        for atom in self.atoms:
+            lines.append(atom.xyz())
+        record = "\n".join(lines)
+        if fobj:
+            fobj.write(record)
+        else:
+            print record
+        return
+                 
         
         
 
