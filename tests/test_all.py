@@ -28,5 +28,8 @@ if __name__ == '__main__':
     testSuite.addTest(doctest.DocTestSuite(molecule))
     testSuite.addTest(doctest.DocTestSuite(samples))
 
+    from pyquante2.scf import hamiltonians
+    testSuite.addTest(doctest.DocTestSuite(hamiltonians))
+
     # Run the suite
     unittest.TextTestRunner(verbosity=2).run(testSuite)
