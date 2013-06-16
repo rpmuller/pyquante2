@@ -1,6 +1,6 @@
 from pyquante2.ints.integrals import onee_integrals,twoe_integrals
 from pyquante2.utils import trace2,geigh
-from pyquante2.scf.iterators import simple
+from pyquante2.scf.iterators import simple,usimple
 import numpy as np
 
 class rhf:
@@ -11,7 +11,7 @@ class rhf:
     >>> bfs = basisset(h2,'sto3g')
     >>> h2_rhf = rhf(h2,bfs)
     >>> ens = h2_rhf.converge(simple)
-    >>> round(h2_rhf.energy(),6)
+    >>> round(h2_rhf.energy,6)
     -1.1171
     """
     def __init__(self,geo,bfs):
@@ -24,18 +24,38 @@ class rhf:
         return list(iterator(self,**kwargs))
 
     def update(self,D):
-        from pyquante2.utils import geigh,dmat,trace2
-        self._energy = self.geo.nuclear_repulsion()
+        self.energy = self.geo.nuclear_repulsion()
         H = self.i1.T + self.i1.V
-        self._energy += trace2(H,D)
+        self.energy += trace2(H,D)
 
-        JK = self.i2.jk(D)
+        JK = self.i2.get_2jk(D)
         H = H + JK
-        self._energy += trace2(H,D)
+        self.energy += trace2(H,D)
         E,c = geigh(H,self.i1.S)
         return c
         
-    def energy(self): return self._energy
+class uhf:
+    def __init__(self,geo,bfs):
+        self.geo = geo
+        self.bfs = bfs
+        self.i1 = onee_integrals(bfs,geo)
+        self.i2 = twoe_integrals(bfs)
+
+    def converge(self,iterator=usimple,**kwargs):
+        return list(iterator(self,**kwargs))
+
+    def update(self,Da,Db):
+        self.energy = self.geo.nuclear_repulsion()
+        H = self.i1.T + self.i1.V
+        self.energy += trace2(Da,H) + trace2(Db,H)
+        Ja,Ka = self.i2.get_j(Da),self.i2.get_k(Da)
+        Jb,Kb = self.i2.get_j(Db),self.i2.get_k(Db)
+        Ha = H + Ja + Jb - Ka
+        Hb = H + Ja + Jb - Kb
+        orbea,ca = geigh(Ha,self.i1.S)
+        orbeb,cb = geigh(Hb,self.i1.S)
+        self.energy += trace2(Ha,Da)/2 + trace2(Hb,Db)/2
+        return ca,cb
 
 if __name__ == '__main__':
     import doctest; doctest.testmod()
