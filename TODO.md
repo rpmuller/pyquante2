@@ -6,6 +6,8 @@
 * _repr_html_ for atoms, hamiltonians
 * 6-31G** basis set
 * Change iterators from generator expression, so we can print them after they're done, also using _repr_html_
+* A method to make a pyquante1 molecule out of a pyquante2 molecule, for ease in debugging.
+* xyz format from molecule
 
 ## Bug!!
 I'm doing something dumb in my cute code that expands the cgbfs into pgbfs in the integral code.
