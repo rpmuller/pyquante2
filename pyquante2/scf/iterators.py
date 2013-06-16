@@ -1,18 +1,9 @@
 import numpy as np
 from pyquante2.utils import dmat
-class mock:
-    """
-    A mock Hamiltonian for testing purposes. Implements energy() and update()
-    """
-    def __init__(self,*args): self.i = 0
-    def update(self,*args): self.i += 1
-    def energy(self): return 1.0/pow(10,self.i)
 
 def simple(H,c=None,tol=1e-5,maxiters=100):
     """
-    Simplest possible iterator for SCF.
-    >>> list(simple(mock()))
-    [0.1, 0.01, 0.001, 0.0001, 1e-05]
+    Simple SCF iterator.
     """
     Eold = 0
     orbe,c = np.linalg.eigh(H.i1.S)
