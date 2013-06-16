@@ -26,6 +26,9 @@ class atom:
         return
 
     def atuple(self): return (self.atno,self.r[0],self.r[1],self.r[2])
+    def nsxyz(self):
+        from pyquante2.geo.elements import symbol
+        return (self.atno,symbol[self.atno],self.r[0],self.r[1],self.r[2])
     def __repr__(self): return repr(self.atuple())
     def __getitem__(self, i): return self.r[i]
 
