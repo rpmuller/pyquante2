@@ -21,7 +21,7 @@ class basisset:
     def __init__(self,atoms,name='sto3g',**kwargs):
         self.bfs = []
         self.name = name
-        basis_data = getattr(data,name)
+        basis_data = data.basis[name]
         omit_f = kwargs.get('omit_f',settings.omit_f)
         for atom in atoms:
             for sym,prims in basis_data[atom.atno]:
