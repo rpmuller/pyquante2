@@ -25,8 +25,8 @@ def usimple(H,c=None,tol=1e-5,maxiters=100):
         cdown = cup
     nup,ndown = H.geo.nup(),H.geo.ndown()
     for i in xrange(maxiters):
-        Dup = dmat(cup,nup)/2
-        Ddown = dmat(cdown,ndown)/2
+        Dup = dmat(cup,nup)
+        Ddown = dmat(cdown,ndown)
         cup,cdown = H.update(Dup,Ddown)
         E = H.energy
         if abs(E-Eold) < tol:

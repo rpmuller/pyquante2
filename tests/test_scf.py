@@ -53,11 +53,11 @@ class test_scf(unittest.TestCase):
         bfs = basisset(oh,'sto3g')
         solver = uhf(oh,bfs)
         Es = solver.converge()
-        self.assertAlmostEqual(solver.energy,-130.48582965653802)
+        self.assertAlmostEqual(solver.energy,-74.14666861386641)
 
     def test_li(self):
         from pyquante2 import li
         bfs = basisset(li,'sto3g')
         solver = uhf(li,bfs)
         Es = solver.converge()
-        self.assertAlmostEqual(solver.energy,-12.06529283901496)
+        self.assertAlmostEqual(solver.energy,-7.2301642412807379)

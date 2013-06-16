@@ -46,15 +46,15 @@ class uhf:
 
     def update(self,Da,Db):
         self.energy = self.geo.nuclear_repulsion()
-        H = self.i1.T + self.i1.V
-        self.energy += trace2(Da,H) + trace2(Db,H)
+        h = self.i1.T + self.i1.V
+        self.energy += trace2(Da+Db,h)/2
         Ja,Ka = self.i2.get_j(Da),self.i2.get_k(Da)
         Jb,Kb = self.i2.get_j(Db),self.i2.get_k(Db)
-        Ha = H + Ja + Jb - Ka
-        Hb = H + Ja + Jb - Kb
-        orbea,ca = geigh(Ha,self.i1.S)
-        orbeb,cb = geigh(Hb,self.i1.S)
-        self.energy += trace2(Ha,Da) + trace2(Hb,Db)
+        Fa = h + Ja + Jb - Ka
+        Fb = h + Ja + Jb - Kb
+        orbea,ca = geigh(Fa,self.i1.S)
+        orbeb,cb = geigh(Fb,self.i1.S)
+        self.energy += trace2(Fa,Da)/2 + trace2(Fb,Db)/2
         return ca,cb
 
 if __name__ == '__main__':
