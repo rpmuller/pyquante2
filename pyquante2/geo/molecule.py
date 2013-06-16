@@ -54,6 +54,9 @@ class molecule:
     def ndown(self): return self.nclosed()
 
     def xyz(self,title="XYZ format from PyQuante",fobj=None):
+        """
+        Output molecule in [xyz format](http://en.wikipedia.org/wiki/XYZ_file_format).
+        """
         lines = ["%d" % len(self.atoms),"%s" % title]
         for atom in self.atoms:
             lines.append(atom.xyz())
