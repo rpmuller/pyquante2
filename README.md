@@ -1,5 +1,6 @@
 # PyQuante2
 
+## Why rewrite PyQuante?
 [PyQuante](http://pyquante.sf.net) is a Quantum Chemistry Suite
 written in Python. Over the years, there are many things that I'm
 growing increasingly unsatisfied with:
@@ -26,6 +27,11 @@ PyQuante2. My goals are:
 Of course, it would be nice if this code were also much faster than
 PyQuante, but I'd be surprised if this happened automatically, and I'm
 prepared to deal with code performance at a later time.
+
+## What works so far:
+* Huzinaga and HGP integral methods, both in Python and with Cython wrappers to C
+* RHF, UHF wave functions
+
 
 Feel free to fork this if it interests you. The PyQuante code is still
 around, so I'm not rushing through the process, I'm just taking as
