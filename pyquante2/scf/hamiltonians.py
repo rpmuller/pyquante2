@@ -54,7 +54,7 @@ class uhf:
         Hb = H + Ja + Jb - Kb
         orbea,ca = geigh(Ha,self.i1.S)
         orbeb,cb = geigh(Hb,self.i1.S)
-        self.energy += trace2(Ha,Da)/2 + trace2(Hb,Db)/2
+        self.energy += trace2(Ha,Da) + trace2(Hb,Db)
         return ca,cb
 
 if __name__ == '__main__':
