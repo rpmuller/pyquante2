@@ -41,7 +41,7 @@ class molecule:
     def __repr__(self): return repr(self.atoms)
     def __getitem__(self,i): return self.atoms.__getitem__(i)
 
-    def _repr_html_(self,tablehead=False):
+    def _repr_html_(self,tablehead=True):
         import xml.etree.ElementTree as ET
         top = ET.Element("html")
         h2 = ET.SubElement(top,"h2")
@@ -109,10 +109,6 @@ class molecule:
         atuples = [(a.atno,tuple(a.r)) for a in self.atoms]
         return Molecule(name,atuples,charge=self.charge,multiplicity=self.multiplicity)
                  
-        
-        
-
-
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
