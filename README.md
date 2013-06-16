@@ -32,7 +32,6 @@ prepared to deal with code performance at a later time.
 * Huzinaga and HGP integral methods, both in Python and with Cython wrappers to C
 * RHF, UHF wave functions
 
-
 Feel free to fork this if it interests you. The PyQuante code is still
 around, so I'm not rushing through the process, I'm just taking as
 much time as I feel I need to do this properly.
