@@ -4,6 +4,6 @@ from pyquante2.basis.pgbf import pgbf
 from pyquante2.geo.molecule import molecule
 from pyquante2.geo.samples import *
 from pyquante2.ints.one import S,T,V
-from pyquante2.scf.hamiltonians import rhf
+from pyquante2.scf.hamiltonians import rhf,uhf
 
 
