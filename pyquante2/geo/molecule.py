@@ -47,12 +47,12 @@ class molecule:
         "Number of electrons of the molecule"
         return sum(atom.atno for atom in self) - self.charge
     
-    def nocc(self,assert_closed=False):
-        "Number of occupied orbitals"
-        c,o = divmod(self.nel(),2)
-        if assert_closed:
-            assert o==0, "Molecule should be closed shell"
-        return c+o
+    def nocc(self): return sum(divmod(self.nel(),2))
+    def nclosed(self): return self.nel()//2
+    def nopen(self): return divmod(self.nel(),2)[1]
+    def nup(self): return self.nocc()
+    def ndown(self): return self.nclosed()
+        
         
 
 
