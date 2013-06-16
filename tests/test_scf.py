@@ -8,6 +8,12 @@ class test_scf(unittest.TestCase):
         ens = solver.converge()
         self.assertAlmostEqual(solver.energy,-1.117099582955609)
 
+    def test_h2_631(self):
+        bfs = basisset(h2,'6-31G**')
+        solver = rhf(h2,bfs)
+        ens = solver.converge()
+        self.assertAlmostEqual(solver.energy,-1.1313335790123258)
+
     def test_lih(self):
         bfs = basisset(lih,'sto3g')
         solver = rhf(lih,bfs)
