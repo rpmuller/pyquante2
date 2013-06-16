@@ -41,7 +41,7 @@ class twoe_integrals:
     def __getitem__(self,pos): return self._2e_ints[index(*pos)]
     def __repr__(self): return repr(self._2e_ints)
 
-    def fetchjk(self,i,j):
+    def fetch_2jk(self,i,j):
         nbf = self.nbf
         temp = np.empty(nbf**2,'d')
         kl = 0
@@ -50,14 +50,36 @@ class twoe_integrals:
             kl += 1
         return temp
 
-    def jk(self,D):
+    def fetch_j(self,i,j):
+        nbf = self.nbf
+        temp = np.empty(nbf**2,'d')
+        kl = 0
+        for k,l in product(xrange(nbf),repeat=2):
+            temp[kl] = self[i,j,k,l]
+            kl += 1
+        return temp
+
+    def fetch_k(self,i,j):
+        nbf = self.nbf
+        temp = np.empty(nbf**2,'d')
+        kl = 0
+        for k,l in product(xrange(nbf),repeat=2):
+            temp[kl] = self[i,k,j,l]
+            kl += 1
+        return temp
+
+    def make_operator(self,D,fetcher):
         nbf = self.nbf
         D1 = np.reshape(D,(nbf*nbf,))
         G = np.empty((nbf,nbf),'d')
         for i,j in pairs(xrange(nbf)):
-            temp = self.fetchjk(i,j)
+            temp = fetcher(i,j)
             G[i,j] = G[j,i] = np.dot(D1,temp)
         return G
+
+    def get_2jk(self,D): return self.make_operator(D,self.fetch_2jk)
+    def get_j(self,D): return self.make_operator(D,self.fetch_j)
+    def get_k(self,D): return self.make_operator(D,self.fetch_k)
                     
 class onee_integrals:
     """
