@@ -38,8 +38,12 @@ class molecule:
                 self.atoms.append(atom(*atuple,units=self.units))
         return
 
-    def __repr__(self): return repr(self.atoms)
     def __getitem__(self,i): return self.atoms.__getitem__(i)
+
+    def __repr__(self):
+        lines = ["Charge = %d, Multiplicity = %d" % (self.charge,self.multiplicity)]
+        lines.extend(repr(atom) for atom in self.atoms)
+        return "\n".join(lines)
 
     def html(self,tablehead=True):
         import xml.etree.ElementTree as ET
