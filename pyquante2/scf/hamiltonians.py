@@ -13,6 +13,15 @@ class hamiltonian:
         self.energies = []
         self.converged = False
 
+    def __repr__(self):
+        lines = ["%s Hamiltonian" % self.name]
+        lines.append(str(self.geo))
+        lines.append("Basis set: %s, Nbf: %d" %  (self.bfs.name,len(self.bfs)))
+        lines.append("Status: Converged = %s" % self.converged)
+        for i,E in enumerate(self.energies):
+            lines.append("%d  %.5f" % (i,E))
+        return "\n".join(lines)
+
     def _repr_html_(self):
         import xml.etree.ElementTree as ET
         top = ET.Element("html")
