@@ -2,7 +2,8 @@
 Create a molecule for use in pyquante
 >>> h = molecule([(1,0,0,0)])
 >>> h
-[(1, 0.0, 0.0, 0.0)]
+Stoichiometry = H, Charge = 0, Multiplicity = 2
+1 H     0.000000     0.000000     0.000000
 
  Copyright (c) 2004, Richard P. Muller. All Rights Reserved. 
 
@@ -28,7 +29,7 @@ class molecule:
     def __init__(self,atomlist=[],**kwargs):
         self.atoms = []
         self.charge = int(kwargs.get('charge',settings.molecular_charge))
-        self.multiplicity = int(kwargs.get('multiplicity',settings.spin_multiplicity))
+        self.multiplicity = kwargs.get('multiplicity')
         self.name = kwargs.get('name','pyquante2 molecule')
 
         self.units = kwargs.get('units',settings.units).lower()
@@ -36,14 +37,24 @@ class molecule:
         if atomlist:
             for atuple in atomlist:
                 self.atoms.append(atom(*atuple,units=self.units))
+        if self.multiplicity is None:
+            self.set_multiplicity()
         return
 
     def __getitem__(self,i): return self.atoms.__getitem__(i)
 
     def __repr__(self):
-        lines = ["Charge = %d, Multiplicity = %d" % (self.charge,self.multiplicity)]
+        lines = ["Stoichiometry = %s, Charge = %d, Multiplicity = %d" %\
+                 (self.stoich(),self.charge,self.multiplicity)]
         lines.extend(repr(atom) for atom in self.atoms)
         return "\n".join(lines)
+
+    def set_multiplicity(self):
+        if self.nel() % 2:
+            self.multiplicity = 2
+        else:
+            self.multiplicity = 1
+        return
 
     def html(self,tablehead=True):
         import xml.etree.ElementTree as ET
@@ -51,7 +62,8 @@ class molecule:
         h2 = ET.SubElement(top,"h2")
         h2.text = self.name
         p = ET.SubElement(top,"p")
-        p.text = "Charge = %d, Multiplicity = %d" % (self.charge,self.multiplicity)
+        p.text = "Stoichiometry = %s, Charge = %d, Multiplicity = %d" %\
+                 (self.stoich(),self.charge,self.multiplicity)
         table = ET.SubElement(top,"table")
         if tablehead:
             tr = ET.SubElement(table,"tr")
@@ -118,6 +130,31 @@ class molecule:
         from PyQuante import Molecule
         atuples = [(a.atno,tuple(a.r)) for a in self.atoms]
         return Molecule(name,atuples,charge=self.charge,multiplicity=self.multiplicity)
+
+    def stoich(self):
+        """
+        Generate a stoichiometry string for the molecule:
+        >>> from pyquante2 import h2,h2o,c6h6
+        >>> print h2.name,h2.stoich()
+        Hydrogen H2
+        >>> print c6h6.name,c6h6.stoich()
+        Benzene H6C6
+        """
+        from collections import Counter
+        from pyquante2.geo.elements import symbol
+        cnt = Counter()
+        for atom in self.atoms:
+            cnt[atom.atno] += 1
+        keys = sorted(cnt.keys())
+        s = []
+        for key in keys:
+            if cnt[key] == 1:
+                s.append(symbol[key])
+            else:
+                s.append("%s%d" % (symbol[key],cnt[key]))
+        return "".join(s)
+                        
+
                  
 if __name__ == '__main__':
     import doctest
