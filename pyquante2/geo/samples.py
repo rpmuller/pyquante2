@@ -2,7 +2,8 @@
 A collection of molecules for testing and fun.
 
 >>> h
-[(1, 0.0, 0.0, 0.0)]
+Stoichiometry = H, Charge = 0, Multiplicity = 2
+1 H     0.000000     0.000000     0.000000
 
  Copyright (c) 2004, Richard P. Muller. All Rights Reserved. 
 

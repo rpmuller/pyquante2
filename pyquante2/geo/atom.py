@@ -3,7 +3,8 @@ Class to create an atom object
 
 >>> h = atom(1,0,0,0)
 >>> h
-(1, 0.0, 0.0, 0.0)
+Stoichiometry = H, Charge = 0, Multiplicity = 2
+1 H     0.000000     0.000000     0.000000
 >>> h.r
 array([ 0.,  0.,  0.])
 
