@@ -34,7 +34,7 @@ def usimple(H,c=None,tol=1e-5,maxiters=100):
         Eold = E
         yield E
     return
-    
+  
 def averaging(H,c=None,fraction=0.5,tol=1e-5,maxiters=100):
     """
     Density matrix averaging iterator.
