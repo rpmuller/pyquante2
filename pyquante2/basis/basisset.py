@@ -33,7 +33,7 @@ class basisset:
         return
 
     def __getitem__(self,i): return self.bfs.__getitem__(i)
-    def __repr__(self): return repr(self.bfs)
+    def __repr__(self): return "\n".join(repr(bf) for bf in self.bfs)
     def __len__(self): return len(self.bfs)
 
 # Can define shellbasisset here, which is essentially a normal basis set, but has the functions
