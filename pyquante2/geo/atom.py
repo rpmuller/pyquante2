@@ -29,7 +29,7 @@ class atom:
     def nsxyz(self):
         from pyquante2.geo.elements import symbol
         return (self.atno,symbol[self.atno],self.r[0],self.r[1],self.r[2])
-    def __repr__(self): return repr(self.atuple())
+    def __repr__(self): return "%d %s %12.6f %12.6f %12.6f" % self.nsxyz()
     def __getitem__(self, i): return self.r[i]
 
     def xyz(self):
