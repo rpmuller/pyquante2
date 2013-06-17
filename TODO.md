@@ -4,7 +4,6 @@
 * Graphics module with lineplot, contour plot, etc, for bfs and orbital
 * VTK plotting
 * Units for molecule._repr_html_
-* Stoichiometry function in molecule
 * Hamiltonian (or iterator) function that distinguishes between scf convergence and max iteration
 * __repr__ and _repr_html_ for basisset
 
