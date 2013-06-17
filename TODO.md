@@ -4,11 +4,9 @@
 * Graphics module with lineplot, contour plot, etc, for bfs and orbital
 * VTK plotting
 * Units for molecule._repr_html_
-* Change iterators from generator expression, so we can print them after they're done, also using _repr_html_
 * Stoichiometry function in molecule
 * Hamiltonian (or iterator) function that distinguishes between scf convergence and max iteration
-* _repr_html_ for iterators
-* _repr_html_ for basis sets
+* __repr__ and _repr_html_ for basisset
 
 ## Bug!!
 I'm doing something dumb in my cute code that expands the cgbfs into pgbfs in the integral code.
