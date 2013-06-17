@@ -3,7 +3,41 @@ from pyquante2.utils import trace2,geigh
 from pyquante2.scf.iterators import simple,usimple
 import numpy as np
 
-class rhf:
+class hamiltonian:
+    name = 'abstract'
+    def __init__(self,geo,bfs):
+        self.geo = geo
+        self.bfs = bfs
+        self.i1 = onee_integrals(bfs,geo)
+        self.i2 = twoe_integrals(bfs)
+        self.energies = []
+        self.converged = False
+
+    def _repr_html_(self):
+        import xml.etree.ElementTree as ET
+        top = ET.Element("html")
+        h2 = ET.SubElement(top,"h2")
+        h2.text = "%s Hamiltonian" % self.name
+        top.append(self.geo.html())
+        p = ET.SubElement(top,"p")
+        p.text = "Basis set: %s, Nbf: %d" % (self.bfs.name,len(self.bfs))
+        p = ET.SubElement(top,"p")
+        p.text = "Status: Converged=%s" % self.converged
+        if self.energies:
+            table = ET.SubElement(top,"table")
+            tr = ET.SubElement(table,"tr")
+            for heading in ["#","Energy"]:
+                td = ET.SubElement(tr,"th")
+                td.text = heading
+            for i,energy in enumerate(self.energies):
+                tr = ET.SubElement(table,"tr")
+                td = ET.SubElement(table,"td")
+                td.text = str(i)
+                td = ET.SubElement(table,"td")
+                td.text = "%.5f" % energy
+        return ET.tostring(top)
+
+class rhf(hamiltonian):
     """
     >>> from pyquante2.geo.samples import h2
     >>> from pyquante2.basis.basisset import basisset
@@ -14,14 +48,13 @@ class rhf:
     >>> round(h2_rhf.energy,6)
     -1.1171
     """
-    def __init__(self,geo,bfs):
-        self.geo = geo
-        self.bfs = bfs
-        self.i1 = onee_integrals(bfs,geo)
-        self.i2 = twoe_integrals(bfs)
+    name = 'RHF'
 
     def converge(self,iterator=simple,**kwargs):
-        return list(iterator(self,**kwargs))
+        self.energies = list(iterator(self,**kwargs))
+        # Need something that checks for convergence, rather than just max iterations
+        self.converged = True
+        return self.energies
 
     def update(self,D):
         self.energy = self.geo.nuclear_repulsion()
@@ -34,15 +67,14 @@ class rhf:
         E,c = geigh(H,self.i1.S)
         return c
         
-class uhf:
-    def __init__(self,geo,bfs):
-        self.geo = geo
-        self.bfs = bfs
-        self.i1 = onee_integrals(bfs,geo)
-        self.i2 = twoe_integrals(bfs)
+class uhf(hamiltonian):
+    name = 'UHF'
 
     def converge(self,iterator=usimple,**kwargs):
-        return list(iterator(self,**kwargs))
+        self.energies = list(iterator(self,**kwargs))
+        # Need something that checks for convergence, rather than just max iterations
+        self.converged = True
+        return self.energies
 
     def update(self,Da,Db):
         self.energy = self.geo.nuclear_repulsion()
