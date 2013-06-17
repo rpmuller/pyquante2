@@ -41,9 +41,9 @@ class molecule:
     def __repr__(self): return repr(self.atoms)
     def __getitem__(self,i): return self.atoms.__getitem__(i)
 
-    def _repr_html_(self,tablehead=True):
+    def html(self,tablehead=True):
         import xml.etree.ElementTree as ET
-        top = ET.Element("html")
+        top = ET.Element("p")
         h2 = ET.SubElement(top,"h2")
         h2.text = self.name
         p = ET.SubElement(top,"p")
@@ -69,6 +69,12 @@ class molecule:
             td.text = "%.5f" % y
             td = ET.SubElement(tr,"td")
             td.text = "%.5f" % y
+        return top
+
+    def _repr_html_(self,tablehead=True):
+        import xml.etree.ElementTree as ET
+        top = ET.Element("html")
+        top.append(self.html(tablehead=tablehead))
         return ET.tostring(top)
 
     def nuclear_repulsion(self):
