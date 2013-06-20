@@ -72,3 +72,5 @@ build/lib.macosx-10.7-x86_64-2.7/pyquante2/__init__.py
 profile.out
 
 build/lib.macosx-10.7-x86_64-2.7/pyquante2/geo/elements.py
+
+*.py~
