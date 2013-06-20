@@ -132,8 +132,8 @@ class molecule:
         return Molecule(name,atuples,charge=self.charge,multiplicity=self.multiplicity)
 
     def bbox(self,padding=5.,BIG=1e12):
-        xmin,ymin,zmin = BIG
-        xmax,ymax,zmax = -BIG
+        xmin = ymin = zmin = BIG
+        xmax = ymax = zmax = -BIG
         for atom in self.atoms:
             x,y,z = atom.r
             xmin = min(x,xmin)
