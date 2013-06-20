@@ -74,6 +74,8 @@ class rhf(hamiltonian):
         H = H + JK
         self.energy += trace2(H,D)
         E,c = geigh(H,self.i1.S)
+        self.orbe = E
+        self.orbs = c
         return c
         
 class uhf(hamiltonian):
@@ -96,6 +98,10 @@ class uhf(hamiltonian):
         orbea,ca = geigh(Fa,self.i1.S)
         orbeb,cb = geigh(Fb,self.i1.S)
         self.energy += trace2(Fa,Da)/2 + trace2(Fb,Db)/2
+        self.orbea = orbea
+        self.orbsa = ca
+        self.orbeb = orbeb
+        self.orbsb = cb
         return ca,cb
 
 if __name__ == '__main__':
