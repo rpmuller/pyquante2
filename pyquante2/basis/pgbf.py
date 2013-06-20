@@ -46,11 +46,11 @@ class pgbf:
 
     def __call__(self,*args):
         "Compute the amplitude of the PGBF at point x,y,z"
-        i,j,k = self.powers
+        I,J,K = self.powers
         xyz = array(args,'d')
         d = xyz-self.origin
         d2 = norm2(d)
-        return self.norm*d[0]**i*d[1]**j*d[2]**k*exp(-self.exponent*d2)
+        return self.norm*d[0]**I*d[1]**J*d[2]**K*exp(-self.exponent*d2)
 
     def _normalize(self):
         "Normalize basis function. From THO eq. 2.2"
