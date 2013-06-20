@@ -74,3 +74,15 @@ profile.out
 build/lib.macosx-10.7-x86_64-2.7/pyquante2/geo/elements.py
 
 *.py~
+
+build/lib.macosx-10.7-x86_64-2.7/pyquante2/basis/__init__.py
+
+build/lib.macosx-10.7-x86_64-2.7/pyquante2/geo/__init__.py
+
+build/lib.macosx-10.7-x86_64-2.7/pyquante2/graphics/__init__.py
+
+build/lib.macosx-10.7-x86_64-2.7/pyquante2/graphics/vtk.py
+
+build/lib.macosx-10.7-x86_64-2.7/pyquante2/ints/__init__.py
+
+pyq_orb.vtk
