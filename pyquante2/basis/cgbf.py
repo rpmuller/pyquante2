@@ -76,6 +76,7 @@ class cgbf:
         Saa_sqrt = sqrt(Saa)
         for i in xrange(len(self.coefs)):
             self.coefs[i] /= Saa_sqrt
+        # Is this the right way to do this, or should I have a separate normalization constant?
         return
 
 def sto(zeta,N=1,L=0,M=0,origin=(0,0,0)):
