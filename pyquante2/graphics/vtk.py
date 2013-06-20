@@ -25,8 +25,6 @@ def make_recordstrings(records,names):
         lines.append(record_template % dict(name=name,datastring=datastring))
     return "\n".join(lines)
         
-        
-
 def write_vtk(records,names,nxyz,oxyz,sxyz,fname = "nemo.vtk"):
     spacing = 0.543095
     sx = sy = sz = spacing
