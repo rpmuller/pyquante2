@@ -131,6 +131,22 @@ class molecule:
         atuples = [(a.atno,tuple(a.r)) for a in self.atoms]
         return Molecule(name,atuples,charge=self.charge,multiplicity=self.multiplicity)
 
+    def bbox(self,padding=5.,BIG=1e12):
+        xmin,ymin,zmin = BIG
+        xmax,ymax,zmax = -BIG
+        for atom in self.atoms:
+            x,y,z = atom.r
+            xmin = min(x,xmin)
+            ymin = min(y,ymin)
+            zmin = min(z,zmin)
+            xmax = max(x,xmax)
+            ymax = max(y,ymax)
+            zmax = max(z,zmax)
+        xmin,ymin,zmin = xmin-padding,ymin-padding,zmin-padding
+        xmax,ymax,zmax = xmax+padding,ymax+padding,zmax+padding
+        return xmin,xmax,ymin,ymax,zmin,zmax
+        
+
     def stoich(self):
         """
         Generate a stoichiometry string for the molecule:
