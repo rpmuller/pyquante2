@@ -31,33 +31,46 @@ def iterator_3d(nxyz,oxyz,sxyz):
                 yield x,y,z
     return
 
-def image_orbitals(atoms,orbs,bfs,npts=20):
+def make_recordstrings(records,names):
+    lines = []
+    for name,record in zip(names,records):
+        lines.append(make_recordstring(record,name))
+    return "\n".join(lines)
+
+def make_recordstring(record,name):
+    datastring = "\n".join("%f" % fi for fi in record)
+    return record_template % dict(name=name,datastring=datastring)
+        
+def write_vtk(records,nxyz,oxyz,sxyz,names=None,fname = "pyq_orb.vtk"):
+    sx,sy,sz = sxyz
+    ox,oy,oz = oxyz
+    nx,ny,nz = nxyz
+    npts = nx*ny*nz
+    if not names:
+        names = ["orb%d" % (i+1) for i in xrange(len(records))]
+    recordstrings = make_recordstrings(records,names)
+    open(fname,"w").write(vtk_template % locals())
+    return
+
+def eval_orb(orb,bfs,nxyz,oxyz,sxyz):
+    nx,ny,nz = nxyz
+    fxyz = np.zeros(nx*ny*nz,'d')
+    for c in orb:
+        for bf in bfs:
+            for i,(x,y,z) in enumerate(iterator_3d(nxyz,oxyz,sxyz)):
+                fxyz[i] += c*bf(x,y,z)
+    return fxyz
+
+def vtk_orbital(atoms,orbs,bfs,npts=20):
     xmin,xmax,ymin,ymax,zmin,zmax = atoms.bbox()
     oxyz = xmin,ymin,zmin
     sxyz = (xmax-xmin)/(npts-1.),(ymax-ymin)/(npts-1.),(zmax-zmin)/(npts-1.)
     nxyz = npts,npts,npts
+    records = []
+    print "Imaging %d orbitals" % len(orbs)
     for orb in orbs:
-        for c in orb:
-            for bf in bfs:
-                for x,y,z in iterator_3d(nxyz,oxyz,sxyz):
-                    
-    
+        fxyz = eval_orb(orb,bfs,nxyz,oxyz,sxyz)
+        records.append(fxyz)
+    write_vtk(records,nxyz,oxyz,sxyz)
+    return
 
-def make_recordstrings(records,names):
-    lines = []
-    for name,record in zip(names,records):
-        datastring = "\n".join("%f" % fi for fi in record)
-        lines.append(record_template % dict(name=name,datastring=datastring))
-    return "\n".join(lines)
-        
-def write_vtk(records,names,nxyz,oxyz,sxyz,fname = "nemo.vtk"):
-    sx = sy = sz = sxyz
-    ox = oy = oz = oxyz
-    nx,ny,nz = nxyz
-    npts = nx*ny*nz
-    assert len(records) == len(names)
-    assert npts == len(records[0])
-    recordstrings = make_recordstrings(records,names)
-    open(fname,"w").write(vtk_template % locals())
-    return    
-    
