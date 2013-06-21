@@ -17,7 +17,28 @@ def lineplot(points,orbs,bfs,doshow=False):
         pl.show()
     return
 
+def lineplot_bfs(points,bfs,doshow=False):
+    for bf in bfs:
+        f = np.zeros(len(points),'d')
+        for i,(x,y,z) in enumerate(points):
+            f[i] += bf(x,y,z)
+        pl.plot(points,f)
+    #pl.savefig('pyq_bf.png')
+    
+    if doshow:
+        pl.show()
+    return
+        
+
 def plot_fake():
+    from pyquante2 import basisset,h2
+    bfs = basisset(h2,'sto3g')
+    zvals = np.linspace(-5,5)
+    points = [(0,0,z) for z in zvals]
+    lineplot_bfs(points,bfs,True)
+    return
+
+def plot_fake2():
     from pyquante2 import basisset,h2
     bfs = basisset(h2,'sto3g')
     orbs = np.array([[1.0,0.0],
