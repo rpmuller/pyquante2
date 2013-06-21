@@ -19,7 +19,7 @@
 
 """
 
-from numpy import array,sqrt,pi,exp
+import numpy as np
 from pyquante2.utils import fact2,norm2
 
 class pgbf:
@@ -38,7 +38,7 @@ class pgbf:
         assert len(origin) == 3
         assert len(powers) == 3
         self.exponent = float(exponent)
-        self.origin = array(origin,'d')
+        self.origin = np.array(origin,'d')
         self.powers = powers
         self._normalize()
 
@@ -47,18 +47,18 @@ class pgbf:
     def __call__(self,*args):
         "Compute the amplitude of the PGBF at point x,y,z"
         I,J,K = self.powers
-        xyz = array(args,'d')
+        xyz = np.array(args,'d')
         d = xyz-self.origin
         d2 = norm2(d)
-        return self.norm*d[0]**I*d[1]**J*d[2]**K*exp(-self.exponent*d2)
+        return self.norm*d[0]**I*d[1]**J*d[2]**K*np.exp(-self.exponent*d2)
 
     def _normalize(self):
         "Normalize basis function. From THO eq. 2.2"
         l,m,n = self.powers
-        self.norm = sqrt(pow(2,2*(l+m+n)+1.5)*
-                         pow(self.exponent,l+m+n+1.5)/
-                         fact2(2*l-1)/fact2(2*m-1)/
-                         fact2(2*n-1)/pow(pi,1.5))
+        self.norm = np.sqrt(pow(2,2*(l+m+n)+1.5)*
+                            pow(self.exponent,l+m+n+1.5)/
+                            fact2(2*l-1)/fact2(2*m-1)/
+                            fact2(2*n-1)/pow(np.pi,1.5))
         return
 
 if __name__ == '__main__':
