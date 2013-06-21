@@ -13,9 +13,8 @@ def lineplot_orb(points,orbs,bfs,doshow=False):
 def bf_on_points(points,bf): return np.array([bf(*point) for point in points],'d')
 def orb_on_points(points,orb,bfs):
     f = np.zeros(len(points),'d')
-    for c in orb:
-        for bf in bfs:
-            f = f + c*bf_on_points(points,bf)
+    for c,bf in zip(orb,bfs):
+        f = f + c*bf_on_points(points,bf)
     return f
 
 def lineplot_bfs(points,bfs,doshow=False):
@@ -38,8 +37,8 @@ def test_plot_bfs():
 def test_plot_orbs():
     from pyquante2 import basisset,h2
     bfs = basisset(h2,'sto3g')
-    orbs = np.array([[1.0,0.0],
-                     [0.0,-1.0]],'d')
+    orbs = np.array([[1.0,1.0],
+                     [1.0,-1.0]],'d')
     
     zvals = np.linspace(-5,5)
     points = [(0,0,z) for z in zvals]
