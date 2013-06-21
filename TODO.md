@@ -1,8 +1,11 @@
 # PyQuante 2 Todo List
 
+## Important
+* Check symmetry of h2 orbitals!?
+
 ## Easy stuff to add:
-* Graphics module with lineplot, contour plot, etc, for bfs and orbital
-* VTK plotting
+* Graphics module with contour plot, etc, for bfs and orbital
+* Smarter way of handling evaluation of bf and orbs on a mesh of points.
 * Units for molecule._repr_html_
 * Hamiltonian (or iterator) function that distinguishes between scf convergence and max iteration
 * __repr__ and _repr_html_ for basisset
