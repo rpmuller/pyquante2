@@ -57,20 +57,41 @@ def eval_orb(orb,bfs,nxyz,oxyz,sxyz):
     fxyz = np.zeros(nx*ny*nz,'d')
     for c in orb:
         for bf in bfs:
+            print [p.origin[2] for c,p in bf]
             for i,(x,y,z) in enumerate(iterator_3d(nxyz,oxyz,sxyz)):
                 fxyz[i] += c*bf(x,y,z)
     return fxyz
 
-def vtk_orbital(atoms,orbs,bfs,npts=20):
+def vtk_orbital(atoms,orbs,bfs,npts=8):
     xmin,xmax,ymin,ymax,zmin,zmax = atoms.bbox()
     oxyz = xmin,ymin,zmin
     sxyz = (xmax-xmin)/(npts-1.),(ymax-ymin)/(npts-1.),(zmax-zmin)/(npts-1.)
     nxyz = npts,npts,npts
     records = []
-    print "Imaging %d orbitals" % len(orbs)
     for orb in orbs:
         fxyz = eval_orb(orb,bfs,nxyz,oxyz,sxyz)
+        print orb,np.min(fxyz),np.max(fxyz)
         records.append(fxyz)
     write_vtk(records,nxyz,oxyz,sxyz)
     return
 
+def plot_fake():
+    from pyquante2 import basisset,h2
+    bfs = basisset(h2,'sto3g')
+    orbs = np.array([[1.0,0.0],
+                     [0.0,-1.0]],'d')
+    
+    vtk_orbital(h2,orbs,bfs)
+    return
+
+def plot_fake2():
+    from pyquante2 import basisset,h2
+    bfs = basisset(h2,'sto3g')
+    orbs = np.array([[1.0,1.0],
+                     [1.0,-1.0]],'d')
+    
+    vtk_orbital(h2,orbs,bfs)
+    return
+
+if __name__ == '__main__':
+    plot_fake()
