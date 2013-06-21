@@ -2,6 +2,7 @@
 
 ## Important
 * Check symmetry of h2 orbitals!?
+* Check profiling of test case runs: are the c integral routines being called? Seems slow.
 
 ## Easy stuff to add:
 * Graphics module with contour plot, etc, for bfs and orbital
