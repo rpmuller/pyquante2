@@ -55,11 +55,9 @@ def write_vtk(records,nxyz,oxyz,sxyz,names=None,fname = "pyq_orb.vtk"):
 def eval_orb(orb,bfs,nxyz,oxyz,sxyz):
     nx,ny,nz = nxyz
     fxyz = np.zeros(nx*ny*nz,'d')
-    for c in orb:
-        for bf in bfs:
-            print [p.origin[2] for c,p in bf]
-            for i,(x,y,z) in enumerate(iterator_3d(nxyz,oxyz,sxyz)):
-                fxyz[i] += c*bf(x,y,z)
+    for c,bf in zip(orb,bfs):
+        for i,(x,y,z) in enumerate(iterator_3d(nxyz,oxyz,sxyz)):
+            fxyz[i] += c*bf(x,y,z)
     return fxyz
 
 def vtk_orbital(atoms,orbs,bfs,npts=8):
