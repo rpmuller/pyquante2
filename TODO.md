@@ -2,6 +2,10 @@
 
 ## Important
 * Check symmetry of h2 orbitals!?
+  This is really weird. It seems like the energies are correct, but the
+  orbitals are not. I've been checking the simx code, and both it
+  and the different orthogonalization routines are fine. X^TSX = I,
+  and yet the orbitals are not coming out symmetric.
 * Check profiling of test case runs: are the c integral routines being called? Seems slow.
 
 ## Easy stuff to add:
