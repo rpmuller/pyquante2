@@ -60,13 +60,13 @@ def eval_orb(orb,bfs,nxyz,oxyz,sxyz):
             fxyz[i] += c*bf(x,y,z)
     return fxyz
 
-def vtk_orbital(atoms,orbs,bfs,npts=8):
+def vtk_orbs(atoms,orbs,bfs,npts=8):
     xmin,xmax,ymin,ymax,zmin,zmax = atoms.bbox()
     oxyz = xmin,ymin,zmin
     sxyz = (xmax-xmin)/(npts-1.),(ymax-ymin)/(npts-1.),(zmax-zmin)/(npts-1.)
     nxyz = npts,npts,npts
     records = []
-    for orb in orbs:
+    for orb in orbs.T: # transpose makes iterations work right
         fxyz = eval_orb(orb,bfs,nxyz,oxyz,sxyz)
         records.append(fxyz)
     write_vtk(records,nxyz,oxyz,sxyz)
@@ -78,7 +78,7 @@ def plot_orb():
     orbs = np.array([[1.0,0.0],
                      [0.0,-1.0]],'d')
     
-    vtk_orbital(h2,orbs,bfs)
+    vtk_orbs(h2,orbs,bfs)
     return
 
 def plot_orb2():
@@ -87,7 +87,7 @@ def plot_orb2():
     orbs = np.array([[1.0,1.0],
                      [1.0,-1.0]],'d')
     
-    vtk_orbital(h2,orbs,bfs)
+    vtk_orbs(h2,orbs,bfs)
     return
 
 if __name__ == '__main__':
