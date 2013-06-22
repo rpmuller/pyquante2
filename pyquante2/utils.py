@@ -158,12 +158,6 @@ def geigh(H,S):
     "Solve the generalized eigensystem Hc = ESc"
     A = cholorth(S)
     E,U = np.linalg.eigh(simx(H,A))
-    print "H:\n",H
-    print "H':\n",simx(H,A)
-    print "S:\n",S
-    print "S':\n",simx(S,A)
-    print "U:\n",U
-    print "XU:\n",np.dot(A,U)
     return E,np.dot(A,U)
     
 if __name__ == '__main__':
