@@ -68,12 +68,11 @@ def vtk_orbital(atoms,orbs,bfs,npts=8):
     records = []
     for orb in orbs:
         fxyz = eval_orb(orb,bfs,nxyz,oxyz,sxyz)
-        print orb,np.min(fxyz),np.max(fxyz)
         records.append(fxyz)
     write_vtk(records,nxyz,oxyz,sxyz)
     return
 
-def plot_fake2():
+def plot_orb():
     from pyquante2 import basisset,h2
     bfs = basisset(h2,'sto3g')
     orbs = np.array([[1.0,0.0],
@@ -82,7 +81,7 @@ def plot_fake2():
     vtk_orbital(h2,orbs,bfs)
     return
 
-def plot_fake():
+def plot_orb2():
     from pyquante2 import basisset,h2
     bfs = basisset(h2,'sto3g')
     orbs = np.array([[1.0,1.0],
@@ -92,4 +91,4 @@ def plot_fake():
     return
 
 if __name__ == '__main__':
-    plot_fake()
+    plot_orb()
