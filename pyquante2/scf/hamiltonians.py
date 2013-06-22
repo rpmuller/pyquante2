@@ -72,6 +72,7 @@ class rhf(hamiltonian):
 
         JK = self.i2.get_2jk(D)
         H = H + JK
+        #print H
         self.energy += trace2(H,D)
         E,c = geigh(H,self.i1.S)
         self.orbe = E
