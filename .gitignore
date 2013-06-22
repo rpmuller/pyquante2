@@ -92,3 +92,5 @@ build/lib.macosx-10.7-x86_64-2.7/pyquante2/graphics/lineplot.py
 *.png
 
 build/lib.macosx-10.7-x86_64-2.7/pyquante2/graphics/contourplot.py
+
+build/lib.macosx-10.7-x86_64-2.7/pyquante2/graphics/vtkplot.py
