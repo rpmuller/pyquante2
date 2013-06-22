@@ -1,7 +1,11 @@
 import numpy as np
 from pyquante2 import basisset,rhf,h2
 from pyquante2.graphics.vtk import vtk_orbital
+from pyquante.graphics.lineplot import test_plot_orbs,test_plot_bfs
 
+def lineplot_orbs(): return test_plot_orbs()
+def lineplot_bfs(): return test_plot_bfs()
+    
 def plot_h2():
     bfs = basisset(h2,'sto3g')
     solver = rhf(h2,bfs)
@@ -12,7 +16,7 @@ def plot_h2():
     print solver.orbs
     vtk_orbital(h2,solver.orbs,bfs)
 
-def plot_fake():
+def plot_orbs():
     bfs = basisset(h2,'sto3g')
     orbs = np.array([[1.0,1.0],
                      [1.0,-1.0]],'d')
@@ -21,5 +25,5 @@ def plot_fake():
     return
 
 if __name__ == '__main__':
-    plot_fake()
+    plot_h2()
 
