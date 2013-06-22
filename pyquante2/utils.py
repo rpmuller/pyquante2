@@ -128,15 +128,43 @@ def dmat(c,nocc):
     "Form the density matrix from the first nocc orbitals of c"
     return np.dot(c[:,:nocc],c[:,:nocc].T)
 
-def simx(A,B):
-    "Similarity transform B^TAB"
+def symorth(S):
+    "Symmetric orthogonalization"
+    E,U = np.linalg.eigh(S)
+    n = len(E)
+    Shalf = np.identity(n,'d')
+    for i in xrange(n):
+        Shalf[i,i] /= np.sqrt(E[i])
+    return simx(Shalf,U,True)
+
+def canorth(S):
+    "Canonical orthogonalization U/sqrt(lambda)"
+    E,U = np.linalg.eigh(S)
+    for i in xrange(len(E)):
+        U[:,i] = U[:,i] / np.sqrt(E[i])
+    return U
+
+def cholorth(S):
+    "Cholesky orthogonalization"
+    return np.linalg.inv(np.linalg.cholesky(S)).T
+
+def simx(A,B,transpose=False):
+    "Similarity transform B^T(AB) or B(AB^T) (if transpose)"
+    if transpose:
+        return np.dot(B,np.dot(A,B.T))
     return np.dot(B.T,np.dot(A,B))
 
 def geigh(H,S):
     "Solve the generalized eigensystem Hc = ESc"
-    X = np.linalg.inv(np.linalg.cholesky(S)).T
-    E,U = np.linalg.eigh(simx(H,X))
-    return E,np.dot(X,U)
+    A = cholorth(S)
+    E,U = np.linalg.eigh(simx(H,A))
+    print "H:\n",H
+    print "H':\n",simx(H,A)
+    print "S:\n",S
+    print "S':\n",simx(S,A)
+    print "U:\n",U
+    print "XU:\n",np.dot(A,U)
+    return E,np.dot(A,U)
     
 if __name__ == '__main__':
     import doctest
