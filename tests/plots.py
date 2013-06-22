@@ -2,9 +2,11 @@ import numpy as np
 from pyquante2 import basisset,rhf,h2
 from pyquante2.graphics.vtk import vtk_orbital
 from pyquante.graphics.lineplot import test_plot_orbs,test_plot_bfs
+from pyquante.graphics.contourplot import test_contour
 
 def lineplot_orbs(): return test_plot_orbs()
 def lineplot_bfs(): return test_plot_bfs()
+def contour_orb(): return test_contour(True)
     
 def plot_h2():
     bfs = basisset(h2,'sto3g')
