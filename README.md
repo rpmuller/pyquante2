@@ -31,6 +31,9 @@ prepared to deal with code performance at a later time.
 ## What works so far:
 * Huzinaga and HGP integral methods, both in Python and with Cython wrappers to C
 * RHF, UHF wave functions
+* A limited number of basis sets (STO-3G, 6-31G, 6-31G**)
+* Basic plotting
+* Basic IPython notebook support for some objects
 
 Feel free to fork this if it interests you. The PyQuante code is still
 around, so I'm not rushing through the process, I'm just taking as
