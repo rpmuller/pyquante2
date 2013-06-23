@@ -28,6 +28,10 @@ Of course, it would be nice if this code were also much faster than
 PyQuante, but I'd be surprised if this happened automatically, and I'm
 prepared to deal with code performance at a later time.
 
+There is an IPython notebook surveying some of the new features that
+can be viewed as a [gist](https://gist.github.com/rpmuller/5745404) or
+[on nbviewer](http://nbviewer.ipython.org/5745404). 
+
 ## What works so far:
 * Huzinaga and HGP integral methods, both in Python and with Cython wrappers to C
 * RHF, UHF wave functions
