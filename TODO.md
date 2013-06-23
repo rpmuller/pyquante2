@@ -5,7 +5,6 @@
   called? Seems slow.  
 
 ## Easy stuff to add:
-* Graphics module with contour plot, etc, for bfs and orbital
 * Smarter way of handling evaluation of bf and orbs on a mesh of points.
 * Units for molecule._repr_html_
 * Hamiltonian (or iterator) function that distinguishes between scf
