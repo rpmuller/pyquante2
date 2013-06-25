@@ -1,9 +1,5 @@
 # PyQuante 2 Todo List
 
-## Important
-* Check profiling of test case runs: are the c integral routines being
-  called? Seems slow.  
-
 ## Easy stuff to add:
 * Smarter way of handling evaluation of bf and orbs on a mesh of points.
 * Units for molecule._repr_html_
