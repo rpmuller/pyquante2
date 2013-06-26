@@ -1,6 +1,7 @@
 # PyQuante 2 Todo List
 
 ## Easy stuff to add:
+* Exit more gracefully from RuntimeError maxiters.
 * Smarter way of handling evaluation of bf and orbs on a mesh of points.
 * Units for molecule._repr_html_
 * __repr__ and _repr_html_ for basisset
