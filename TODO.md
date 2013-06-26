@@ -3,8 +3,6 @@
 ## Easy stuff to add:
 * Smarter way of handling evaluation of bf and orbs on a mesh of points.
 * Units for molecule._repr_html_
-* Hamiltonian (or iterator) function that distinguishes between scf
-  convergence and max iteration 
 * __repr__ and _repr_html_ for basisset
 
 ## Bug!!
