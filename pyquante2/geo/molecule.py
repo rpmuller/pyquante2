@@ -84,7 +84,7 @@ class molecule:
             td = ET.SubElement(tr,"td")
             td.text = "%.5f" % y
             td = ET.SubElement(tr,"td")
-            td.text = "%.5f" % y
+            td.text = "%.5f" % z
         return top
 
     def _repr_html_(self,tablehead=True):
