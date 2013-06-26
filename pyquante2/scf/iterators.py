@@ -1,6 +1,7 @@
 import numpy as np
 from pyquante2.utils import dmat
 
+
 def simple(H,c=None,tol=1e-5,maxiters=100):
     """
     Simple SCF iterator.
@@ -16,6 +17,8 @@ def simple(H,c=None,tol=1e-5,maxiters=100):
             break
         Eold = E
         yield E
+    else:
+        raise RuntimeError("Warning: Max iterations %d reached" % maxiters)
     return
 
 def usimple(H,c=None,tol=1e-5,maxiters=100):
@@ -33,6 +36,8 @@ def usimple(H,c=None,tol=1e-5,maxiters=100):
             break
         Eold = E
         yield E
+    else:
+        raise RuntimeError("Warning: Max iterations %d reached" % maxiters)
     return
   
 def averaging(H,c=None,fraction=0.5,tol=1e-5,maxiters=100):
@@ -52,6 +57,8 @@ def averaging(H,c=None,fraction=0.5,tol=1e-5,maxiters=100):
             break
         Eold = E
         yield E
+    else:
+        raise RuntimeError("Warning: Max iterations %d reached" % maxiters)
     return
 
 if __name__ == '__main__':
