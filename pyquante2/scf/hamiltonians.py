@@ -61,7 +61,6 @@ class rhf(hamiltonian):
 
     def converge(self,iterator=simple,**kwargs):
         self.energies = list(iterator(self,**kwargs))
-        # Need something that checks for convergence, rather than just max iterations
         self.converged = True
         return self.energies
 
