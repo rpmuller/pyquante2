@@ -1,6 +1,6 @@
 from pyquante2.ints.integrals import onee_integrals,twoe_integrals
 from pyquante2.utils import trace2,geigh
-from pyquante2.scf.iterators import simple,usimple
+from pyquante2.scf.iterators import simple,usimple,SCFIterator
 import numpy as np
 
 class hamiltonian:
@@ -56,12 +56,26 @@ class rhf(hamiltonian):
     >>> ens = h2_rhf.converge(simple)
     >>> round(h2_rhf.energy,6)
     -1.1171
+    >>> ens = h2_rhf.converge(SCFIterator)
+    >>> round(h2_rhf.energy,6)
+    -1.1171
+    >>> ens = h2_rhf.converge(SCFIterator,maxiters=1)
+    >>> round(h2_rhf.energy,6)
+    0.48556
+    >>> h2_rhf.converged
+    False
     """
     name = 'RHF'
 
     def converge(self,iterator=simple,**kwargs):
-        self.energies = list(iterator(self,**kwargs))
-        self.converged = True
+        converger = iterator(self,**kwargs)
+        self.energies = []
+        for en in converger:
+            self.energies.append(en)
+        try:
+            self.converged = converger.converged
+        except:
+            self.converged = True
         return self.energies
 
     def update(self,D):

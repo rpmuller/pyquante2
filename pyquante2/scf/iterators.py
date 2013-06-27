@@ -1,6 +1,35 @@
 import numpy as np
 from pyquante2.utils import dmat
 
+class SCFIterator:
+    def __init__(self,H,c=None,tol=1e-5,maxiters=100):
+        self.H = H
+        self.Eold = 0
+        if c is None:
+            orbe,self.c = np.linalg.eigh(H.i1.S)
+        else:
+            self.c = c
+        self.maxiters = maxiters
+        self.tol = tol
+        
+        self.converged = False
+        self.iterations = 0
+        return
+
+    def __iter__(self): return self
+
+    def next(self):
+        self.iterations += 1
+        if self.iterations > self.maxiters:
+            raise StopIteration
+        D = dmat(self.c,self.H.geo.nocc())
+        self.c = self.H.update(D)
+        E = self.H.energy
+        if abs(E-self.Eold) < self.tol:
+            self.converged = True
+            raise StopIteration
+        self.Eold = E
+        return E
 
 def simple(H,c=None,tol=1e-5,maxiters=100):
     """
@@ -17,8 +46,6 @@ def simple(H,c=None,tol=1e-5,maxiters=100):
             break
         Eold = E
         yield E
-    else:
-        raise RuntimeError("Warning: Max iterations %d reached" % maxiters)
     return
 
 def usimple(H,c=None,tol=1e-5,maxiters=100):
@@ -36,8 +63,6 @@ def usimple(H,c=None,tol=1e-5,maxiters=100):
             break
         Eold = E
         yield E
-    else:
-        raise RuntimeError("Warning: Max iterations %d reached" % maxiters)
     return
   
 def averaging(H,c=None,fraction=0.5,tol=1e-5,maxiters=100):
@@ -57,8 +82,6 @@ def averaging(H,c=None,fraction=0.5,tol=1e-5,maxiters=100):
             break
         Eold = E
         yield E
-    else:
-        raise RuntimeError("Warning: Max iterations %d reached" % maxiters)
     return
 
 if __name__ == '__main__':
