@@ -98,12 +98,31 @@ class rhf(hamiltonian):
         return c
         
 class uhf(hamiltonian):
+    """
+    >>> from pyquante2.geo.samples import oh
+    >>> from pyquante2.basis.basisset import basisset
+    >>> from pyquante2.scf.iterators import usimple,USCFIterator
+    >>> bfs = basisset(oh,'sto3g')
+    >>> solver = uhf(oh,bfs)
+    >>> ens = solver.converge(usimple)
+    >>> round(solver.energy,6)
+    -74.146668
+
+    >>> ens = solver.converge(USCFIterator)
+    >>> round(solver.energy,6)
+    -74.146668
+    """
     name = 'UHF'
 
     def converge(self,iterator=usimple,**kwargs):
-        self.energies = list(iterator(self,**kwargs))
-        # Need something that checks for convergence, rather than just max iterations
-        self.converged = True
+        converger = iterator(self,**kwargs)
+        self.energies = []
+        for en in converger:
+            self.energies.append(en)
+        try:
+            self.converged = converger.converged
+        except:
+            self.converged = True
         return self.energies
 
     def update(self,Da,Db):
