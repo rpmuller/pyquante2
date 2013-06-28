@@ -21,10 +21,10 @@ class test_scf(unittest.TestCase):
         self.assertAlmostEqual(solver.energy,-7.8607437)
 
     def test_lih_averaging(self):
-        from pyquante2.scf.iterators import averaging
+        from pyquante2.scf.iterators import AveragingIterator
         bfs = basisset(lih,'sto3g')
         solver = rhf(lih,bfs)
-        ens = solver.converge(averaging)
+        ens = solver.converge(AveragingIterator)
         self.assertAlmostEqual(solver.energy,-7.8607375733271088)
 
     def test_h4(self):
@@ -48,10 +48,10 @@ class test_scf(unittest.TestCase):
         self.assertAlmostEqual(solver.energy,-74.959856073494194,6)
 
     def test_h2o_averaging(self):
-        from pyquante2.scf.iterators import averaging
+        from pyquante2.scf.iterators import AveragingIterator
         bfs = basisset(h2o,'sto3g')
         solver = rhf(h2o,bfs)
-        ens = solver.converge(averaging)
+        ens = solver.converge(AveragingIterator)
         self.assertAlmostEqual(solver.energy,-74.959846854926553,6)
 
     def test_oh(self):
