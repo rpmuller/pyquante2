@@ -1,6 +1,6 @@
 from pyquante2.ints.integrals import onee_integrals,twoe_integrals
 from pyquante2.utils import trace2,geigh
-from pyquante2.scf.iterators import simple,usimple,SCFIterator,AveragingIterator
+from pyquante2.scf.iterators import SCFIterator,USCFIterator,AveragingIterator
 import numpy as np
 
 class hamiltonian:
@@ -50,12 +50,8 @@ class rhf(hamiltonian):
     """
     >>> from pyquante2.geo.samples import h2
     >>> from pyquante2.basis.basisset import basisset
-    >>> from pyquante2.scf.iterators import simple,averaging
     >>> bfs = basisset(h2,'sto3g')
     >>> h2_rhf = rhf(h2,bfs)
-    >>> ens = h2_rhf.converge(simple)
-    >>> round(h2_rhf.energy,6)
-    -1.1171
     >>> ens = h2_rhf.converge(SCFIterator)
     >>> round(h2_rhf.energy,6)
     -1.1171
@@ -72,15 +68,12 @@ class rhf(hamiltonian):
     """
     name = 'RHF'
 
-    def converge(self,iterator=simple,**kwargs):
+    def converge(self,iterator=SCFIterator,**kwargs):
         converger = iterator(self,**kwargs)
         self.energies = []
         for en in converger:
             self.energies.append(en)
-        try:
-            self.converged = converger.converged
-        except:
-            self.converged = True
+        self.converged = converger.converged
         return self.energies
 
     def update(self,D):
@@ -101,28 +94,21 @@ class uhf(hamiltonian):
     """
     >>> from pyquante2.geo.samples import oh
     >>> from pyquante2.basis.basisset import basisset
-    >>> from pyquante2.scf.iterators import usimple,USCFIterator
+    >>> from pyquante2.scf.iterators import USCFIterator
     >>> bfs = basisset(oh,'sto3g')
     >>> solver = uhf(oh,bfs)
-    >>> ens = solver.converge(usimple)
-    >>> round(solver.energy,6)
-    -74.146668
-
     >>> ens = solver.converge(USCFIterator)
     >>> round(solver.energy,6)
     -74.146668
     """
     name = 'UHF'
 
-    def converge(self,iterator=usimple,**kwargs):
+    def converge(self,iterator=USCFIterator,**kwargs):
         converger = iterator(self,**kwargs)
         self.energies = []
         for en in converger:
             self.energies.append(en)
-        try:
-            self.converged = converger.converged
-        except:
-            self.converged = True
+        self.converged = converger.converged
         return self.energies
 
     def update(self,Da,Db):
