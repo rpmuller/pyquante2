@@ -23,6 +23,8 @@ problem for the 2e code.
 Example code of what doesn't work:
 
     # these mixed pgbf/cgbf cases don't work:
+    >>> from pyquante2 import pgbf,cgbf
+    >>> s = pgbf(1)
     >>> sc = cgbf(exps=[1],coefs=[1])
     >>> round(S(sc,s),6)
     1.0
