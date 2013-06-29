@@ -20,6 +20,16 @@ To fix this, I think I need 'else' statements:
 I don't think this is a big deal for the 1e code, but I think it's a
 problem for the 2e code.
 
+Example code of what doesn't work:
+
+    # these mixed pgbf/cgbf cases don't work:
+    >>> sc = cgbf(exps=[1],coefs=[1])
+    >>> round(S(sc,s),6)
+    1.0
+    >>> round(S(s,sc),6)
+    1.0
+
+
 ## Next steps to take:
 * Settings to ConfigParser
 * Wrap libxc
