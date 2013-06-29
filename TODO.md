@@ -10,27 +10,7 @@ I'm doing something dumb in my cute code that expands the cgbfs into
 pgbfs in the integral code.  Everything should work fine if I'm doing
 all pgbf or all cgbfs, but there's a bug if I have a mixture.
 
-To fix this, I think I need 'else' statements:
-
-    if b.contracted:
-        return sum(cb*S(pb,a) for cb,pb in b)
-    else:
-        return S(b,a)
-
-I don't think this is a big deal for the 1e code, but I think it's a
-problem for the 2e code.
-
-Example code of what doesn't work:
-
-    # these mixed pgbf/cgbf cases don't work:
-    >>> from pyquante2 import pgbf,cgbf
-    >>> s = pgbf(1)
-    >>> sc = cgbf(exps=[1],coefs=[1])
-    >>> round(S(sc,s),6)
-    1.0
-    >>> round(S(s,sc),6)
-    1.0
-
+**Update**: Fixed for 1e code, not for 2e code.
 
 ## Next steps to take:
 * Settings to ConfigParser
