@@ -20,10 +20,14 @@ from pyquante2.utils import binomial, fact2, Fgamma, norm2
 def S(a,b):
     """
     The simple interface to the overlap function, using only primitive basis functions as the arguments.
-    >>> from pyquante2.basis.pgbf import pgbf
+    >>> from pyquante2 import pgbf,cgbf
     >>> s = pgbf(1)
     >>> round(S(s,s),6)
     1.0
+    >>> sc = cgbf(exps=[1],coefs=[1])
+    >>> round(S(sc,sc),6)
+    1.0
+
     """
     if b.contracted:
         return sum(cb*S(pb,a) for (cb,pb) in b)
