@@ -28,33 +28,69 @@ def S(a,b):
     >>> round(S(sc,sc),6)
     1.0
 
+    >>> sc = cgbf(exps=[1],coefs=[1])
+    >>> round(S(sc,s),6)
+    1.0
+    >>> round(S(s,sc),6)
+    1.0
+
     """
     if b.contracted:
         return sum(cb*S(pb,a) for (cb,pb) in b)
+    elif a.contracted:
+        return sum(ca*S(b,pa) for (ca,pa) in a)
     return a.norm*b.norm*overlap(a.exponent,a.powers,a.origin,b.exponent,b.powers,b.origin)
 
 def T(a,b):
     """
     Simple interface to the kinetic function.
+    >>> from pyquante2 import pgbf,cgbf
     >>> from pyquante2.basis.pgbf import pgbf
     >>> s = pgbf(1)
     >>> round(T(s,s),6)
     1.5
+
+    >>> sc = cgbf(exps=[1],coefs=[1])
+    >>> round(T(sc,sc),6)
+    1.5
+
+    >>> sc = cgbf(exps=[1],coefs=[1])
+    >>> round(T(sc,s),6)
+    1.5
+    >>> round(T(s,sc),6)
+    1.5
+
     """
     if b.contracted:
         return sum(cb*T(pb,a) for (cb,pb) in b)
+    elif a.contracted:
+        return sum(ca*T(b,pa) for (ca,pa) in a)
     return a.norm*b.norm*kinetic(a.exponent,a.powers,a.origin,b.exponent,b.powers,b.origin)
 
 def V(a,b,C):
     """
     Simple interface to the nuclear attraction function.
-    >>> from pyquante2.basis.pgbf import pgbf
+    >>> from pyquante2 import pgbf,cgbf
     >>> s = pgbf(1)
     >>> round(V(s,s,(0,0,0)),6)
     -1.595769
+
+    >>> sc = cgbf(exps=[1],coefs=[1])
+    >>> round(V(sc,sc,(0,0,0)),6)
+    -1.595769
+
+    >>> sc = cgbf(exps=[1],coefs=[1])
+    >>> round(V(sc,s,(0,0,0)),6)
+    -1.595769
+
+    >>> round(V(s,sc,(0,0,0)),6)
+    -1.595769
+
     """
     if b.contracted:
         return sum(cb*V(pb,a,C) for (cb,pb) in b)
+    elif a.contracted:
+        return sum(ca*V(b,pa,C) for (ca,pa) in a)
     return a.norm*b.norm*nuclear_attraction(a.exponent,a.powers,a.origin,
                                             b.exponent,b.powers,b.origin,C)
 
