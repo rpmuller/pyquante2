@@ -52,6 +52,12 @@ class cgbf:
     def __call__(self,xyz): return sum(c*p(xyz) for c,p in self)
     def __repr__(self): return "cgbf(%s,%s,%s,%s)" % (tuple(self.origin),self.powers,list(self.pexps),list(self.coefs))
 
+    def mesh(self,xyzs):
+        """
+        Evaluate basis function on a mesh of points *xyz*.
+        """
+        return sum(c*p.mesh(xyzs) for c,p in self)
+
     def cne_list(self):
         return self.coefs,self.pnorms,self.pexps
 

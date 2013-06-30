@@ -52,6 +52,17 @@ class pgbf:
         d2 = norm2(d)
         return self.norm*d[0]**I*d[1]**J*d[2]**K*np.exp(-self.exponent*d2)
 
+    def mesh(self,xyzs):
+        """
+        Evaluate basis function on a mesh of points *xyz*.
+        """
+        I,J,K = self.powers
+        d = np.asarray(xyzs,'d')-self.origin
+        # Got help from stackoverflow user @unutbu with this.
+        # See: http://stackoverflow.com/questions/17391052/compute-square-distances-from-numpy-array
+        d2 = np.einsum('ij,ij -> i',d,d)
+        return self.norm*d[:,0]**I*d[:,1]**J*d[:,2]**K*np.exp(-self.exponent*d2)
+
     def _normalize(self):
         "Normalize basis function. From THO eq. 2.2"
         l,m,n = self.powers
