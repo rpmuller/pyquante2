@@ -31,7 +31,7 @@ def contour_yz(atoms,orb,bfs,x=0,npts=50,doshow=False,
     for i,yi in enumerate(y):
         for j,zj in enumerate(z):
             for c,bf in zip(orb,bfs):
-                f[i,j] += c*bf(x,yi,zj)
+                f[i,j] += c*bf(np.array((x,yi,zj),'d'))
     Y,Z = np.meshgrid(y,z)
     #pl.contour(Y,Z,f) # colored
     cp = pl.contour(Y,Z,f,colors='k') # b&w
