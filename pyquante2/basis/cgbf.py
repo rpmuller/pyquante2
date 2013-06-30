@@ -25,7 +25,7 @@ class cgbf:
     >>> s = cgbf(exps=[1],coefs=[1])
     >>> print s
     cgbf((0.0, 0.0, 0.0),(0, 0, 0),[1.0],[1.0000000000000002])
-    >>> round(s(0,0,0),6)
+    >>> round(s((0,0,0)),6)
     0.712705
     """
     contracted = True
@@ -49,7 +49,7 @@ class cgbf:
         return
 
     def __getitem__(self,item): return zip(self.coefs,self.pgbfs).__getitem__(item)
-    def __call__(self,x,y,z): return sum(c*p(x,y,z) for c,p in self)
+    def __call__(self,xyz): return sum(c*p(xyz) for c,p in self)
     def __repr__(self): return "cgbf(%s,%s,%s,%s)" % (tuple(self.origin),self.powers,list(self.pexps),list(self.coefs))
 
     def cne_list(self):
@@ -87,7 +87,7 @@ def sto(zeta,N=1,L=0,M=0,origin=(0,0,0)):
     Reference: RF Stewart, JCP 52, 431 (1970)
 
     >>> s = sto(1)
-    >>> round(s(0,0,0),6) # Just guessing at this value
+    >>> round(s((0,0,0)),6) # Just guessing at this value
     0.530121
     """
     nlm2powers = {
