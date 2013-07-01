@@ -21,13 +21,15 @@ from pyquante2.utils import pairs
 from itertools import product
 import numpy as np
 
-# The most time-consuming parts of the code are here. Tread carefully!
-class twoe_integrals:
+# This is the old part of the code. It has now been replaced with the one
+#  below it, which takes 8x as much space, but is significantly faster.
+#  It's also more elegant code.
+class twoe_integrals_compressed:
     """
     >>> from pyquante2.geo.samples import h
     >>> from pyquante2.basis.basisset import basisset
     >>> bfs = basisset(h,'sto3g')
-    >>> twoe_integrals(bfs)
+    >>> twoe_integrals_compressed(bfs)
     array([ 0.77460594])
     """
     def __init__(self,bfs):
@@ -73,13 +75,40 @@ class twoe_integrals:
         D1 = np.reshape(D,(nbf*nbf,))
         G = np.empty((nbf,nbf),'d')
         for i,j in pairs(xrange(nbf)):
-            temp = fetcher(i,j)
+            temp = fetcher(i,j) # replace temp with fetcher()
             G[i,j] = G[j,i] = np.dot(D1,temp)
         return G
 
     def get_2jk(self,D): return self.make_operator(D,self.fetch_2jk)
     def get_j(self,D): return self.make_operator(D,self.fetch_j)
     def get_k(self,D): return self.make_operator(D,self.fetch_k)
+
+class twoe_integrals:
+    """
+    >>> from pyquante2.geo.samples import h
+    >>> from pyquante2.basis.basisset import basisset
+    >>> bfs = basisset(h,'sto3g')
+    >>> twoe_integrals(bfs)
+    array([ 0.77460594])
+    """
+    def __init__(self,bfs):
+        nbf = self.nbf = len(bfs)
+        self._2e_ints = np.empty((nbf,nbf,nbf,nbf),'d')
+        ints = self._2e_ints
+        
+        for i,j,k,l in iterator(nbf):
+            ints[i,j,k,l] = ints[j,i,k,l] = ints[i,j,l,k] = ints[j,i,l,k] = \
+                            ints[k,l,i,j] = ints[l,k,i,j] = ints[k,l,j,i] = \
+                            ints[l,k,j,i] = ERI(bfs[i],bfs[j],bfs[k],bfs[l])
+        return
+    def __getitem__(self,*args): return self._2e_ints.__getitem__(*args)
+    def __repr__(self): return repr(self._2e_ints.ravel())
+
+    # This turns out to be slower:
+    #def get_j(self,D): return np.einsum('ij,ijkl->kl',D,self._2e_ints)
+    def get_j(self,D): return np.einsum('kl,ijkl->ij',D,self._2e_ints)
+    def get_k(self,D): return np.einsum('ij,ikjl->kl',D,self._2e_ints)
+    def get_2jk(self,D): return 2*self.get_j(D)-self.get_k(D)
                     
 class onee_integrals:
     """
