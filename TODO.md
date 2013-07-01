@@ -1,7 +1,9 @@
 # PyQuante 2 Todo List
 
 ## Easy stuff to add:
-* Smarter way of handling evaluation of bf and orbs on a mesh of points.
+* basisset .mesh function
+* Evaluate orbitals by einsum of basis sets meshes times orbitals
+* MP2 integral transform using einsum
 * Units for molecule._repr_html_
 * __repr__ and _repr_html_ for basisset
 
@@ -33,3 +35,4 @@ all pgbf or all cgbfs, but there's a bug if I have a mixture.
 * Speed
 * _repr_html_
 * nosetests
+* einsum
