@@ -12,6 +12,7 @@ Copyright (c) 2004, Richard P. Muller. All Rights Reserved.
  distribution. 
 """
 
+import numpy as np
 from pyquante2 import settings
 from pyquante2.basis import data
 from pyquante2.basis.cgbf import cgbf
@@ -35,9 +36,17 @@ class basisset:
     def __getitem__(self,i): return self.bfs.__getitem__(i)
     def __repr__(self): return "\n".join(repr(bf) for bf in self.bfs)
     def __len__(self): return len(self.bfs)
-
-# Can define shellbasisset here, which is essentially a normal basis set, but has the functions
-# shorted into shells. Overload the normal basis set.
+    def mesh(self,points):
+        nbf = len(self.bfs)
+        ng,sb3 = points.shape
+        self.bfmesh = np.empty((ng,nbf),'d')
+        for i,bf in enumerate(self.bfs):
+            self.bfmesh[:,i] = bf.mesh(points)
+        return self.bfmesh
+            
+# Can define shellbasisset here, which is essentially a normal basis
+# set, but has the functions shorted into shells. Overload the normal
+# basis set.
 
 if __name__ == '__main__':
     import doctest
