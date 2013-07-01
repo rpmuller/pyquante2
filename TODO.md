@@ -1,9 +1,8 @@
 # PyQuante 2 Todo List
 
 ## Easy stuff to add:
-* basisset .mesh function
-* Evaluate orbitals by einsum of basis sets meshes times orbitals
-* MP2 integral transform using einsum
+* Test basisset .mesh function
+* Evaluate orbitals by dot/einsum of basis sets meshes times orbitals
 * Units for molecule._repr_html_
 * __repr__ and _repr_html_ for basisset
 * Could save a factor of 2 or 4 in integral storage by only storing i>jk [i,j,k,l]
