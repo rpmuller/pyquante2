@@ -3,10 +3,8 @@ import pylab as pl
 
 def lineplot_orbs(points,orbs,bfs,doshow=False,
                title="Line plot of pyquante orbital"):
-    zvals = [z for (x,y,z) in points]
     for orb in orbs.T: # Transpose makes interations work
-        pl.plot(zvals,orb_on_points(points,orb,bfs))
-    #pl.savefig('pyq_orb.png')
+        pl.plot(orb_on_points(points,orb,bfs))
     pl.title(title)
     if doshow:
         pl.show()
@@ -20,19 +18,25 @@ def orb_on_points(points,orb,bfs):
 
 def lineplot_bfs(points,bfs,doshow=False,
                title="Line plot of pyquante bfs"):
-    zvals = [z for (x,y,z) in points]
     for bf in bfs:
-        pl.plot(zvals,bf.mesh(points))
+        pl.plot(bf.mesh(points))
     pl.title(title)
     if doshow:
         pl.show()
     return
 
+def line(origin,destination,npts=50):
+    """
+    Create a 1d line from the 3-tuple origin to the 3-tuple destination
+    Yet another solution from @unutbu at stackoverflow.
+    http://stackoverflow.com/questions/17396164/numpythonic-way-to-make-3d-meshes-for-line-plotting
+    """
+    return np.column_stack((np.linspace(o,d,npts) for o,d in zip(origin,destination)))
+
 def test_plot_bfs():
     from pyquante2 import basisset,h2
     bfs = basisset(h2,'sto3g')
-    zvals = np.linspace(-5,5)
-    points = [(0,0,z) for z in zvals]
+    points = line((0,0,-5),(0,0,5))
     lineplot_bfs(points,bfs,True)
     return
 
@@ -43,7 +47,7 @@ def test_plot_orbs():
                      [1.0,-1.0]],'d')
     
     zvals = np.linspace(-5,5)
-    points = [(0,0,z) for z in zvals]
+    points = line((0,0,-5),(0,0,5))
     lineplot_orbs(points,orbs,bfs,True)
     return
 
