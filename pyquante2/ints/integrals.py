@@ -37,8 +37,8 @@ class twoe_integrals_compressed:
         self.totlen = nbf*(nbf+1)*(nbf*nbf+nbf+2)/8
         self._2e_ints = np.empty(self.totlen,'d')
         
-        for i,j,k,l in iterator(nbf):
-            self._2e_ints[index(i,j,k,l)] = ERI(bfs[i],bfs[j],bfs[k],bfs[l])
+        for i,j,k,l in iiterator(nbf):
+            self._2e_ints[iindex(i,j,k,l)] = ERI(bfs[i],bfs[j],bfs[k],bfs[l])
         return
     def __getitem__(self,pos): return self._2e_ints[index(*pos)]
     def __repr__(self): return repr(self._2e_ints)
@@ -96,7 +96,7 @@ class twoe_integrals:
         self._2e_ints = np.empty((nbf,nbf,nbf,nbf),'d')
         ints = self._2e_ints
         
-        for i,j,k,l in iterator(nbf):
+        for i,j,k,l in iiterator(nbf):
             ints[i,j,k,l] = ints[j,i,k,l] = ints[i,j,l,k] = ints[j,i,l,k] = \
                             ints[k,l,i,j] = ints[l,k,i,j] = ints[k,l,j,i] = \
                             ints[l,k,j,i] = ERI(bfs[i],bfs[j],bfs[k],bfs[l])
@@ -136,10 +136,10 @@ class onee_integrals:
         return
         
 
-def iterator(nbf):
+def iiterator(nbf):
     """
     Iterator over n**4 integral indices
-    >>> list(iterator(2))
+    >>> list(iiterator(2))
     [(0, 0, 0, 0), (0, 0, 0, 1), (0, 0, 1, 1), (0, 1, 0, 1), (0, 1, 1, 1), (1, 1, 1, 1)]
     """
     for i,j in pairs(xrange(nbf)):
@@ -150,26 +150,26 @@ def iterator(nbf):
                 yield i,j,k,l
     return
 
-def index(i,j,k,l):
+def iindex(i,j,k,l):
     """
     Indexing into the integral array
-    >>> index(0,0,0,0)
+    >>> iindex(0,0,0,0)
     0
-    >>> index(1,0,0,0)
+    >>> iindex(1,0,0,0)
     1
-    >>> index(0,1,0,0)
+    >>> iindex(0,1,0,0)
     1
-    >>> index(0,0,1,0)
+    >>> iindex(0,0,1,0)
     1
-    >>> index(0,0,0,1)
+    >>> iindex(0,0,0,1)
     1
-    >>> index(1,0,1,0)
+    >>> iindex(1,0,1,0)
     2
-    >>> index(0,1,0,1)
+    >>> iindex(0,1,0,1)
     2
-    >>> index(1,1,0,0)
+    >>> iindex(1,1,0,0)
     3
-    >>> index(0,0,1,1)
+    >>> iindex(0,0,1,1)
     3
     """
     if i<j: i,j = j,i
