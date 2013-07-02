@@ -5,7 +5,7 @@ from pyquante2.ints.one import S,T,V
 class test_one(unittest.TestCase):
     def test_pgbf(self):
         s = pgbf(1.0)
-        self.assertAlmostEqual(s((0,0,0)),0.7127054703549901)
+        self.assertAlmostEqual(s(0,0,0),0.7127054703549901)
 
     def test_overlap(self):
         s = pgbf(1.0)
