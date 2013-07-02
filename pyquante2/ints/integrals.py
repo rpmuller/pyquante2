@@ -40,7 +40,7 @@ class twoe_integrals_compressed:
         for i,j,k,l in iiterator(nbf):
             self._2e_ints[iindex(i,j,k,l)] = ERI(bfs[i],bfs[j],bfs[k],bfs[l])
         return
-    def __getitem__(self,pos): return self._2e_ints[index(*pos)]
+    def __getitem__(self,pos): return self._2e_ints[iindex(*pos)]
     def __repr__(self): return repr(self._2e_ints)
 
     def fetch_2jk(self,i,j):
