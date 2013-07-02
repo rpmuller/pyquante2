@@ -4,7 +4,7 @@ import pylab as pl
 def lineplot_orbs(points,orbs,bfs,doshow=False,
                title="Line plot of pyquante orbital"):
     bfmesh = bfs.mesh(points)
-    orbmesh = np.dot(bfmesh,orbs) #.T?
+    orbmesh = np.dot(bfmesh,orbs)
     ng,norb = orbmesh.shape
     for i in range(norb):
         pl.plot(orbmesh[:,i])
