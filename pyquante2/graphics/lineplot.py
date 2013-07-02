@@ -4,21 +4,14 @@ import pylab as pl
 def lineplot_orbs(points,orbs,bfs,doshow=False,
                title="Line plot of pyquante orbital"):
     bfmesh = bfs.mesh(points)
-    for orb in orbs.T: # Transpose makes interations work
-        pl.plot(orb_on_points_with_mesh(points,orb,bfmesh))
+    orbmesh = np.dot(bfmesh,orbs) #.T?
+    ng,norb = orbmesh.shape
+    for i in range(norb):
+        pl.plot(orbmesh[:,i])
     pl.title(title)
     if doshow:
         pl.show()
     return
-
-def orb_on_points(points,orb,bfs):
-    f = np.zeros(len(points),'d')
-    for c,bf in zip(orb,bfs):
-        f = f + c*bf.mesh(points)
-    return f
-
-def orb_on_points_with_mesh(points,orb,bfmesh):
-    return np.dot(bfmesh,orb)
 
 def lineplot_bfs(points,bfs,doshow=False,
                  title="Line plot of pyquante bfs"):
