@@ -26,10 +26,10 @@ class pgbf:
     """
     Construct a primitive gaussian basis functions.
     >>> s = pgbf(1.0)
-    >>> round(s((0,0,0)),6)
+    >>> round(s(0,0,0),6)
     0.712705
     >>> px = pgbf(1.0,powers=(1,0,0))
-    >>> round(px((0,0,0)),6)
+    >>> round(px(0,0,0),6)
     0.0
     """
     contracted = False
@@ -44,13 +44,12 @@ class pgbf:
 
     def __repr__(self): return "pgbf(%f,%s,%s)" % (self.exponent,tuple(self.origin),self.powers)
 
-    def __call__(self,xyz):
+    def __call__(self,x,y,z):
         "Compute the amplitude of the PGBF at point x,y,z"
         I,J,K = self.powers
-        xyz = np.asarray(xyz,'d')
-        d = xyz-self.origin
-        d2 = norm2(d)
-        return self.norm*d[0]**I*d[1]**J*d[2]**K*np.exp(-self.exponent*d2)
+        dx,dy,dz = x-self.origin[0],y-self.origin[1],z-self.origin[2]
+        d2 = dx**2 + dy**2 + dz**2
+        return self.norm*dx**I*dy**J*dz**K*np.exp(-self.exponent*d2)
 
     def mesh(self,xyzs):
         """
