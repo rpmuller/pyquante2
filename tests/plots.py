@@ -24,7 +24,7 @@ def plot_h2_vtk():
     # Note: these orbitals are not coming out symmetric. Why not??
     print solver
     print solver.orbs
-    vtk_orbital(h2,solver.orbs,bfs)
+    vtk_orbs(h2,solver.orbs,bfs,npts=10)
 
 def plot_orbs():
     bfs = basisset(h2,'sto3g')
@@ -35,5 +35,6 @@ def plot_orbs():
     return
 
 if __name__ == '__main__':
-    plot_h2_lineplot()
+    #plot_h2_lineplot()
+    plot_h2_vtk()
 
