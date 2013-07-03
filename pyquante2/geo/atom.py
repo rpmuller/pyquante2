@@ -14,6 +14,7 @@ array([ 0.,  0.,  0.])
  distribution. 
 """
 import numpy as np
+from pyquante2.constants import ang2bohr
 
 class atom:
     def __init__(self,atno,x,y,z,**kwargs):
@@ -22,7 +23,7 @@ class atom:
         self.units = kwargs.get('units','bohr').lower()
         assert self.units[:4] in ['bohr','angs']
         if not self.units == 'bohr':
-            self.r /= 0.52918
+            self.r *= ang2bohr
         return
 
     def atuple(self): return (self.atno,self.r[0],self.r[1],self.r[2])
