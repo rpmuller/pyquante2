@@ -1,11 +1,11 @@
 # PyQuante 2 Todo List
 
 ## Easy stuff to add:
+* Move atomic grid stuff into own module
+* Grab lebedev and legendre stuff from pyquante1
 * Clean up mp2 arguments
 * Units for molecule._repr_html_
 * __repr__ and _repr_html_ for basisset
-* Could save a factor of 2 or 4 in integral storage by only storing i>jk [i,j,k,l]
-  (and all kl's)
 
 ## Bug!!
 I'm doing something dumb in my cute code that expands the cgbfs into
