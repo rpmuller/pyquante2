@@ -108,3 +108,13 @@ build/lib.macosx-10.7-x86_64-2.7/pyquante2/mp2/mp2.py
 build/lib.macosx-10.7-x86_64-2.7/pyquante2/pt/__init__.py
 
 build/lib.macosx-10.7-x86_64-2.7/pyquante2/pt/mp2.py
+
+build/lib.macosx-10.7-x86_64-2.7/pyquante2/constants.py
+
+build/lib.macosx-10.7-x86_64-2.7/pyquante2/grid/__init__.py
+
+build/lib.macosx-10.7-x86_64-2.7/pyquante2/grid/atomic_grid.py
+
+build/lib.macosx-10.7-x86_64-2.7/pyquante2/grid/data.py
+
+build/lib.macosx-10.7-x86_64-2.7/pyquante2/grid/grid.py
