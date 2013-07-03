@@ -54,7 +54,7 @@ class rhf(hamiltonian):
     >>> h2_rhf = rhf(h2,bfs)
     >>> ens = h2_rhf.converge(SCFIterator)
     >>> round(h2_rhf.energy,6)
-    -1.1171
+    -1.117099
 
     >>> ens = h2_rhf.converge(AveragingIterator,maxiters=100)
     >>> round(h2_rhf.energy,6)
@@ -62,7 +62,7 @@ class rhf(hamiltonian):
 
     >>> ens = h2_rhf.converge(SCFIterator,maxiters=1)
     >>> round(h2_rhf.energy,6)
-    0.48556
+    0.485554
     >>> h2_rhf.converged
     False
     """
@@ -99,7 +99,7 @@ class uhf(hamiltonian):
     >>> solver = uhf(oh,bfs)
     >>> ens = solver.converge(USCFIterator)
     >>> round(solver.energy,6)
-    -74.146668
+    -74.146669
     """
     name = 'UHF'
 

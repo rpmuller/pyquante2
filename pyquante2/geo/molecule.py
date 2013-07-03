@@ -20,7 +20,7 @@ class molecule:
     """
     >>> from pyquante2.geo.samples import h2
     >>> round(h2.nuclear_repulsion(), 6)
-    0.72236
+    0.722356
     >>> h2.nel()
     2
     >>> h2.nocc()

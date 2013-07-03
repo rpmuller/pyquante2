@@ -6,7 +6,7 @@ class test_scf(unittest.TestCase):
         bfs = basisset(h2,'sto3g')
         solver = rhf(h2,bfs)
         ens = solver.converge()
-        self.assertAlmostEqual(solver.energy,-1.117099582955609)
+        self.assertAlmostEqual(solver.energy,-1.117099582955609,6)
 
     def test_h2_631(self):
         bfs = basisset(h2,'6-31G**')
@@ -18,14 +18,14 @@ class test_scf(unittest.TestCase):
         bfs = basisset(lih,'sto3g')
         solver = rhf(lih,bfs)
         ens = solver.converge()
-        self.assertAlmostEqual(solver.energy,-7.8607437)
+        self.assertAlmostEqual(solver.energy,-7.8607437,6)
 
     def test_lih_averaging(self):
         from pyquante2.scf.iterators import AveragingIterator
         bfs = basisset(lih,'sto3g')
         solver = rhf(lih,bfs)
         ens = solver.converge(AveragingIterator)
-        self.assertAlmostEqual(solver.energy,-7.8607375733271088)
+        self.assertAlmostEqual(solver.energy,-7.8607375733271088,6)
 
     def test_h4(self):
         h4 = molecule([
@@ -38,21 +38,21 @@ class test_scf(unittest.TestCase):
         bfs = basisset(h4,'sto3g')
         solver = rhf(h4,bfs)
         ens = solver.converge()
-        self.assertAlmostEqual(solver.energy,-2.234185653441159)
+        self.assertAlmostEqual(solver.energy,-2.234185653441159,6)
         # This is not quite equal to 2x the h2 energy, but very close
 
     def test_h2o(self):
         bfs = basisset(h2o,'sto3g')
         solver = rhf(h2o,bfs)
         ens = solver.converge()
-        self.assertAlmostEqual(solver.energy,-74.959856073494194,6)
+        self.assertAlmostEqual(solver.energy,-74.959856675848712)
 
     def test_h2o_averaging(self):
         from pyquante2.scf.iterators import AveragingIterator
         bfs = basisset(h2o,'sto3g')
         solver = rhf(h2o,bfs)
         ens = solver.converge(AveragingIterator)
-        self.assertAlmostEqual(solver.energy,-74.959846854926553,6)
+        self.assertAlmostEqual(solver.energy,-74.959847457272502)
 
     def test_oh(self):
         from pyquante2 import oh
