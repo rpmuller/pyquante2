@@ -1,10 +1,17 @@
+"""
+The DFT grids are a little different in pyquante2 from pyquante1. Here we are
+only storing the points and the weights, and we will use other data objects to
+store, say, the density, the basis functions, or the various gradients at each
+point.
+"""
 import numpy as np
+
 class grid:
     def __init__(self,atoms,**kwargs):
         self.atoms = atoms
         agrids = [atomicgrid(atom,**kwargs) for atom in atoms]
         becke_reweight_atoms(atoms,agrids)
-        self.points = np.vstack(agrids)
+        self.points = np.vstack([agrid.points for agrid in agrids])
         self.ng,sb4 = self.points.shape
         assert sb4==4
         return
@@ -14,7 +21,20 @@ class grid:
 
 class atomic_grid:
     def __init__(self,atom,**kwargs):
+        atno,x,y,z,Z = atom.atuple()
+        nrad = kwargs.get('nrad',32)
+        fineness = kwargs.get('fineness',1)
         
+        if kwargs.get('radial','EulerMaclaurin') == 'Legendre':
+            grid_params = LegendreGrid(nrad,atno,**kwargs)
+        else:
+            grid_params = EulerMaclaurinGrid(nrad,atno,**kwargs)
+        self.points = []
+        for rrad,wrad,nang in grid_params:
+            for xang,yang,zang,wang in Lebedev[nang]:
+                w = wrad*wang
+                self.points.append((rrad*xand+x,rrad*yang+y,rrad*zang+z,w))
+        self.points = np.array(self.points,dtype=float)
         return
 
 # The following two routines return [(ri,wi,nangi)] for nrad shells.
@@ -31,8 +51,9 @@ def EulerMaclaurinGrid(nrad,Z,**opts):
         grid = [(r,w,nang) for r,w in radial]
     return grid
 
-def LegendreGrid(nrad,Rmax,fineness):
-    #Rmax = 0.5*Bragg[Z]*ang2bohr
+def LegendreGrid(nrad,Z,fineness):
+    from pyquante2.constants import ang2bohr
+    Rmax = 0.5*Bragg[Z]*ang2bohr
 
     radial = Legendre[nrad]
     grid = []
