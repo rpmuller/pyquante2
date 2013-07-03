@@ -15,18 +15,20 @@ all pgbf or all cgbfs, but there's a bug if I have a mixture.
 **Update**: Fixed for 1e code, not for 2e code.
 
 ## Next steps to take:
-* Settings to ConfigParser
 * Wrap libxc
+* Settings to ConfigParser
 
 ## Questions to answer
 * Should gaussian product center be in utils? should binomial whatever
+* More intelligent way of handling physical constants, using one of 
+  the many units packages that work with numpy (e.g. quantities, etc.)
 * Make it possible for __call__ in basis functions to be a ufunc, so
   that we can evaluate wave functions along a set of points by just
   passing in a matrix??
 * Should we require scipy to gain access to the incomplete gamma
   functions? Is there any way we can use the math.erf function in
   py27?
-* Should we consider doing everything in Cython?
+* How about scipy for the Legendre or Lebedev stuff?
 
 ## Things I'd like more of
 * Itertools
