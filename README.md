@@ -35,8 +35,9 @@ can be viewed as a [gist](https://gist.github.com/rpmuller/5745404) or
 ## What works so far:
 * Huzinaga and HGP integral methods, both in Python and with Cython wrappers to C
 * RHF, UHF wave functions
+* MP2 perturbation theory
 * A limited number of basis sets (STO-3G, 6-31G, 6-31G**)
-* Basic plotting
+* Line and contour plotting
 * Basic IPython notebook support for some objects
 
 Feel free to fork this if it interests you. The PyQuante code is still
