@@ -1,8 +1,6 @@
 # PyQuante 2 Todo List
 
 ## Easy stuff to add:
-* Move atomic grid stuff into own module
-* Grab lebedev and legendre stuff from pyquante1
 * Clean up mp2 arguments
 * Units for molecule._repr_html_
 * __repr__ and _repr_html_ for basisset
