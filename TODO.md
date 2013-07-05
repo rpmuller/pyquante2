@@ -3,6 +3,8 @@
 ## Easy stuff to add:
 * Units for molecule._repr_html_
 * __repr__ and _repr_html_ for basisset
+* use numpy in shapes/viewer stuff
+* from pyglet.gl import * ==> from pyglet import gl, gl.???
 
 ## Bug!!
 I'm doing something dumb in my cute code that expands the cgbfs into
