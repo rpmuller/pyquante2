@@ -32,6 +32,12 @@ There is an IPython notebook surveying some of the new features that
 can be viewed as a [gist](https://gist.github.com/rpmuller/5745404) or
 [on nbviewer](http://nbviewer.ipython.org/5745404). 
 
+## Requirements:
+* 2.7 < Python < 3
+* Numpy >= 1.7
+* Matplotlib
+* ?Pyglet?
+
 ## What works so far:
 * Huzinaga and HGP integral methods, both in Python and with Cython wrappers to C
 * RHF, UHF wave functions
