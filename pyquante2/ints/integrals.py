@@ -104,6 +104,11 @@ class twoe_integrals:
     def __getitem__(self,*args): return self._2e_ints.__getitem__(*args)
     def __repr__(self): return repr(self._2e_ints.ravel())
 
+    def transform(self,c): return np.einsum('aI,bJ,cK,dL,abcd->IJKL',c,c,c,c,self._2e_ints)
+    def transform_mp2(self,c,nocc):
+        return np.einsum('aI,bJ,cK,dL,abcd->IJKL',c[:,:nocc],c,c[:,:nocc],c,self._2e_ints)
+
+
     # This turns out to be slower:
     #def get_j(self,D): return np.einsum('ij,ijkl->kl',D,self._2e_ints)
     def get_j(self,D): return np.einsum('kl,ijkl->ij',D,self._2e_ints)
