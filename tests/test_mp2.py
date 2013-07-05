@@ -7,7 +7,7 @@ class test_mp2(unittest.TestCase):
         solver=rhf(h2,bfs)
         solver.converge()
         nvirt = len(bfs)-h2.nocc()
-        emp2 = mp2(solver.i2._2e_ints,solver.orbs,solver.orbe,h2.nocc(),len(bfs)-h2.nocc())
+        emp2 = mp2(solver.i2,solver.orbs,solver.orbe,h2.nocc(),len(bfs)-h2.nocc())
         self.assertAlmostEqual(emp2,-0.02632654197486595)
         return
 

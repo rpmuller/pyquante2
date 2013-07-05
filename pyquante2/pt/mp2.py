@@ -2,8 +2,8 @@ import numpy as np
 from itertools import product
 from pyquante2.ints.transform import transform_mp2
 
-def mp2(aoints,orbs,orbe,nocc,nvirt,verbose=False):
-    moints = transform_mp2(aoints,orbs,nocc)
+def mp2(ints,orbs,orbe,nocc,nvirt,verbose=False):
+    moints = ints.transform_mp2(orbs,nocc)
     Emp2 = 0
     for a,b in product(xrange(nocc),repeat=2):
         Eab = 0
