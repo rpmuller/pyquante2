@@ -42,6 +42,7 @@ class molecule:
         return
 
     def __getitem__(self,i): return self.atoms.__getitem__(i)
+    def __len__(self): return self.atoms.__len__()
 
     def __repr__(self):
         lines = ["Stoichiometry = %s, Charge = %d, Multiplicity = %d" %\
