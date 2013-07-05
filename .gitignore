@@ -122,3 +122,9 @@ build/lib.macosx-10.7-x86_64-2.7/pyquante2/grid/grid.py
 build/lib.macosx-10.7-x86_64-2.7/pyquante2/grid/lebedev.py
 
 build/lib.macosx-10.7-x86_64-2.7/pyquante2/grid/legendre.py
+
+build/lib.macosx-10.7-x86_64-2.7/pyquante2/viewer/TBWindow.py
+
+build/lib.macosx-10.7-x86_64-2.7/pyquante2/viewer/trackball_camera.py
+
+build/lib.macosx-10.7-x86_64-2.7/pyquante2/viewer/viewer.py
