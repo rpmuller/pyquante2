@@ -1,5 +1,9 @@
 from pyglet import *
+from pyglet.gl import *
 from trackball_camera import TrackballCamera
+
+from pyquante2.viewer.utils import defaults,glf,norm1
+
 class TBWindow:
     def __init__(self,width=defaults['width'],height=defaults['height']):
         self.width = width

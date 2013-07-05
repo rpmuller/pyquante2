@@ -1,24 +1,10 @@
+import math
+
 import pyglet
 from pyglet.gl import *
 
-# Defaults for kwarg-passed options
-defaults = {
-    'mat_draw'    : True, # Use materials/lighting to draw
-    'wire_draw'   : False,# Use open wires to draw
-    'swire_draw'  : False,# Use smoothed wires to draw
-    'fwire_draw'  : False,# Use filled wires to draw
-    'specular'    : True, # Use specular highlights
-    'sslices'     : 32,   # Number of slices in a sphere
-    'sstacks'     : 32,   # Number of stacks in a sphere
-    'cslices'     : 12,   # Number of slices in a cylinder
-    'cstacks'     : 12,   # Number of stacks in a cylinder
-    'lweight'     : 1,    # Line weight
-    'width'       : 600,  # Window width
-    'height'      : 600,  # Window height
-    'lightpos'    : (10,4,10,1), # Default position for lighting
-    'lightcolor'  : (1,1,1,1),   # Default color for lighting
-    }
-
+from pyquante2.viewer.TBWindow import TBWindow
+from pyquante2.viewer.utils import defaults,glf
 
 def draw_sphere(x,y,z,red,green,blue,rad,**kwargs):
     mat_draw = kwargs.get('mat_draw',defaults['mat_draw'])
@@ -109,47 +95,31 @@ def draw_line(x1,y1,z1,x2,y2,z2,red,green,blue,**kwargs):
     glEnable(GL_LIGHTING)
     return
 
-def glf(x): return (GLfloat * len(x))(*x)
-
-def norm1(x,maxx):
-    """given x within [0,maxx], scale to a range [-1,1]."""
-    return (2.0 * x - float(maxx)) / float(maxx)
-
-
 class Sphere:
     def __init__(self,x,y,z,r,g,b,rad):
-        self._pos = Position(x,y,z)
-        self._color = Color(r,g,b)
+        self._pos = (x,y,z)
+        self._color = (r,g,b)
         self._rad = rad
 
     def draw(self):
-        x,y,z = self._pos.get()
-        r,g,b = self._color.get()
+        x,y,z = self._pos
+        r,g,b = self._color
         draw_sphere(x,y,z,r,g,b,self._rad)
 
     def __repr__(self):
         return "Sphere(%s,%s,%f)" % (self._pos,self._color,self._rad)
 
-class Color:
-    def __init__(self,r,g,b):
-        self._color = (r,g,b)
-        return
-
-    def get(self): return self._color
-
-    def __repr__(self): return "(%.2f,%.2f,%.2f)" % self._color
-
 class Cylinder:
     def __init__(self,x1,y1,z1,x2,y2,z2,r,g,b,rad):
-        self._start = Position(x1,y1,z1)
-        self._end = Position(x2,y2,z2)
-        self._color = Color(r,g,b)
+        self._start = (x1,y1,z1)
+        self._end = (x2,y2,z2)
+        self._color = (r,g,b)
         self._rad = rad
 
     def draw(self):
-        x1,y1,z1 = self._start.get()
-        x2,y2,z2 = self._end.get()
-        r,g,b = self._color.get()
+        x1,y1,z1 = self._start
+        x2,y2,z2 = self._end
+        r,g,b = self._color
         draw_cylinder(x1,y1,z1,x2,y2,z2,r,g,b,self._rad)
 
     def __repr__(self):
@@ -158,40 +128,16 @@ class Cylinder:
 
 class Line:
     def __init__(self,x1,y1,z1,x2,y2,z2,r=255,g=255,b=255):
-        self._start = Position(x1,y1,z1)
-        self._end = Position(x2,y2,y2)
-        self._color = Color(r,g,b)
+        self._start = (x1,y1,z1)
+        self._end = (x2,y2,y2)
+        self._color = (r,g,b)
 
     def draw(self):
-        x1,y1,z1 = self._start.get()
-        x2,y2,z2 = self._end.get()
-        r,g,b = self._color.get()
+        x1,y1,z1 = self._start
+        x2,y2,z2 = self._end
+        r,g,b = self._color
         draw_line(x1,y1,z1,x2,y2,z2,r,g,b)
 
-class UC:
-    def __init__(self,A,B,C,origin=(0,0,0)):
-        self._origin = Position(*origin)
-        self._A = Position(*A)
-        self._B = Position(*B)
-        self._C = Position(*C)
-        return
-
-    def shapes(self):
-        xo,yo,zo = self._origin.get()
-        xa,ya,za = self._A.get()
-        xb,yb,zb = self._B.get()
-        xc,yc,zc = self._C.get()
-        s = [Line(xo,yo,zo,xo+xa,yo+ya,zo+za),
-             Line(xo,yo,zo,xo+xb,yo+yb,zo+zb),
-             Line(xo,yo,zo,xo+xc,yo+yc,zo+zc),
-             Line(xo+xa+xb+xc,zo+ya+yb+yc,zo+za+zb+zc,
-                  xo+xa,yo+ya,zo+za),
-             Line(xo+xa+xb+xc,zo+ya+yb+yc,zo+za+zb+zc,
-                  xo+xb,yo+yb,zo+zb),
-             Line(xo+xa+xb+xc,zo+ya+yb+yc,zo+za+zb+zc,
-                  xo+xc,yo+yc,zo+zc)]
-        return s
-    
 class Shapes:
     def __init__(self,molecule,**kwargs):
         self.atoms = molecule
@@ -228,7 +174,7 @@ class Shapes:
     def find_bonds(self,scalef=0.6):
         from pyquante2.utils import upairs
         self.bonds = []
-        for i,j in upairs(len(self.atoms)):
+        for i,j in upairs(xrange(len(self.atoms))):
             ati,atj = self.atoms[i],self.atoms[j]
             r = ati.distance(atj)
             r0 = ati.radius() + atj.radius()
@@ -246,7 +192,16 @@ def test_prims():
     win.run()
     return
 
+def test_mol():
+    from pyquante2 import h2o
+    shapes = Shapes(h2o)
+    win = TBWindow()
+    win.calllist(shapes.shapes())
+    win.run()
+    return
+
 
 if __name__ == '__main__':
-    viewer()
+    #test_prims()
+    test_mol()
 
