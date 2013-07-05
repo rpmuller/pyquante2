@@ -1,7 +1,6 @@
 # PyQuante 2 Todo List
 
 ## Easy stuff to add:
-* Clean up mp2 arguments
 * Units for molecule._repr_html_
 * __repr__ and _repr_html_ for basisset
 
@@ -15,6 +14,7 @@ all pgbf or all cgbfs, but there's a bug if I have a mixture.
 ## Next steps to take:
 * Wrap libxc
 * Settings to ConfigParser
+* Simple OGL viewer
 
 ## Questions to answer
 * Should gaussian product center be in utils? should binomial whatever
