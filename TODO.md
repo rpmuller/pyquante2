@@ -5,6 +5,7 @@
 * __repr__ and _repr_html_ for basisset
 * use numpy in shapes/viewer stuff
 * from pyglet.gl import * ==> from pyglet import gl, gl.???
+* Move xyz readers into IO module?
 
 ## Bug!!
 I'm doing something dumb in my cute code that expands the cgbfs into
