@@ -15,6 +15,7 @@ array([ 0.,  0.,  0.])
 """
 import numpy as np
 from pyquante2.constants import ang2bohr
+from pyquante2.utils import norm2
 
 class atom:
     def __init__(self,atno,x,y,z,**kwargs):
@@ -36,6 +37,9 @@ class atom:
     def xyz(self):
         from pyquante2.geo.elements import symbol
         return "%4s %12.6f %12.6f %12.6f" % (symbol[self.atno],self.r[0],self.r[1],self.r[2])
+
+    def distance(self,other): return np.sqrt(norm2(self.r-other.r))
+
 
 if __name__ == '__main__':
     import doctest
