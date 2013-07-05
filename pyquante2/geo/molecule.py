@@ -14,7 +14,7 @@ Stoichiometry = H, Charge = 0, Multiplicity = 2
 import numpy as np
 from pyquante2 import settings
 from pyquante2.geo.atom import atom
-from pyquante2.utils import upairs,norm2
+from pyquante2.utils import upairs
 
 class molecule:
     """
@@ -94,7 +94,7 @@ class molecule:
         return ET.tostring(top)
 
     def nuclear_repulsion(self):
-        return sum(ati.atno*atj.atno/np.sqrt(norm2(ati.r-atj.r)) for ati,atj in upairs(self))
+        return sum(ati.atno*atj.atno/ati.distance(atj) for ati,atj in upairs(self))
 
     def nel(self):
         "Number of electrons of the molecule"
@@ -169,8 +169,24 @@ class molecule:
             else:
                 s.append("%s%d" % (symbol[key],cnt[key]))
         return "".join(s)
-                        
 
+def read_xyz(fname):
+    f = open(fname)
+    line = f.readline()
+    nat = int(line.strip())
+    comment = f.readline()
+    lines = [f.readline() for i in range(nat)]
+    return read_xyz_lines(lines)
+
+def read_xyz_lines(lines,**kwargs):
+    from pyquante2.geo.elements import sym2no
+    from pyquante2.utils import parseline
+    atuples = []
+    for line in lines:
+        sym,x,y,z = parseline(line,'sfff')
+        atno = sym2no[sym]
+        atuples.append((atno,x,y,z))
+    return molecule(atuples,**kwargs)
                  
 if __name__ == '__main__':
     import doctest
