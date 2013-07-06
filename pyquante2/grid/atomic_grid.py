@@ -1,6 +1,8 @@
+import numpy as np
+from lebedev import lebedev
 class atomic_grid:
     def __init__(self,atom,**kwargs):
-        atno,x,y,z,Z = atom.atuple()
+        atno,x,y,z = atom.atuple()
         nrad = kwargs.get('nrad',32)
         fineness = kwargs.get('fineness',1)
         
@@ -10,10 +12,11 @@ class atomic_grid:
             grid_params = EulerMaclaurinGrid(nrad,atno,**kwargs)
         self.points = []
         for rrad,wrad,nang in grid_params:
-            for xang,yang,zang,wang in Lebedev[nang]:
+            for xang,yang,zang,wang in lebedev[nang]:
                 w = wrad*wang
-                self.points.append((rrad*xand+x,rrad*yang+y,rrad*zang+z,w))
+                self.points.append((rrad*xang+x,rrad*yang+y,rrad*zang+z,w))
         self.points = np.array(self.points,dtype=float)
+        self.npts = self.points.shape[0]
         return
 
 # The following two routines return [(ri,wi,nangi)] for nrad shells.
@@ -40,7 +43,7 @@ def LegendreGrid(nrad,Z,fineness):
         xrad,wrad = radial[i]
         rrad = BeckeRadMap(xrad,Rmax)
         dr = 2*Rmax/pow(1-xrad,2)
-        vol = 4*pi*rrad*rrad*dr
+        vol = 4*np.pi*rrad*rrad*dr
         nangpts = ang_mesh(float(i+1)/nrad,fineness)
         grid.append((rrad,wrad*vol,nangpts))
     return grid
@@ -72,18 +75,20 @@ def ang_mesh(frac,fineness,alevs = None):
     return nang
 
 def EulerMaclaurinRadialGrid(nrad,Z):
+    from pyquante2.grid.data import PopleRadii
     # Radial part of the Gill, Johnson, Pople SG-1 grid
     R = PopleRadii[Z]
     grid = []
     for i in range(1,nrad+1):
         # Changed to include a factor of 4pi
         #w = 2.*pow(R,3)*(nrad+1.)*pow(i,5)*pow(nrad+1-i,-7)
-        w = 8.*pi*pow(R,3)*(nrad+1.)*pow(i,5)*pow(nrad+1-i,-7)
+        w = 8.*np.pi*pow(R,3)*(nrad+1.)*pow(i,5)*pow(nrad+1-i,-7)
         r = R*i*i*pow(nrad+1-i,-2)
         grid.append((r,w))
     return grid
 
 def SG1Angs(r,Z):
+    from pyquante2.grid.data import PopleRadii
     # Gill, Johnson, Pople rules for SG-1 angular densities
     R = PopleRadii[Z]
     if Z in range(1,3): # H-He
