@@ -9,6 +9,7 @@
 * get pyglet zooming to work, either through scrolling of modified clicks or something.
 * Is there a redundancy in the Becke reweighting? Seems like I loop over all the atoms
   in the Ps loop, but also loop over all the atoms in becke_atomic_...
+* color dft mesh viewer using point weights
 
 ## Bug!!
 I'm doing something dumb in my cute code that expands the cgbfs into
