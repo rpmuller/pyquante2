@@ -6,8 +6,8 @@
 * use numpy in shapes/viewer stuff
 * from pyglet.gl import * ==> from pyglet import gl, gl.???
 * Move xyz readers into IO module?
-* Why do molecules look so awful in viewer
 * View dft mesh 
+* get pyglet zooming to work, either through scrolling of modified clicks or something.
 
 ## Bug!!
 I'm doing something dumb in my cute code that expands the cgbfs into
