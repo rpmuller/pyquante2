@@ -133,6 +133,7 @@ class TBWindow:
         self.win.on_draw = self.on_draw
         self.win.on_mouse_press = self.on_mouse_press
         self.win.on_mouse_drag = self.on_mouse_drag
+        self.win.on_mouse_scroll = self.on_mouse_scroll
 
         self.win.set_size(self.width,self.height)
 
@@ -188,6 +189,7 @@ class TBWindow:
         return
 
     def on_mouse_press(self, x, y, button, modifiers):
+        from pyglet.window import key
         if button == window.mouse.LEFT:
             self.tb.mouse_roll(
                 norm1(x, self.width),
@@ -210,6 +212,15 @@ class TBWindow:
                 norm1(x,self.width),
                 norm1(y,self.height))
         return
+
+    # This doesn't work at all
+    def on_mouse_scroll(self,x,y,scroll_x, scroll_y):
+        scalef=1.0
+        dx = norm1(scalef*scroll_x,self.width)
+        dy = norm1(scalef*scroll_y,self.height)
+        #self.tb.mouse_zoom(dx,dy)
+        return
+        
 
 class Sphere:
     def __init__(self,x,y,z,r,g,b,rad):
