@@ -9,38 +9,34 @@ from pyquante2.grid.atomic_grid import atomic_grid
 
 class grid:
     def __init__(self,atoms,**kwargs):
-        self.atoms = atoms
-        agrids = [atomicgrid(atom,**kwargs) for atom in atoms]
+        agrids = [atomic_grid(atom,**kwargs) for atom in atoms]
         becke_reweight_atoms(atoms,agrids)
         self.points = np.vstack([agrid.points for agrid in agrids])
-        self.ng,sb4 = self.points.shape
+        self.npts,sb4 = self.points.shape
         assert sb4==4
         return
 
     def __len__(self): return self.ng
     def __getitem__(self,*args): self.points.__getitem__(*args)
 
-# These are the functions for the becke projection operator
-def fbecke(x,n=3):
-    for i in range(n): x = pbecke(x)
-    return x
-def pbecke(x): return 1.5*x-0.5*pow(x,3)
-def sbecke(x,n=3): return 0.5*(1-fbecke(x,n))
+def becke_reweight_atoms(atoms,agrids,**kwargs):
+    for iat,agrid in enumerate(agrids):
+        for i in xrange(agrid.npts):
+            xyzp = agrid.points[i,:3]
+            Ps = [becke_atomic_grid_p(atj,xyzp,atoms,**kwargs) for atj in atoms]
+            P = Ps[iat]/sum(Ps)
+            agrid.points[i,3] = P*agrid.points[i,3]
+    return
 
-def becke_atomic_grid_p(iat,(xp,yp,zp),atoms,**opts):
-    do_becke_hetero = opts.get('do_becke_hetero',True)
-    nat = len(atoms)
+def becke_atomic_grid_p(ati,xyzp,atoms,**kwargs):
+    from pyquante2.grid.data import Bragg
+    do_becke_hetero = kwargs.get('do_becke_hetero',True)
     sprod = 1
-    ati = atoms[iat]
-    rip2 = dist2(ati.pos(),(xp,yp,zp))
-    rip = sqrt(rip2)
-    for jat in range(nat):
-        if jat == iat: continue
-        atj = atoms[jat]
-        rjp2 = dist2(atj.pos(),(xp,yp,zp))
-        rjp = sqrt(rjp2)
-        rij2 = dist2(ati.pos(),atj.pos())
-        rij = sqrt(rij2)
+    rip = np.linalg.norm(ati.r-xyzp)
+    for atj in atoms:
+        if ati == atj: continue
+        rij = np.linalg.norm(ati.r-atj.r)
+        rjp = np.linalg.norm(atj.r-xyzp)
         mu = (rip-rjp)/rij
         # Modify mu based on Becke hetero formulas (App A)
         if do_becke_hetero and ati.atno != atj.atno:
@@ -53,4 +49,15 @@ def becke_atomic_grid_p(iat,(xp,yp,zp),atoms,**opts):
         sprod *= sbecke(mu)
     return sprod
 
-    
+def fbecke(x,n=3):
+    for i in range(n): x = pbecke(x)
+    return x
+def pbecke(x): return 1.5*x-0.5*pow(x,3)
+def sbecke(x,n=3): return 0.5*(1-fbecke(x,n))
+
+def test_mesh():
+    from pyquante2 import h2o
+    return grid(h2o)
+
+if __name__ == '__main__':
+    mesh = test_mesh()
