@@ -14,7 +14,7 @@ array([ 0.,  0.,  0.])
  distribution. 
 """
 import numpy as np
-from pyquante2.geo.elements import color,radius
+from pyquante2.geo.elements import floatcolor,radius
 from pyquante2.constants import ang2bohr
 from pyquante2.utils import norm2
 
@@ -40,7 +40,7 @@ class atom:
         return "%4s %12.6f %12.6f %12.6f" % (symbol[self.atno],self.r[0],self.r[1],self.r[2])
 
     def distance(self,other): return np.sqrt(norm2(self.r-other.r))
-    def color(self): return color[self.atno]
+    def color(self): return floatcolor[self.atno]
     def radius(self): return radius[self.atno]
 
 
