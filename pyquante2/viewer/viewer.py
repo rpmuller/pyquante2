@@ -114,13 +114,19 @@ def draw_line(x1,y1,z1,x2,y2,z2,red,green,blue,**kwargs):
     glEnable(GL_LIGHTING)
     return
 
+def draw_points(points):
+    n,sb4 = points.shape
+    pyglet.graphics.draw(n,pyglet.gl.GL_POINTS,
+                         ('v3f',points.flatten()))
+    return
+
 def glf(x): return (GLfloat * len(x))(*x)
 
 def norm1(x,maxx):
     """given x within [0,maxx], scale to a range [-1,1]."""
     return (2.0 * x - float(maxx)) / float(maxx)
 
-class TBWindow:
+class Viewer:
     def __init__(self,width=defaults['width'],height=defaults['height']):
         self.width = width
         self.height = height
@@ -220,6 +226,10 @@ class TBWindow:
         dy = norm1(scalef*scroll_y,self.height)
         #self.tb.mouse_zoom(dx,dy)
         return
+
+class Points:
+    def __init__(self,points): self.points = points
+    def draw(self): draw_points(self.points)
         
 
 class Sphere:
@@ -266,28 +276,38 @@ class Line:
         draw_line(x1,y1,z1,x2,y2,z2,r,g,b)
 
 class Shapes:
-    def __init__(self,molecule,**kwargs):
+    def __init__(self,molecule=[],**kwargs):
         self.atoms = molecule
+        self.shapelist = []
+        for atom in self.atoms:
+            self.add_atom(atom)
         self.find_bonds(**kwargs)
+        for bond in self.bonds:
+            self.add_bond(bond)
         return
 
-    def shapes(self,**kwargs):
-        s = []
-        for atom in self.atoms:
-            s.extend(self.atom_shapes(atom,**kwargs))
-        for bond in self.bonds:
-            s.extend(self.bond_shapes(bond,**kwargs))
-        return s
+    def add_sphere(self,x,y,z,r=0.9,g=0.9,b=0.9,rad=0.1):
+        self.shapelist.append(Sphere(x,y,z,r,g,b,rad))
 
-    def atom_shapes(self,atom,**kwargs):
+    def add_cylinder(self,x1,y1,z1,x2,y2,z2,r=0.5,g=0.5,b=0.5,rad=0.2):
+        self.shapelist.append(Cylinder(x1,y1,z1,x2,y2,z2,r,g,b,rad))
+
+    def add_points(self,points):
+        #self.shapelist.append(Points(points)) # these points are only visible from 1 side
+        for i in xrange(points.shape[0]):
+            x,y,z = points[i,:3]
+            self.add_sphere(x,y,z,rad=0.02)
+        return
+
+    def add_atom(self,atom,**kwargs):
         x,y,z = atom.r
         r,g,b = atom.color()
         style = kwargs.get('style','BallStick')
-        scaling = 0.34
+        scaling = kwargs.get('scaling',0.5)
         rad = scaling*atom.radius()
-        return [Sphere(x,y,z,r,g,b,rad)]
+        return self.add_sphere(x,y,z,r,g,b,rad)
 
-    def bond_shapes(self,(at1,at2),**kwargs):
+    def add_bond(self,(at1,at2),**kwargs):
         style = kwargs.get('style','BallStick')
         if style == 'Ball': return []
         x1,y1,z1 = at1.r
@@ -296,7 +316,7 @@ class Shapes:
         g = kwargs.get('g',0.5)
         b = kwargs.get('b',0.5)
         rad = kwargs.get('rad',0.2)
-        return [Cylinder(x1,y1,z1,x2,y2,z2,r,g,b,rad)]
+        return self.add_cylinder(x1,y1,z1,x2,y2,z2,r,g,b,rad)
 
     def find_bonds(self,scalef=0.6):
         from pyquante2.utils import upairs
@@ -310,9 +330,8 @@ class Shapes:
                 self.bonds.append((ati,atj))
         return
 
-
 def test_prims():
-    win = TBWindow()
+    win = Viewer()
     spheres = [Sphere(-1,-1,0,1.,0.,0.,1.),
                Sphere(1,1,1.,0.,0.,1.,1.)]
     cyls = [Cylinder(-1,-1,0,1,1,1,0.5,0.5,0.5,0.2)]
@@ -323,8 +342,8 @@ def test_prims():
 def test_mol():
     from pyquante2 import h2o
     shapes = Shapes(h2o)
-    win = TBWindow()
-    win.calllist(shapes.shapes())
+    win = Viewer()
+    win.calllist(shapes.shapelist)
     win.run()
     return
 
