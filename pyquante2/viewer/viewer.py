@@ -124,16 +124,9 @@ class TBWindow:
     def __init__(self,width=defaults['width'],height=defaults['height']):
         self.width = width
         self.height = height
-        #self.config = Config(double_buffer=True, depth_size=24)
-        #self.win = window.Window(visible=True,resizable=True,
-        #                         config=self.config, caption='Viewer')
-        platform = pyglet.window.get_platform()
-        display = platform.get_default_display()
-        screen = display.get_default_screen()
-        template = Config(alpha_size=8,double_buffer=True,depth_size=24)
-        config = screen.get_best_config(template)
-        context = config.create_context(None)
-        self.win = window.Window(context=context)
+        self.config = Config(double_buffer=True, depth_size=24)
+        self.win = window.Window(visible=True,resizable=True,
+                                 config=self.config, caption='PyQuante Viewer')
 
         # set callbacks
         self.win.on_resize = self.on_resize
