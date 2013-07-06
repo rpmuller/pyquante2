@@ -197,9 +197,7 @@ color = [
         (190,190,190),  # Ds, 110
         (190,190,190)]  # Rg, 111
 
-color1 = [] # colors scaled to 0-1
-for col in color:
-    if col: color1.append((col[0]/255.,col[1]/255.,col[2]/255.))
+floatcolor = [(col[0]/255.,col[1]/255.,col[2]/255.) for col in color]
 
 rvdw = [
         1.0000, # dummy
