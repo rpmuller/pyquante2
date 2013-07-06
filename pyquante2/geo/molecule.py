@@ -171,6 +171,15 @@ class molecule:
                 s.append("%s%d" % (symbol[key],cnt[key]))
         return "".join(s)
 
+    def mass(self): return sum(at.mass() for at in self.atoms)
+    def com(self): return sum(at.mass()*at.r for at in self.atoms)/self.mass()
+
+    def center(self):
+        r_com = self.com()
+        for at in self.atoms:
+            at.r = at.r - r_com
+        return
+
 def read_xyz(fname):
     f = open(fname)
     line = f.readline()
