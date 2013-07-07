@@ -4,7 +4,7 @@ def test_mesh():
     from pyquante2.viewer.viewer import Shapes,Viewer
     h2o_mesh = grid(h2o)
     shapes = Shapes(h2o)
-    shapes.add_points(h2o_mesh.points[:,:3])
+    shapes.add_points_weights(h2o_mesh.points)
     win = Viewer()
     win.calllist(shapes.shapelist)
     win.run()

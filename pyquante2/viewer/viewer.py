@@ -293,10 +293,22 @@ class Shapes:
         self.shapelist.append(Cylinder(x1,y1,z1,x2,y2,z2,r,g,b,rad))
 
     def add_points(self,points):
-        #self.shapelist.append(Points(points)) # these points are only visible from 1 side
+        #self.shapelist.append(Points(points)) # only visible from 1 side
         for i in xrange(points.shape[0]):
             x,y,z = points[i,:3]
             self.add_sphere(x,y,z,rad=0.02)
+        return
+
+    def add_points_weights(self,points):
+        "Same as add_points, but color by 4th column value"
+        from pyquante2.utils import colorscale
+        weights = points[:,3]
+        wmin = np.min(weights)
+        wmax = np.max(weights)
+        for i in xrange(points.shape[0]):
+            x,y,z = points[i,:3]
+            r,g,b = colorscale(weights[i],wmin,wmax)
+            self.add_sphere(x,y,z,r,g,b,rad=0.02)
         return
 
     def add_atom(self,atom,**kwargs):
