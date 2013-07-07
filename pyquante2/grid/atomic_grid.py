@@ -4,7 +4,6 @@ class atomic_grid:
     def __init__(self,atom,**kwargs):
         atno,x,y,z = atom.atuple()
         nrad = kwargs.get('nrad',32)
-        fineness = kwargs.get('fineness',1)
         
         if kwargs.get('radial','EulerMaclaurin') == 'Legendre':
             grid_params = LegendreGrid(nrad,atno,**kwargs)
@@ -33,11 +32,14 @@ def EulerMaclaurinGrid(nrad,Z,**opts):
         grid = [(r,w,nang) for r,w in radial]
     return grid
 
-def LegendreGrid(nrad,Z,fineness):
+def LegendreGrid(nrad,Z,**kwargs):
     from pyquante2.constants import ang2bohr
+    from pyquante2.grid.data import Bragg
+    from pyquante2.grid.legendre import legendre
     Rmax = 0.5*Bragg[Z]*ang2bohr
 
-    radial = Legendre[nrad]
+    fineness = kwargs.get('fineness',1)
+    radial = legendre[nrad]
     grid = []
     for i in range(nrad):
         xrad,wrad = radial[i]
@@ -104,3 +106,14 @@ def SG1Angs(r,Z):
     elif r < alphas[3]*R: return 194
     return 86
 
+if __name__ == '__main__':
+    import pylab
+    nrad = 32
+    for atno in [8,1]:
+        #print 'lgrid:  ',
+        #print 'elgrid: ',[w for r,w,n in EulerMaclaurinGrid(nrad,atno)]
+        pylab.semilogy([w for r,w,n in LegendreGrid(nrad,atno)],label='L%d'%atno)
+        pylab.semilogy([w for r,w,n in EulerMaclaurinGrid(nrad,atno)],label='EL%d'%atno)
+    title("Radial weights for DFT Grids")
+    pylab.show()
+    

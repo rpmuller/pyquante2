@@ -10,7 +10,13 @@ from pyquante2.grid.atomic_grid import atomic_grid
 class grid:
     def __init__(self,atoms,**kwargs):
         agrids = [atomic_grid(atom,**kwargs) for atom in atoms]
+        print "Atomic grid min/max before reweighting"
+        for ag in agrids:
+            print min(ag.points[:,3]),max(ag.points[:,3])
         becke_reweight_atoms(atoms,agrids)
+        print "Atomic grid min/max after reweighting"
+        for ag in agrids:
+            print min(ag.points[:,3]),max(ag.points[:,3])
         self.points = np.vstack([agrid.points for agrid in agrids])
         self.npts,sb4 = self.points.shape
         assert sb4==4
