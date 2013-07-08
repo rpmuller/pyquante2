@@ -72,20 +72,7 @@ class molecule:
                 th = ET.SubElement(tr,"th")
                 th.text = item
         for i,atom in enumerate(self.atoms):
-            tr = ET.SubElement(table,"tr")
-            td = ET.SubElement(tr,"td")
-            td.text = str(i)
-            n,s,x,y,z = atom.nsxyz()
-            td = ET.SubElement(tr,"td")
-            td.text = str(n)
-            td = ET.SubElement(tr,"td")
-            td.text = s
-            td = ET.SubElement(tr,"td")
-            td.text = "%.5f" % x
-            td = ET.SubElement(tr,"td")
-            td.text = "%.5f" % y
-            td = ET.SubElement(tr,"td")
-            td.text = "%.5f" % z
+            atom.html_row(table,i)
         return top
 
     def _repr_html_(self,tablehead=True):
