@@ -5,11 +5,9 @@
 * __repr__ and _repr_html_ for basisset
 * use numpy in shapes/viewer stuff
 * from pyglet.gl import * ==> from pyglet import gl, gl.???
-* Move xyz readers into IO module?
 * get pyglet zooming to work, either through scrolling of modified clicks or something.
 * Is there a redundancy in the Becke reweighting? Seems like I loop over all the atoms
   in the Ps loop, but also loop over all the atoms in becke_atomic_...
-* color dft mesh viewer using point weights
 
 ## Bug!!
 I'm doing something dumb in my cute code that expands the cgbfs into
@@ -21,9 +19,9 @@ all pgbf or all cgbfs, but there's a bug if I have a mixture.
 ## Next steps to take:
 * Wrap libxc
 * Settings to ConfigParser
-* Simple OGL viewer
 
-## Questions to answer
+## Questions to consider
+* Move xyz readers into IO module?
 * Should gaussian product center be in utils? should binomial whatever
 * More intelligent way of handling physical constants, using one of 
   the many units packages that work with numpy (e.g. quantities, etc.)
