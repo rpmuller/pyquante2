@@ -114,6 +114,7 @@ if __name__ == '__main__':
         #print 'elgrid: ',[w for r,w,n in EulerMaclaurinGrid(nrad,atno)]
         pylab.semilogy([w for r,w,n in LegendreGrid(nrad,atno)],label='L%d'%atno)
         pylab.semilogy([w for r,w,n in EulerMaclaurinGrid(nrad,atno)],label='EL%d'%atno)
-    title("Radial weights for DFT Grids")
+    pylab.legend(loc='lower right')
+    pylab.title("Radial weights for DFT Grids")
     pylab.show()
     
