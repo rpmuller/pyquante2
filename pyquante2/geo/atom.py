@@ -38,7 +38,7 @@ class atom:
         import xml.etree.ElementTree as ET
         tr = ET.SubElement(table,"tr")
         td = ET.SubElement(tr,"td")
-        td.text = str(i)
+        td.text = str(i+1)
         td = ET.SubElement(tr,"td")
         td.text = str(self.atno)
         td = ET.SubElement(tr,"td")
