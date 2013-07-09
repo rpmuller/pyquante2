@@ -19,7 +19,7 @@ from pyquante2.utils import binomial, fact2, Fgamma, norm2
 
 def S(a,b):
     """
-    The simple interface to the overlap function, using only primitive basis functions as the arguments.
+    Simple interface to the overlap function.
     >>> from pyquante2 import pgbf,cgbf
     >>> s = pgbf(1)
     >>> round(S(s,s),6)
@@ -39,7 +39,8 @@ def S(a,b):
         return sum(cb*S(pb,a) for (cb,pb) in b)
     elif a.contracted:
         return sum(ca*S(b,pa) for (ca,pa) in a)
-    return a.norm*b.norm*overlap(a.exponent,a.powers,a.origin,b.exponent,b.powers,b.origin)
+    return a.norm*b.norm*overlap(a.exponent,a.powers,
+                                 a.origin,b.exponent,b.powers,b.origin)
 
 def T(a,b):
     """
@@ -65,7 +66,8 @@ def T(a,b):
         return sum(cb*T(pb,a) for (cb,pb) in b)
     elif a.contracted:
         return sum(ca*T(b,pa) for (ca,pa) in a)
-    return a.norm*b.norm*kinetic(a.exponent,a.powers,a.origin,b.exponent,b.powers,b.origin)
+    return a.norm*b.norm*kinetic(a.exponent,a.powers,a.origin,
+                                 b.exponent,b.powers,b.origin)
 
 def V(a,b,C):
     """
@@ -171,7 +173,8 @@ def kinetic(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
 def nuclear_attraction(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B,C):
     """
     Full form of the nuclear attraction integral
-    >>> round(nuclear_attraction(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d'),array((0,0,0),'d')),6)
+    >>> round(nuclear_attraction(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),\
+              array((0,0,0),'d'),array((0,0,0),'d')),6)
     -3.141593
     """
     gamma = alpha1+alpha2
