@@ -11,13 +11,14 @@ Notes on functionals in pyquante2.
      - return values from non-spin-polarized calculations.
 
 """
+import numpy as np
 def zero_low_density(rho,cut=1e-10):
     rho[rho<cut]=0
     return rho
 
 def xs(rho,alpha=2/3.):
     "Xalpha X functional. alpha is the X-alpha scaling factor"
-    fac=-2.25*alpha*np.power(0.75/pi,1./3.)
+    fac=-2.25*alpha*np.power(0.75/np.pi,1./3.)
     rho3 = np.power(rho,1./3.)
     fx = fac*rho*rho3
     dfxdna = (4./3.)*fac*rho3
@@ -26,7 +27,7 @@ def xs(rho,alpha=2/3.):
 def cvwn(rhoa,rhob,**opts):
     rho = rhoa+rhob
     zeta=(rhoa-rhob)/rho
-    x = np.power(3./4./pi/rho,1./6.)
+    x = np.power(3./4./np.pi/rho,1./6.)
     epsp = vwn_epsp(x)
     depsp = vwn_depsp(x)
     g = vwn_g(zeta)
