@@ -16,6 +16,11 @@ all pgbf or all cgbfs, but there's a bug if I have a mixture.
 
 **Update**: Fixed for 1e code, not for 2e code.
 
+## DFT errors
+* The slater basis has a fairly high error (2e-6) in the test suite. I think
+  there may be a bug, perhaps for small densities (guessing).
+* cvwn has a dfb bug that may be similar.
+
 ## Next steps to take:
 * Wrap libxc
 * Settings to ConfigParser
