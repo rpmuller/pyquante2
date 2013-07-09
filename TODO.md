@@ -17,7 +17,7 @@ all pgbf or all cgbfs, but there's a bug if I have a mixture.
 **Update**: Fixed for 1e code, not for 2e code.
 
 ## DFT errors
-* The slater basis has a fairly high error (2e-6) in the test suite. 
+* The slater exchange has a fairly high error (2e-6) in the test suite. 
   Is there a bug here? The value occurs at high densities. Does not 
   seem to be an incorrect factor value.
 * cvwn has a similar bug with the dfb value. The erroneous value
