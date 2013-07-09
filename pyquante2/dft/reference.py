@@ -1235,6 +1235,14 @@ def parsedata(dataname):
             continue
     return np.array(fields)
 
+data = {
+    'xlda' : parsedata(x_lda_data),
+    'cvwn' : parsedata(c_vwn5_data)
+    }
+# Redundant names
+data['xs'] = data['xlda']
+data['cvwn5'] = data['cvwn']
+
 if __name__ == '__main__':
     xlda = parsedata(x_lda_data)
     cvwn = parsedata(c_vwn5_data)
