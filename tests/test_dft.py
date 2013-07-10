@@ -24,11 +24,12 @@ class test_dft(unittest.TestCase):
         max_f = np.max(f-data['cvwn'][:,5])
         max_dfa = np.max(dfa-data['cvwn'][:,6])
         max_dfb = np.max(dfb-data['cvwn'][:,7])
-        print np.column_stack([na,nb,data['cvwn'][:,7]-dfb])
+        print np.column_stack([na,nb,data['cvwn'][:,7],dfb])
         self.assertAlmostEqual(max_f,0)
         self.assertAlmostEqual(max_dfa,0)
-        #self.assertAlmostEqual(max_dfb,0,6) ## Fix this!
+        self.assertAlmostEqual(max_dfb,0,6) ## Fix this!
 
+    @unittest.skip
     def test_xb88(self):
         na = data['xb88'][:,0]
         nb = data['xb88'][:,1]
