@@ -24,6 +24,31 @@ def xs(rho,alpha=2/3.):
     dfxdna = (4./3.)*fac*rho3
     return fx,dfxdna
 
+def xb88(rho,gam):
+    rho13 = pow(rho,1./3.)
+    x = np.sqrt(gam)/rho13/rho 
+    g = b88_g(x)
+    dg = b88_dg(x)
+    dfxdrho = (4./3.)*rho13*(g-x*dg)
+    dfxdgam = 0.5*dg/np.sqrt(gam)
+    fx = rho*rho13*g
+    return fx,dfxdrho,dfxdgam
+
+def xpbe(rho,gam):
+    kap = 0.804
+    mu = 0.449276922095889E-2
+    ex0,vx0 = xs(rho)
+    rho13 = rho**(1.0/3.0)
+    rho43 = rho13*rho
+    den = 1.E0+mu*gam/rho43/rho43
+    F = 1+kap-kap/den
+    ex = ex0*F
+    dFdr = -(8./3.)*kap*mu*gam/den/den*rho**(-11./3.)
+    vxrho = vx0*F+ex0*dFdr
+    dFdg = -kap*mu/rho43/rho43/den/den
+    vxgam = ex0*dFdg
+    return ex,vxrho,vxgam
+
 def cvwn(rhoa,rhob,**opts):
     rho = rhoa+rhob
     zeta=(rhoa-rhob)/rho
@@ -63,4 +88,12 @@ def vwn_deps(x,a,x0,b,c):
 
 def vwn_g(z): return 1.125*(np.power(1+z,4./3.)+np.power(1-z,4./3.)-2)
 def vwn_dg(z): return 1.5*(np.power(1+z,1./3.)-np.power(1-z,1./3.))
+
+def b88_g(x,b=0.0042):
+    return -1.5*np.power(3./4./np.pi,1./3.)-b*x*x/(1.+6.*b*x*np.arcsinh(x))
+
+def b88_dg(x,b=0.0042):
+    num = 6*b*b*x*x*(x/np.sqrt(x*x+1)-np.arcsinh(x))-2*b*x
+    denom = np.power(1+6*b*x*np.arcsinh(x),2)
+    return num/denom
 

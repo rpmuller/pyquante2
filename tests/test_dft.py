@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from pyquante2.dft.functionals import xs,cvwn
+from pyquante2.dft.functionals import xs,cvwn,xb88
 from pyquante2.dft.reference import data
 
 class test_dft(unittest.TestCase):
@@ -29,6 +29,20 @@ class test_dft(unittest.TestCase):
         self.assertAlmostEqual(max_dfa,0)
         #self.assertAlmostEqual(max_dfb,0,6) ## Fix this!
 
+    def test_xb88(self):
+        na = data['xb88'][:,0]
+        nb = data['xb88'][:,1]
+        gaa = data['xb88'][:,2]
+        gbb = data['xb88'][:,4]
+        fa,dfa,dfga = xb88(na,gaa)
+        fb,dfb,dfgb = xb88(nb,gbb)
+        max_f = np.max(fa+fb-data['xb88'][:,5])
+        max_dfa = np.max(dfa-data['xb88'][:,6])
+        max_dfb = np.max(dfb-data['xb88'][:,7])
+        #print np.column_stack([na,nb,data['xb88'][:,5]-fa-fb])
+        self.assertAlmostEqual(max_f,0) ## Fix this!
+        self.assertAlmostEqual(max_dfa,0)
+        self.assertAlmostEqual(max_dfb,0)
 
 def runsuite(verbose=True):
     if verbose: verbosity=2
