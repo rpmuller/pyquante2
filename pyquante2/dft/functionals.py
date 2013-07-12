@@ -24,6 +24,21 @@ def xs(rho,alpha=2/3.):
     dfxdna = (4./3.)*fac*rho3
     return fx,dfxdna
 
+def xb88_array(rho,gam,tol=1e-6):
+    # Still doesn't work
+    rho = zero_low_density(rho)
+    rho13 = np.power(rho,1./3.)
+    x = np.zeros(rho.shape,dtype=float)
+    g = np.zeros(rho.shape,dtype=float)
+    dg = np.zeros(rho.shape,dtype=float)
+    x[rho>tol] = np.sqrt(gam)/rho13/rho
+    g[rho>tol] = b88_g(x[rho>tol])
+    dg[rho>tol] = b88_dg(x[rho>tol])
+    dfxdrho = (4./3.)*rho13*(g-x*dg)
+    dfxdgam = 0.5*dg/np.sqrt(gam)
+    fx = rho*rho13*g
+    return fx,dfxdrho,dfxdgam
+
 def xb88(rho,gam,tol=1e-10):
     rho = zero_low_density(rho)
     fxs = []
