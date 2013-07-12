@@ -24,15 +24,26 @@ def xs(rho,alpha=2/3.):
     dfxdna = (4./3.)*fac*rho3
     return fx,dfxdna
 
-def xb88(rho,gam):
-    rho13 = pow(rho,1./3.)
-    x = np.sqrt(gam)/rho13/rho 
-    g = b88_g(x)
-    dg = b88_dg(x)
-    dfxdrho = (4./3.)*rho13*(g-x*dg)
-    dfxdgam = 0.5*dg/np.sqrt(gam)
-    fx = rho*rho13*g
-    return fx,dfxdrho,dfxdgam
+def xb88(rho,gam,tol=1e-10):
+    rho = zero_low_density(rho)
+    fxs = []
+    dfxdrhos = []
+    dfxdgams = []
+
+    for na,gama in zip(rho,gam):
+        fx = dfxdrho = dfxdgam = 0
+        if na > tol:
+            rho13 = np.power(na,1./3.)
+            x = np.sqrt(gama)/rho13/na
+            g = b88_g(x)
+            dg = b88_dg(x)
+            dfxdrho = (4./3.)*rho13*(g-x*dg)
+            dfxdgam = 0.5*dg/np.sqrt(gama)
+            fx = na*rho13*g
+        fxs.append(fx)
+        dfxdrhos.append(dfxdrho)
+        dfxdgams.append(dfxdgam)
+    return np.array(fxs),np.array(dfxdrhos),np.array(dfxdgams)
 
 def xpbe(rho,gam):
     kap = 0.804
