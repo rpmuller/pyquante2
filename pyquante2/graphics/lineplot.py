@@ -1,5 +1,8 @@
 import numpy as np
-import pylab as pl
+try:
+    import pylab as pl
+except:
+    pass
 
 def lineplot_orbs(points,orbs,bfs,doshow=False,
                title="Line plot of pyquante orbital"):

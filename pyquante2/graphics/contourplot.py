@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 
 import numpy as np
-import pylab as pl
+try:
+    import pylab as pl
+except:
+    pass
 
 def contourplot(plane,atoms,orb,bfs,val=0,npts=50,doshow=False,
                 title="Contour plot of pyquante orbital"):
