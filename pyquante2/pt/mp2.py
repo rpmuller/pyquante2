@@ -1,6 +1,5 @@
 import numpy as np
 from itertools import product
-from pyquante2.ints.transform import transform_mp2
 
 def mp2(ints,orbs,orbe,nocc,nvirt,verbose=False):
     moints = ints.transform_mp2(orbs,nocc)
