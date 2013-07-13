@@ -13,6 +13,6 @@ try:
     import matplotlib
     from pyquante2.graphics.lineplot import lineplot_orbs,line
     from pyquante2.graphics.contourplot import contourplot
-except e:
+except:
     pass
     
