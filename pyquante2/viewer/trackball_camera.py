@@ -83,7 +83,11 @@ __version__ = "1.0"
                                 
 import math
 import copy
-from pyglet.gl import *
+
+try:
+    from pyglet.gl import *
+except:
+    pass
 
 def glf(x): return (GLfloat * len(x))(*x)
 

@@ -1,11 +1,18 @@
 #!/usr/bin/env python
 
-from pyglet.gl import *
-from pyglet import window
-from trackball_camera import TrackballCamera
-from pyquante2.geo.elements import sym2no
 import math
 import numpy as np
+
+from pyquante2.geo.elements import sym2no
+
+try:
+    from pyglet.gl import *
+    from pyglet import window
+except:
+    pass
+
+from trackball_camera import TrackballCamera
+
 
 # Defaults for kwarg-passed options
 defaults = {
