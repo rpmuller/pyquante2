@@ -10,12 +10,6 @@
  are written in C to be faster.
 
  This program is part of the PyQuante quantum chemistry program suite.
-
- Copyright (c) 2004, Richard P. Muller. All Rights Reserved. 
-
- PyQuante version 2.0 and later is covered by the GPL
- license. Please see the file LICENSE that is part of this
- distribution. 
 """
 from numpy import sqrt,exp,pi
 from pyquante2.utils import Fgamma

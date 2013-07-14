@@ -5,11 +5,6 @@ A collection of molecules for testing and fun.
 Stoichiometry = H, Charge = 0, Multiplicity = 2
 1 H     0.000000     0.000000     0.000000
 
- Copyright (c) 2004, Richard P. Muller. All Rights Reserved. 
-
- PyQuante version 2.0 and later is covered by the GPL
- license. Please see the file LICENSE that is part of this
- distribution. 
 """
 
 from pyquante2.geo.molecule import molecule,read_xyz_lines
