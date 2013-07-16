@@ -1,6 +1,9 @@
 # PyQuante 2 Todo List
 
 ## Easy stuff to add:
+* Get cvwn working
+* Get clyp working
+* Text cpbe
 * Units for molecule._repr_html_
 * __repr__ and _repr_html_ for basisset
 * use numpy in shapes/viewer stuff
