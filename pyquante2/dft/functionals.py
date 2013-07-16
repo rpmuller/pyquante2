@@ -136,6 +136,87 @@ def cvwn_pointwise(rhoa,rhob,tol=1e-10):
 
 def cvwn(rhoa,rhob): return cvwn_pointwise(rhoa,rhob)
 
+def clyp(rhoas,rhobs,gaas,gabs,gbbs,tol=1e-10):
+    fcs = []
+    fcnas = []
+    fcnbs = []
+    fcgaas = []
+    fcgabs = []
+    fcgbbs = []
+    for na,nb,gaa,gab,gbb in zip(rhoas,rhobs,gaas,gabs,gbbs):
+        fc,fcna,fcnb,fcgaa,fcgab,fcgbb = clyp_point(na,nb,gaa,gab,gbb,tol)
+        fcs.append(fc)
+        fcnas.append(fcnbs)
+        fcnbs.append(fcnb)
+        fcgaas.append(fcgaa)
+        fcgabs.append(fcgab)
+        fcgbbs.append(fcgbb)
+    return np.array(fcs),np.array(fcnas),np.array(fcnbs),np.array(fcgaas),np.array(fcgabs),np.array(fcgbbs)
+
+def clyp_point(rhoa,rhob,gamaa,gamab,gambb,tol=1e-10):
+    # Modified and corrected by AEM in June 2006.
+    a = 0.04918  # Parameters from the LYP papers
+    b = 0.132
+    c = 0.2533
+    d = 0.349
+    rho = rhoa+rhob
+    fc=fcrhoa=fcrhob=fcgamaa=fcgamab=fcgambb=0
+    assert rhoa >= 0.0
+    assert rhob >= 0.0
+    if rho > tol:
+        rhom3 = np.power(rho,-1./3.)
+        w = np.exp(-c*rhom3)/(1+d*rhom3)*np.power(rho,-11./3.)
+        dl = c*rhom3+d*rhom3/(1+d*rhom3)
+
+        fcgamaa = -a*b*w*((1./9.)*rhoa*rhob*(1-3*dl-(dl-11)*rhoa/rho)-rhob*rhob)
+        fcgamab = -a*b*w*((1./9.)*rhoa*rhob*(47-7*dl)-(4./3.)*rho*rho)
+	fcgambb = -a*b*w*((1./9.)*rhoa*rhob*(1-3*dl-(dl-11)*rhob/rho)-rhoa*rhoa)
+
+        fc = -4*a/(1+d*rhom3)*rhoa*rhob/rho \
+             -np.power(2,11./3.)*0.3*np.power(3*np.pi*np.pi,2./3.)*a*b*w \
+             *rhoa*rhob*(np.power(rhoa,8./3.)+np.power(rhob,8./3.)) \
+             + fcgamaa*gamaa + fcgamab*gamab + fcgambb*gambb
+
+        dw = -(1./3.)*np.power(rho,-4./3.)*w*(11*np.power(rho,1./3.)-c-d/(1+d*rhom3))
+        ddl = (1./3.)*(d*d*np.power(rho,-5./3.)/np.power(1+d*rhom3,2)-dl/rho)
+
+        d2f_dradgaa = dw/w*fcgamaa - a*b*w*(
+            (1./9.)*rhob*(1-3*dl-(dl-11)*rhoa/rho)
+            -(1./9.)*rhoa*rhob*((3+rhoa/rho)*ddl+(dl-11)*rhob/rho/rho))
+        d2f_dradgbb = dw/w*fcgambb - a*b*w*(
+            (1./9.)*rhob*(1-3*dl-(dl-11)*rhob/rho)
+            -(1./9.)*rhoa*rhob*((3+rhob/rho)*ddl-(dl-11)*rhob/rho/rho)
+            -2*rhoa)
+        d2f_dradgab = dw/w*fcgamab-a*b*w*(
+            (1./9)*rhob*(47-7*dl)-(7./9.)*rhoa*rhob*ddl-(8./3.)*rho)
+
+	d2f_drbdgaa = dw/w*fcgamaa - a*b*w*(
+            (1./9.)*rhoa*(1-3*dl-(dl-11)*rhoa/rho)
+            -(1./9.)*rhoa*rhob*((3+rhoa/rho)*ddl-(dl-11)*rhoa/rho/rho)
+            -2*rhob)
+	d2f_drbdgbb = dw/w*fcgambb - a*b*w*(
+            (1./9.)*rhoa*(1-3*dl-(dl-11)*rhob/rho)
+            -(1./9.)*rhoa*rhob*((3+rhob/rho)*ddl+(dl-11)*rhoa/rho/rho))
+        d2f_drbdgab = dw/w*fcgamab-a*b*w*(
+            (1./9)*rhoa*(47-7*dl)-(7./9.)*rhoa*rhob*ddl-(8./3.)*rho)
+
+        fcrhoa = fcrhob = 0
+        if rhoa > tol:
+            fcrhoa = -4*a/(1+d*rhom3)*rhoa*rhob/rho*(
+                (1./3.)*d*np.power(rho,-4./3.)/(1+d*rhom3)+1/rhoa-1/rho)\
+                -np.power(2,11./3.)*0.3*np.power(3*np.pi*np.pi,2./3.)*a*b*(
+                dw*rhoa*rhob*(np.power(rhoa,8./3.)+np.power(rhob,8./3.))
+                +w*rhob*((11./3.)*np.power(rhoa,8./3.)+np.power(rhob,8./3.))) \
+                +d2f_dradgaa*gamaa + d2f_dradgbb*gambb + d2f_dradgab*gamab
+
+        if rhob > tol:
+            fcrhob = -4*a/(1+d*rhom3)*rhoa*rhob/rho*(
+                (1./3.)*d*np.power(rho,-4./3.)/(1+d*rhom3)+1/rhob-1/rho)\
+                -np.power(2,11./3.)*0.3*np.power(3*np.pi*np.pi,2./3.)*a*b*(
+                dw*rhoa*rhob*(np.power(rhob,8./3.)+np.power(rhoa,8./3.))
+                +w*rhoa*((11./3.)*np.power(rhob,8./3.)+np.power(rhoa,8./3.))) \
+                +d2f_drbdgaa*gamaa + d2f_drbdgbb*gambb + d2f_drbdgab*gamab
+    return fc,fcrhoa,fcrhob,fcgamaa,fcgamab,fcgambb
 
 def vwn_xx(x,b,c): return x*x+b*x+c
 def vwn_epsp(x): return vwn_eps(x,0.0310907,-0.10498,3.72744,12.9352)
