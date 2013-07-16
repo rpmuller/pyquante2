@@ -60,20 +60,31 @@ def xb88(rho,gam,tol=1e-10):
         dfxdgams.append(dfxdgam)
     return np.array(fxs),np.array(dfxdrhos),np.array(dfxdgams)
 
-def xpbe(rho,gam):
-    kap = 0.804
-    mu = 0.449276922095889E-2
-    ex0,vx0 = xs(rho)
-    rho13 = rho**(1.0/3.0)
-    rho43 = rho13*rho
-    den = 1.E0+mu*gam/rho43/rho43
-    F = 1+kap-kap/den
-    ex = ex0*F
-    dFdr = -(8./3.)*kap*mu*gam/den/den*rho**(-11./3.)
-    vxrho = vx0*F+ex0*dFdr
-    dFdg = -kap*mu/rho43/rho43/den/den
-    vxgam = ex0*dFdg
-    return ex,vxrho,vxgam
+def xpbe(rho,gam,tol=1e-10):
+    rho = zero_low_density(rho)
+    fxs = []
+    dfxdrhos = []
+    dfxdgams = []
+
+    for na,gama in zip(rho,gam):
+        fx = dfxdrho = dfxdgam = 0
+        if na > tol:
+            kap = 0.804
+            mu = 0.449276922095889E-2
+            fx0,vx0 = xs(na)
+            rho13 = na**(1.0/3.0)
+            rho43 = rho13*na
+            den = 1+mu*gama/rho43/rho43
+            F = 1+kap-kap/den
+            fx = fx0*F
+            dFdr = -(8./3.)*kap*mu*gama/den/den*na**(-11./3.)
+            dfxdrho = vx0*F+fx0*dFdr
+            dFdg = -kap*mu/rho43/rho43/den/den
+            dfxdgam = fx0*dFdg
+        fxs.append(fx)
+        dfxdrhos.append(dfxdrho)
+        dfxdgams.append(dfxdgam)
+    return np.array(fxs),np.array(dfxdrhos),np.array(dfxdgams)
 
 def cvwn_vector(rhoa,rhob):
     rho = rhoa+rhob

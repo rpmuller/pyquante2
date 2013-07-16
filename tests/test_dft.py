@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from pyquante2.dft.functionals import xs,cvwn,xb88
+from pyquante2.dft.functionals import xs,cvwn,xb88,xpbe
 from pyquante2.dft.reference import data
 
 def amax(x): return np.amax(np.absolute(x))
@@ -43,6 +43,21 @@ class test_dft(unittest.TestCase):
         max_dfa = amax(dfa-data['xb88'][:,6])
         max_dfb = amax(dfb-data['xb88'][:,7])
         #print np.column_stack([na,nb,data['xb88'][:,5]-fa-fb])
+        self.assertAlmostEqual(max_f,0,5)
+        self.assertAlmostEqual(max_dfa,0)
+        self.assertAlmostEqual(max_dfb,0)
+
+    def test_xpbe(self):
+        na = data['xpbe'][:,0]
+        nb = data['xpbe'][:,1]
+        gaa = data['xpbe'][:,2]
+        gbb = data['xpbe'][:,4]
+        fa,dfa,dfga = xpbe(na,gaa)
+        fb,dfb,dfgb = xpbe(nb,gbb)
+        max_f = amax(fa+fb-data['xpbe'][:,5])
+        max_dfa = amax(dfa-data['xpbe'][:,6])
+        max_dfb = amax(dfb-data['xpbe'][:,7])
+        #print np.column_stack([na,nb,data['xpbe'][:,5]-fa-fb])
         self.assertAlmostEqual(max_f,0,5)
         self.assertAlmostEqual(max_dfa,0)
         self.assertAlmostEqual(max_dfb,0)

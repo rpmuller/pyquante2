@@ -2438,6 +2438,7 @@ data = {
     'xlda' : parsedata(x_lda_data),
     'cvwn' : parsedata(c_vwn5_data),
     'xb88' : parsedata(x_b88_data),
+    'xpbe' : parsedata(x_pbe_data),
     }
 # Redundant names
 data['xs'] = data['xlda']
