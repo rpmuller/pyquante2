@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from pyquante2.dft.functionals import xs,cvwn,xb88,xpbe,clyp
+from pyquante2.dft.functionals import xs,cvwn,xb88,xpbe,clyp,cpbe
 from pyquante2.dft.reference import data
 
 def amax(x): return np.amax(np.absolute(x))
@@ -79,6 +79,25 @@ class test_dft(unittest.TestCase):
         self.assertAlmostEqual(max_dfa,0)
         self.assertAlmostEqual(max_dfb,0)
 
+    @unittest.skip("Skipping CPBE since it doesn't work")
+    def test_cpbe(self):
+        na = data['cpbe'][:,0]
+        nb = data['cpbe'][:,1]
+        gaa = data['cpbe'][:,2]
+        gab = data['cpbe'][:,3]
+        gbb = data['cpbe'][:,4]
+        fc,dfa,dfb,dfga,dfgab,dfgb = cpbe(na,nb,gaa,gab,gbb)
+
+        max_f = amax(fc-data['cpbe'][:,5])
+        max_dfa = amax(dfa-data['cpbe'][:,6])
+        max_dfb = amax(dfb-data['cpbe'][:,7])
+        #print np.column_stack([na,nb,data['cpbe'][:,5]-fa-fb])
+        self.assertAlmostEqual(max_f,0,5)
+        self.assertAlmostEqual(max_dfa,0)
+        self.assertAlmostEqual(max_dfb,0)
+
+    
+
 def runsuite(verbose=True):
     if verbose: verbosity=2
     else: verbosity=1
@@ -86,7 +105,7 @@ def runsuite(verbose=True):
     unittest.TextTestRunner(verbosity=verbosity).run(suite)
     return
 
-def debugsuite():
+def profsuite():
     import cProfile,pstats
     cProfile.run('runsuite()','prof')
     prof = pstats.Stats('prof')
@@ -94,8 +113,8 @@ def debugsuite():
 
 if __name__ == '__main__':
     import sys
-    if "-d" in sys.argv:
-        debugsuite()
+    if "-p" in sys.argv:
+        profsuite()
     else:
         runsuite()
     
