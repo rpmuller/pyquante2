@@ -218,6 +218,87 @@ def clyp_point(rhoa,rhob,gamaa,gamab,gambb,tol=1e-10):
                 +d2f_drbdgaa*gamaa + d2f_drbdgbb*gambb + d2f_drbdgab*gamab
     return fc,fcrhoa,fcrhob,fcgamaa,fcgamab,fcgambb
 
+def cpbe(na,nb,ga,gab,gb):
+    "PBE Correlation Functional"
+    npts = len(na)
+    ec = np.zeros(npts,'d')
+    vca = np.zeros(npts,'d')
+    vcb = np.zeros(npts,'d')
+    vcga = np.zeros(npts,'d')
+    vcgab = np.zeros(npts,'d')
+    vcgb = np.zeros(npts,'d')
+    for i in range(npts):
+        ec[i],vca[i],vcb[i],vcga[i],vcgab[i],vcgb[i] = \
+                            cpbe_point(na[i],nb[i],ga[i],gab[i],gb[i])
+    return ec,vca,vcb,vcga,vcgab,vcgb
+
+def cpbe_point(rhoa,rhob,gama,gamb,gamab,tol=1e-10):
+    rho = rhoa+rhob
+    ec = vca = vcb = vcgama = vcgamb = vcgamab = 0
+    gam = 0.031091
+    ohm = 0.046644
+    bet = 0.066725
+    if rho > tol:
+        Rs = np.power(3./(4.*np.pi*rho),1./3.)
+        Zeta = (rhoa-rhob)/rho
+        Kf = np.power(3*np.pi*np.pi*rho,1./3.)
+        Ks = np.sqrt(4*Kf/np.pi)
+        Phi = 0.5*(np.power(1+Zeta,2./3.) + np.power(1-Zeta,2./3.))
+        Phi3 = Phi*Phi*Phi
+        gradrho = np.sqrt(gama+gamb+2.*gamab)
+        T = gradrho/(2*Phi*Ks*rho)
+        T2 = T*T
+        T4 = T2*T2
+
+        eps,vc0a,vc0b = cpbe_lsd(rhoa,rhob)
+
+        expo = (np.exp(-eps/(gam*Phi3))-1.)
+        A = bet/gam/expo
+        N = T2+A*T4
+        D = 1.+A*T2+A*A*T4
+        H = gam*Phi3*np.log(1.+(bet/gam)*N/D)
+        ec = rho*(eps+H)
+
+        # Derivative stuff
+        dZ_drhoa = (1.-Zeta)/rho
+        dZ_drhob = -(1.+Zeta)/rho
+
+        dPhi_dZ = np.power(1.+Zeta,-1./3.)/3.-np.power(1.-Zeta,-1./3.)/3.
+        dPhi_drhoa = dPhi_dZ*dZ_drhoa
+        dPhi_drhob = dPhi_dZ*dZ_drhob
+        
+        dKs_drho = Ks/(6*rho)
+        
+        dT_dPhi = -T/Phi
+        dT_dKs = -T/Ks
+        dT_drhoa = -T/rho + dT_dPhi*dPhi_drhoa + dT_dKs*dKs_drho
+        dT_drhob = -T/rho + dT_dPhi*dPhi_drhob + dT_dKs*dKs_drho
+
+        dA_dPhi = -A/expo*np.exp(-eps/(gam*Phi3))*(3*eps/(gam*Phi3*Phi))
+        dA_deps = -A/expo*np.exp(-eps/(gam*Phi3))*(-1/(gam*Phi3))
+        deps_drhoa = (vc0a-eps)/rho
+        deps_drhob = (vc0b-eps)/rho
+        dA_drhoa = dA_dPhi*dPhi_drhoa + dA_deps*deps_drhoa
+        dA_drhob = dA_dPhi*dPhi_drhob + dA_deps*deps_drhoa
+
+        dN_dT = 2*T+4*A*T2*T
+        dD_dT = 2*A*T + 4*A*A*T*T2
+        dN_dA = T4
+        dD_dA = T2+2*A*T4
+
+        dH_dPhi = 3*H/Phi
+        dH_dT = bet*Phi3/(1.+bet/gam*N/D)*(D*dN_dT-N*dD_dT)/D/D
+            
+        dH_dA = bet*Phi3/(1.+bet/gam*N/D)*(D*dN_dA-N*dD_dA)/D/D
+        
+        dH_drhoa = dH_dPhi*dPhi_drhoa + dH_dT*dT_drhoa + dH_dA*dA_drhoa
+        dH_drhob = dH_dPhi*dPhi_drhob + dH_dT*dT_drhob + dH_dA*dA_drhob
+        
+        vca = vc0a + H + rho*dH_drhoa
+        vcb = vc0b + H + rho*dH_drhob
+    # Havent done the dE_dgamma derives yet
+    return ec,vca,vcb,vcgama,vcgamab,vcgamb
+
 def vwn_xx(x,b,c): return x*x+b*x+c
 def vwn_epsp(x): return vwn_eps(x,0.0310907,-0.10498,3.72744,12.9352)
 def vwn_epsf(x): return vwn_eps(x,0.01554535,-0.32500,7.06042,13.0045)
@@ -247,6 +328,55 @@ def b88_dg(x,b=0.0042):
     num = 6*b*b*x*x*(x/np.sqrt(x*x+1)-np.arcsinh(x))-2*b*x
     denom = np.power(1+6*b*x*np.arcsinh(x),2)
     return num/denom
+
+def cpbe_lsd(rhoa,rhob):
+    # Not quite VWN. AEM: It's usually called PW correlation
+    # LSD terms
+    # Note that this routine gives out ec, not fc.
+    # If you rather have fc, use pw instead
+    rho = rhoa+rhob
+    Rs = np.power(3./(4.*np.pi*rho),1./3.)
+    Zeta = (rhoa-rhob)/rho
+    thrd = 1./3.     # thrd*=various multiples of 1/3
+    thrd4 = 4*thrd
+    ggam=0.5198420997897463295344212145565 # gam= 2^(4/3)-2
+    fzz=8./(9.*ggam) # fzz=f''(0)= 8/(9*gam)
+    rtrs = np.sqrt(Rs)
+    eu,eurs = pbe_gcor(0.0310907,0.21370,7.5957,
+                       3.5876,1.6382,0.49294,rtrs)
+    ep,eprs = pbe_gcor(0.01554535,0.20548,14.1189,
+                       6.1977,3.3662,0.62517,rtrs)
+    alfm,alfrsm = pbe_gcor(0.0168869,0.11125,10.357,
+                           3.6231,0.88026,0.49671,rtrs)
+    alfc = -alfm
+    z4 = Zeta**4
+    f=(np.power(1.+Zeta,thrd4)+np.power(1.-Zeta,thrd4)-2.)/ggam
+    eps = eu*(1.-f*z4)+ep*f*z4-alfm*f*(1.-z4)/fzz
+
+    ecrs = eurs*(1.-f*z4)+eprs*f*z4-alfrsm*f*(1.-z4)/fzz
+    fz = thrd4*(np.power(1.+Zeta,thrd)-np.power(1.-Zeta,thrd))/ggam
+    eczet = 4.*(Zeta**3)*f*(ep-eu+alfm/fzz)+fz*(z4*ep-z4*eu-(1.-z4)*alfm/fzz)
+    comm = eps -Rs*ecrs/3.-Zeta*eczet
+    vca = comm + eczet
+    vcb = comm - eczet
+    return eps,vca,vcb
+    
+def pbe_gcor(a,a1,b1,b2,b3,b4,rtrs):
+#      subroutine gcor2(a,a1,b1,b2,b3,b4,rtrs,gg,ggrs)
+# slimmed down version of gcor used in pw91 routines, to interpolate
+# lsd correlation energy, as given by (10) of
+# j. p. perdew and y. wang, phys. rev. b {\bf 45}, 13244 (1992).
+# k. burke, may 11, 1996.
+#      implicit real*8 (a-h,o-z)
+      q0 = -2.*a*(1.+a1*rtrs*rtrs)
+      q1 = 2.*a*rtrs*(b1+rtrs*(b2+rtrs*(b3+b4*rtrs)))
+      q2 = np.log(1.+1./q1)
+      gg = q0*q2
+      q3 = a*(b1/rtrs+2.*b2+rtrs*(3.*b3+4.*b4*rtrs))
+      ggrs = -2.*a*a1*q2-q0*q3/(q1*(1.+q1))
+      return gg,ggrs
+
+
 
 if __name__ == '__main__':
     import pylab as pyl
