@@ -1,5 +1,6 @@
 import unittest
 import numpy as np
+import pylab as pyl
 from pyquante2.dft.functionals import xs,cvwn,xb88,xpbe,clyp,cpbe
 from pyquante2.dft.reference import data
 
@@ -26,7 +27,11 @@ class test_dft(unittest.TestCase):
         max_f = amax(f-data['cvwn'][:,5])
         max_dfa = amax(dfa-data['cvwn'][:,6])
         max_dfb = amax(dfb-data['cvwn'][:,7])
-        print np.column_stack([na,nb,data['cvwn'][:,5],f])
+        np.set_printoptions(precision=3)
+        print np.column_stack([na,nb,data['cvwn'][:,5],f,data['cvwn'][:,6],dfb])
+        #pyl.plot(data['cvwn'][:,5]-f)
+        #pyl.plot(data['cvwn'][:,6]-dfa)
+        #pyl.show()
         self.assertAlmostEqual(max_f,0)
         self.assertAlmostEqual(max_dfa,0)
         self.assertAlmostEqual(max_dfb,0)
