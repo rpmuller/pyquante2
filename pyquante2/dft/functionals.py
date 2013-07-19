@@ -116,13 +116,14 @@ def cvwn_pointwise(rhoa,rhob,tol=1e-10):
         ec = vcrhoa = vcrhob = 0
         if rho>tol:
             zeta=(na-nb)/rho
-            x = pow(3./4./np.pi/rho,1./6.)
+            x = pow(3./4./np.pi/rho,1/6.)
             epsp = vwn_epsp(x)
-            depsp = vwn_depsp(x)
-            g = vwn_g(zeta)
             epsf = vwn_epsf(x)
+            g = vwn_g(zeta)
             eps = epsp + g*(epsf-epsp)
             ec = eps*rho
+
+            depsp = vwn_depsp(x)
             depsf = vwn_depsf(x)
             dg = vwn_dg(zeta)
             deps_dx = depsp + g*(depsf-depsp)
@@ -303,10 +304,14 @@ def vwn_xx(x,b,c): return x*x+b*x+c
 def vwn_epsp(x): return vwn_eps(x,0.0310907,-0.10498,3.72744,12.9352)
 def vwn_epsf(x): return vwn_eps(x,0.01554535,-0.32500,7.06042,13.0045)
 def vwn_eps(x,a,x0,b,c):
+    "Eqn 4.4 from VWN"
     q = np.sqrt(4*c-b*b)
     eps = a*(np.log(x*x/vwn_xx(x,b,c))
              - b*(x0/vwn_xx(x0,b,c))*np.log(np.power(x-x0,2)/vwn_xx(x,b,c))
              + (2*b/q)*(1-(x0*(2*x0+b)/vwn_xx(x0,b,c))) * np.arctan(q/(2*x+b)))
+    #eps = a*(np.log(x*x/vwn_xx(x,b,c)) + (2*b/q)*np.arctan(q/(2*x+b))
+    #         - (b*x0/vwn_xx(x0,b,c))*np.log(np.power(x-x0,2)/vwn_xx(x,b,c))
+    #         + (2*(b+2*x0)/q)*np.arctan(q/(2*x+b)))
     return eps
 
 def vwn_depsp(x): return vwn_deps(x,0.0310907,-0.10498,3.72744,12.9352)

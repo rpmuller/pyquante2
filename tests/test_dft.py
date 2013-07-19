@@ -19,7 +19,6 @@ class test_dft(unittest.TestCase):
         self.assertAlmostEqual(max_dfa,0)
         self.assertAlmostEqual(max_dfb,0)
 
-    @unittest.skip("Skipping CVWN since it doesn't work")
     def test_cvwn(self):
         na = data['cvwn'][:,0]
         nb = data['cvwn'][:,1]
@@ -27,7 +26,7 @@ class test_dft(unittest.TestCase):
         max_f = amax(f-data['cvwn'][:,5])
         max_dfa = amax(dfa-data['cvwn'][:,6])
         max_dfb = amax(dfb-data['cvwn'][:,7])
-        #print np.column_stack([na,nb,data['cvwn'][:,7],dfb])
+        print np.column_stack([na,nb,data['cvwn'][:,5],f])
         self.assertAlmostEqual(max_f,0)
         self.assertAlmostEqual(max_dfa,0)
         self.assertAlmostEqual(max_dfb,0)
