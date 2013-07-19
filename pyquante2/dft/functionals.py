@@ -302,8 +302,8 @@ def cpbe_point(rhoa,rhob,gama,gamb,gamab,tol=1e-10):
 
 def vwn_xx(x,b,c): return x*x+b*x+c
 def vwn_epsp(x): return vwn_eps(x,0.0310907,-0.10498,3.72744,12.9352)
-def vwn_epsf(x): return vwn_eps(x,0.01554535,-0.32500,7.06042,13.0045)
-#def vwn_epsf(x): return vwn_eps(x,0.01554535,-0.32500,7.06042,18.0578)
+#def vwn_epsf(x): return vwn_eps(x,0.01554535,-0.32500,7.06042,13.0045)
+def vwn_epsf(x): return vwn_eps(x,0.01554535,-0.32500,7.06042,18.0578)
 def vwn_eps(x,a,x0,b,c):
     q = np.sqrt(4*c-b*b)
     eps = a*(np.log(x*x/vwn_xx(x,b,c))
