@@ -5,3 +5,5 @@ profile.out
 *.png
 *.vtk
 prof
+docs/_build
+
