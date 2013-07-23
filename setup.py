@@ -10,6 +10,20 @@ except ImportError:
 else:
     use_cython = True
 
+
+classifiers = """\
+Development Status :: 3 - Alpha
+Intended Audience :: Developers
+Intended Audience :: Science/Research
+License :: OSI Approved :: BSD License
+Programming Language :: Python
+Topic :: Scientific/Engineering
+Topic :: Software Development :: Libraries :: Python Modules
+Operating System :: Microsoft :: Windows
+Operating System :: Unix
+Operating System :: MacOS
+"""
+    
 cmdclass = {}
 ext_modules = []
 
@@ -27,12 +41,17 @@ else:
         Extension("pyquante2.ctwo",["cython/ctwo.c","cython/cints.c","cython/chgp.c"]),
         ]
 
+with open('README.md') as file:
+    long_description = file.read()
+
 setup(name='pyquante2',
       version='0.1',
       description='Python Quantum Chemistry, version 2.0',
+      long_description = long_description,
       author='Rick Muller',
       author_email='rpmuller@gmail.com',
       url='http://pyquante.sourceforge.net',
+      install_requires=['numpy'],
       packages=['pyquante2',
                 'pyquante2.basis',
                 'pyquante2.dft',
