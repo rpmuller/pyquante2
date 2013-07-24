@@ -86,25 +86,7 @@ def xpbe(rho,gam,tol=1e-10):
         dfxdgams.append(dfxdgam)
     return np.array(fxs),np.array(dfxdrhos),np.array(dfxdgams)
 
-def cvwn_vector(rhoa,rhob):
-    rho = rhoa+rhob
-    zeta=(rhoa-rhob)/rho
-    x = np.power(3./4./np.pi/rho,1./6.)
-    epsp = vwn_epsp(x)
-    depsp = vwn_depsp(x)
-    g = vwn_g(zeta)
-    epsf = vwn_epsf(x)
-    eps = epsp + g*(epsf-epsp)
-    ec = eps*rho
-    depsf = vwn_depsf(x)
-    dg = vwn_dg(zeta)
-    deps_dx = depsp + g*(depsf-depsp)
-    deps_dg = (epsf-epsp)*dg
-    vcrhoa = eps - (x/6.)*deps_dx + deps_dg*(1-zeta)
-    vcrhob = eps - (x/6.)*deps_dx - deps_dg*(1+zeta)
-    return ec,vcrhoa,vcrhob
-
-def cvwn_pointwise(rhoa,rhob,tol=1e-10):
+def cvwn5(rhoa,rhob,tol=1e-10):
     rhoa = zero_low_density(rhoa)
     rhob = zero_low_density(rhob)
 
@@ -134,8 +116,6 @@ def cvwn_pointwise(rhoa,rhob,tol=1e-10):
         vcrhoas.append(vcrhoa)
         vcrhobs.append(vcrhob)
     return np.array(ecs),np.array(vcrhoas),np.array(vcrhobs)
-
-def cvwn(rhoa,rhob): return cvwn_pointwise(rhoa,rhob)
 
 def clyp(rhoas,rhobs,gaas,gabs,gbbs,tol=1e-10):
     fcs = []
@@ -304,18 +284,28 @@ def vwn_xx(x,b,c): return x*x+b*x+c
 def vwn_epsp(x): return vwn_eps(x,0.0310907,-0.10498,3.72744,12.9352)
 #def vwn_epsf(x): return vwn_eps(x,0.01554535,-0.32500,7.06042,13.0045)
 def vwn_epsf(x): return vwn_eps(x,0.01554535,-0.32500,7.06042,18.0578)
+
 def vwn_eps(x,a,x0,b,c):
-    q = np.sqrt(4*c-b*b)
+    Q = np.sqrt(4*c-b*b)
     eps = a*(np.log(x*x/vwn_xx(x,b,c))
              - b*(x0/vwn_xx(x0,b,c))*np.log(np.power(x-x0,2)/vwn_xx(x,b,c))
-             + (2*b/q)*(1-(x0*(2*x0+b)/vwn_xx(x0,b,c))) * np.arctan(q/(2*x+b)))
-    #eps = a*(np.log(x*x/vwn_xx(x,b,c)) + (2*b/q)*np.arctan(q/(2*x+b))
+             + (2*b/Q)*(1-(x0*(2*x0+b)/vwn_xx(x0,b,c))) * np.arctan(Q/(2*x+b)))
+    #eps = a*(np.log(x*x/vwn_xx(x,b,c)) + (2*b/Q)*np.arctan(Q/(2*x+b))
     #         - (b*x0/vwn_xx(x0,b,c))*np.log(np.power(x-x0,2)/vwn_xx(x,b,c))
-    #         + (2*(b+2*x0)/q)*np.arctan(q/(2*x+b)))
+    #         + (2*(b+2*x0)/Q)*np.arctan(Q/(2*x+b)))
+    return eps
+
+def vwn_eps0(x,a,x0,b,c):
+    def X(x): return x*x+b*x+c
+    Q = np.sqrt(4*c-b*b)
+    eps = a*(np.log(x*x/X(x)) + (2*b/Q)*np.arctan(Q/(2*x+b))
+             - (b*x0/X(x0))*np.log(np.power(x-x0,2)/X(x))
+             + (2*(b+2*x0)/Q)*np.arctan(Q/(2*x+b)))
     return eps
 
 def vwn_depsp(x): return vwn_deps(x,0.0310907,-0.10498,3.72744,12.9352)
-def vwn_depsf(x): return vwn_deps(x,0.01554535,-0.32500,7.06042,13.0045)
+#def vwn_depsf(x): return vwn_deps(x,0.01554535,-0.32500,7.06042,13.0045)
+def vwn_depsf(x): return vwn_deps(x,0.01554535,-0.32500,7.06042,18.0578)
 def vwn_deps(x,a,x0,b,c):
     q = np.sqrt(4*c-b*b)
     deps = a*(2/x - (2*x+b)/vwn_xx(x,b,c)
@@ -381,11 +371,9 @@ def pbe_gcor(a,a1,b1,b2,b3,b4,rtrs):
       ggrs = -2.*a*a1*q2-q0*q3/(q1*(1.+q1))
       return gg,ggrs
 
-
-
 if __name__ == '__main__':
     import pylab as pyl
-    z = np.linspace(0,1)
-    pyl.plot(z,vwn_g(z))
-    pyl.plot(z,vwn_dg(z))
+    x = np.linspace(1e-12,1)
+    pyl.plot(x,vwn_eps(x,0.0310907,-0.10498,3.72744,12.9352))
+    pyl.plot(x,vwn_eps0(x,0.0310907,-0.10498,3.72744,12.9352))
     pyl.show()

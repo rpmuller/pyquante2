@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import pylab as pyl
-from pyquante2.dft.functionals import xs,cvwn,xb88,xpbe,clyp,cpbe
+from pyquante2.dft.functionals import xs,cvwn5,xb88,xpbe,clyp,cpbe
 from pyquante2.dft.reference import data
 
 def amax(x): return np.amax(np.absolute(x))
@@ -23,7 +23,7 @@ class test_dft(unittest.TestCase):
     def test_cvwn(self):
         na = data['cvwn'][:,0]
         nb = data['cvwn'][:,1]
-        f,dfa,dfb = cvwn(na,nb)
+        f,dfa,dfb = cvwn5(na,nb)
         max_f = amax(f-data['cvwn'][:,5])
         max_dfa = amax(dfa-data['cvwn'][:,6])
         max_dfb = amax(dfb-data['cvwn'][:,7])
