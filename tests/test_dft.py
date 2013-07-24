@@ -1,8 +1,13 @@
 import unittest
 import numpy as np
-import pylab as pyl
 from pyquante2.dft.functionals import xs,cvwn5,xb88,xpbe,clyp,cpbe
 from pyquante2.dft.reference import data
+
+try:
+    import pylab as pyl
+    have_pylab = True
+except:
+    have_pylab = False
 
 def amax(x): return np.amax(np.absolute(x))
 
