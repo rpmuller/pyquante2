@@ -28,6 +28,9 @@ oh = molecule([(8,  0.00000000,     0.00000000,    -0.08687037),
               multiplicity=2,
               name='Hydroxide')
 he = molecule(atomlist = [(2,0,0,0)],name='Helium')
+he_triplet = molecule(atomlist = [(2,0,0,0)],name='Helium',multiplicity=3)
+ne = molecule(atomlist = [(10,0,0,0)],name='Neon')
+ar = molecule(atomlist = [(18,0,0,0)],name='Argon')
 li = molecule(atomlist = [(3,0,0,0)], multiplicity=2,name='Lithium')
 li_p = molecule(atomlist = [(3,0,0,0)],charge=1,name="Li+")
 li_m = molecule(atomlist = [(3,0,0,0)],charge=-1,name="Li-")
