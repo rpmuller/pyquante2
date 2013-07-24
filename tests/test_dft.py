@@ -1,5 +1,6 @@
 import unittest
 import numpy as np
+from pyquantte2 import basisset
 from pyquante2.dft.functionals import xs,cvwn5,xb88,xpbe,clyp,cpbe
 from pyquante2.dft.reference import data
 
@@ -106,7 +107,21 @@ class test_dft(unittest.TestCase):
         self.assertAlmostEqual(max_dfa,0)
         self.assertAlmostEqual(max_dfb,0)
 
-    
+    @unittest.skip("DFT solver not implemented yet")
+    def test_he_xlda(self):
+        from pyquante2.geo.samples import he
+        bfs = basisset(he)
+        solver = dft(he,bfs,'xs',None)
+        ens = solver.converge()
+        self.assertAlmostEqual(solver.energy,-2.7229973821)
+
+    @unittest.skip("DFT solver not implemented yet")
+    def test_he_triplet_xlda(self):
+        from pyquante2.geo.samples import he
+        bfs = basisset(he)
+        solver = dft(he,bfs,'xs',None)
+        ens = solver.converge()
+        self.assertAlmostEqual(solver.energy,-1.7819689849)
 
 def runsuite(verbose=True):
     if verbose: verbosity=2
