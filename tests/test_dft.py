@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from pyquantte2 import basisset
+from pyquante2 import basisset
 from pyquante2.dft.functionals import xs,cvwn5,xb88,xpbe,clyp,cpbe
 from pyquante2.dft.reference import data
 
