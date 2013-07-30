@@ -1,9 +1,10 @@
+from pyquante2.grid.grid import grid
 from pyquante2.ints.integrals import onee_integrals,twoe_integrals
 from pyquante2.utils import trace2,geigh
 from pyquante2.scf.iterators import SCFIterator,USCFIterator,AveragingIterator
 import numpy as np
 
-class hamiltonian:
+class hamiltonian(object):
     name = 'abstract'
     def __init__(self,geo,bfs):
         self.geo = geo
@@ -45,6 +46,9 @@ class hamiltonian:
                 td = ET.SubElement(table,"td")
                 td.text = "%.5f" % energy
         return ET.tostring(top)
+
+    def converge(self,*args,**kwargs): raise Exception("Unimplemented")
+    def update(self,*args,**kwargs): raise Exception("Unimplemented")
 
 class rhf(hamiltonian):
     """
@@ -89,6 +93,44 @@ class rhf(hamiltonian):
         self.orbe = E
         self.orbs = c
         return c
+
+class rdft(rhf):
+    "Hamiltonian for DFT calculations. Adds a grid to RHF iterator."
+    def __init__(self,geo,bfs):
+        rhf.__init__(self,geo,bfs)
+        self.grid = grid(geo)
+        # make grid here.
+
+    def update(self,D):
+        self.energy = self.geo.nuclear_repulsion()
+        H = self.i1.T + self.i1.V
+        self.energy += trace2(H,D)
+
+        J = self.i2.get_2j(D)
+        H = H + J
+
+        # XC = ???
+        # H = H + XC
+
+        self.energy += trace2(H,D)
+        E,c = geigh(H,self.i1.S)
+        self.orbe = E
+        self.orbs = c
+        return c
+
+class rohf(rhf):
+    """Hamiltonian for ROHF calculations. Adds shells information
+    >>> from pyquante2.geo.samples import h2
+    >>> from pyquante2.basis.basisset import basisset
+    >>> bfs = basisset(h2,'sto3g')
+    >>> h2_singlet = rohf(h2,bfs,[1],[1])
+    >>> h2_triplet = rohf(h2,bfs,[1,1],[0.5,0.5])
+    """
+    def __init__(self,geo,bfs,noccsh=[],fi=[]):
+        rhf.__init__(self,geo,bfs)
+        self.noccsh = noccsh
+        self.fi = fi
+
         
 class uhf(hamiltonian):
     """
