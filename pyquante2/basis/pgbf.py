@@ -16,7 +16,7 @@
 import numpy as np
 from pyquante2.utils import fact2,norm2
 
-class pgbf:
+class pgbf(object):
     """
     Construct a primitive gaussian basis functions.
     >>> s = pgbf(1.0)

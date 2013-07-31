@@ -20,7 +20,7 @@ import numpy as np
 # This is the old part of the code. It has now been replaced with the one
 #  below it, which takes 8x as much space, but is significantly faster.
 #  It's also more elegant code.
-class twoe_integrals_compressed:
+class twoe_integrals_compressed(object):
     """
     >>> from pyquante2.geo.samples import h
     >>> from pyquante2.basis.basisset import basisset
@@ -79,7 +79,7 @@ class twoe_integrals_compressed:
     def get_j(self,D): return self.make_operator(D,self.fetch_j)
     def get_k(self,D): return self.make_operator(D,self.fetch_k)
 
-class twoe_integrals:
+class twoe_integrals(object):
     """
     >>> from pyquante2.geo.samples import h
     >>> from pyquante2.basis.basisset import basisset
@@ -111,7 +111,7 @@ class twoe_integrals:
     def get_k(self,D): return np.einsum('ij,ikjl->kl',D,self._2e_ints)
     def get_2jk(self,D): return 2*self.get_j(D)-self.get_k(D)
                     
-class onee_integrals:
+class onee_integrals(object):
     """
     >>> from pyquante2.geo.samples import h
     >>> from pyquante2.basis.basisset import basisset

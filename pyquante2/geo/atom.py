@@ -14,7 +14,7 @@ from pyquante2.constants import ang2bohr
 from pyquante2.utils import norm2
 from pyquante2.geo.elements import symbol
 
-class atom:
+class atom(object):
     def __init__(self,atno,x,y,z,**kwargs):
         self.atno = atno
         self.r = np.array([x,y,z],'d')

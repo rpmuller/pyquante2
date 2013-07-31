@@ -12,7 +12,7 @@
 import numpy as np
 import array
 
-class cgbf:
+class cgbf(object):
     """
     Class for a contracted Gaussian basis function
     >>> s = cgbf(exps=[1],coefs=[1])

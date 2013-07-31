@@ -204,7 +204,7 @@ def project_z(r, x, y):
 #
 # Trackball Camera Class
 #
-class TrackballCamera:
+class TrackballCamera(object):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     def __init__(self, radius=1.0):
         """ initialize the camera, giving a radius from the focal point for

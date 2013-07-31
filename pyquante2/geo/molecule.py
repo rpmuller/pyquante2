@@ -11,7 +11,7 @@ from pyquante2 import settings
 from pyquante2.geo.atom import atom
 from pyquante2.utils import upairs
 
-class molecule:
+class molecule(object):
     """
     >>> from pyquante2.geo.samples import h2
     >>> round(h2.nuclear_repulsion(), 6)

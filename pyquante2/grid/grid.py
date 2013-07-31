@@ -7,7 +7,7 @@ point.
 import numpy as np
 from pyquante2.grid.atomic_grid import atomic_grid
 
-class grid:
+class grid(object):
     def __init__(self,atoms,**kwargs):
         agrids = [atomic_grid(atom,**kwargs) for atom in atoms]
         becke_reweight_atoms(atoms,agrids)

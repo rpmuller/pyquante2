@@ -1,6 +1,7 @@
 import numpy as np
 from lebedev import lebedev
-class atomic_grid:
+
+class atomic_grid(object):
     def __init__(self,atom,**kwargs):
         atno,x,y,z = atom.atuple()
         nrad = kwargs.get('nrad',32)

@@ -13,7 +13,7 @@ from pyquante2.basis import data
 from pyquante2.basis.cgbf import cgbf
 from pyquante2.basis.tools import sym2pow
 
-class basisset:
+class basisset(object):
     def __init__(self,atoms,name='sto3g',**kwargs):
         self.bfs = []
         self.name = name

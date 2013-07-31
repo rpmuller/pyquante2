@@ -1,7 +1,7 @@
 import numpy as np
 from pyquante2.utils import dmat
 
-class SCFIterator:
+class SCFIterator(object):
     def __init__(self,H,c=None,tol=1e-5,maxiters=100):
         self.H = H
         self.Eold = 0

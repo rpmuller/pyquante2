@@ -133,7 +133,7 @@ def norm1(x,maxx):
     """given x within [0,maxx], scale to a range [-1,1]."""
     return (2.0 * x - float(maxx)) / float(maxx)
 
-class Viewer:
+class Viewer(object):
     def __init__(self,width=defaults['width'],height=defaults['height']):
         self.width = width
         self.height = height
@@ -234,12 +234,12 @@ class Viewer:
         #self.tb.mouse_zoom(dx,dy)
         return
 
-class Points:
+class Points(object):
     def __init__(self,points): self.points = points
     def draw(self): draw_points(self.points)
         
 
-class Sphere:
+class Sphere(object):
     def __init__(self,x,y,z,r,g,b,rad):
         self._pos = (x,y,z)
         self._color = (r,g,b)
@@ -253,7 +253,7 @@ class Sphere:
     def __repr__(self):
         return "Sphere(%s,%s,%f)" % (self._pos,self._color,self._rad)
 
-class Cylinder:
+class Cylinder(object):
     def __init__(self,x1,y1,z1,x2,y2,z2,r,g,b,rad):
         self._start = (x1,y1,z1)
         self._end = (x2,y2,z2)
@@ -270,7 +270,7 @@ class Cylinder:
         return "Cylinder(%s,%s,%s,%f)" % (self._start,self._end,
                                           self._color,self._rad)
 
-class Line:
+class Line(object):
     def __init__(self,x1,y1,z1,x2,y2,z2,r=255,g=255,b=255):
         self._start = (x1,y1,z1)
         self._end = (x2,y2,y2)
@@ -282,7 +282,7 @@ class Line:
         r,g,b = self._color
         draw_line(x1,y1,z1,x2,y2,z2,r,g,b)
 
-class Shapes:
+class Shapes(object):
     def __init__(self,molecule=[],**kwargs):
         self.atoms = molecule
         self.shapelist = []
