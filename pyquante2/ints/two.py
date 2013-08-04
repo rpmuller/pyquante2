@@ -29,10 +29,10 @@ def ERI(a,b,c,d):
                              c.origin,c.norm,c.powers,c.exponent,
                              d.origin,d.norm,d.powers,d.exponent)
 
-def coulomb_repulsion(xyza,norma,(la,ma,na),alphaa,
-                      xyzb,normb,(lb,mb,nb),alphab,
-                      xyzc,normc,(lc,mc,nc),alphac,
-                      xyzd,normd,(ld,md,nd),alphad):
+def coulomb_repulsion(xyza,norma,lmna,alphaa,
+                      xyzb,normb,lmnb,alphab,
+                      xyzc,normc,lmnc,alphac,
+                      xyzd,normd,lmnd,alphad):
     """
     Return the coulomb repulsion between four primitive gaussians a,b,c,d with the given origin
     x,y,z, normalization constants norm, angular momena l,m,n, and exponent alpha.
@@ -44,6 +44,10 @@ def coulomb_repulsion(xyza,norma,(la,ma,na),alphaa,
     >>> round(coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p2,1.,lmn,1.,p2,1.,lmn,1.),6)
     3.266127
     """
+    la,ma,na = lmna
+    lb,mb,nb = lmnb
+    lc,mc,nc = lmnc
+    ld,md,nd = lmnd
     xa,ya,za = xyza
     xb,yb,zb = xyzb
     xc,yc,zc = xyzc

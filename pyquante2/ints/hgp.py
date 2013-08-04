@@ -48,10 +48,14 @@ def ERI_hgp(a,b,c,d):
                c.origin,c.norm,c.powers,c.exponent,
                d.origin,d.norm,d.powers,d.exponent)
 
-def contr_hrr(xyza,norma,(la,ma,na),aexps,acoefs,
-              xyzb,normb,(lb,mb,nb),bexps,bcoefs,
-              xyzc,normc,(lc,mc,nc),cexps,ccoefs,
-              xyzd,normd,(ld,md,nd),dexps,dcoefs):
+def contr_hrr(xyza,norma,lmna,aexps,acoefs,
+              xyzb,normb,lmnb,bexps,bcoefs,
+              xyzc,normc,lmnc,cexps,ccoefs,
+              xyzd,normd,lmnd,dexps,dcoefs):
+    la,ma,na = lmna
+    lb,mb,nb = lmnb
+    lc,mc,nc = lmnc
+    ld,md,nd = lmnd
     xa,ya,za = xyza
     xb,yb,zb = xyzb
     xc,yc,zc = xyzc
