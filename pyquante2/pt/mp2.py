@@ -10,9 +10,9 @@ def mp2(ints,orbs,orbe,nocc,nvirt,verbose=False):
             arbs,asbr = moints[a,r,b,s],moints[a,s,b,r]
             Eab += arbs*(2*arbs-asbr)/ \
                    (orbe[a]+orbe[b]-orbe[r]-orbe[s])
-        if verbose: print "MP2 pair energy for %d,%d: %f" % (a,b,Eab)
+        if verbose: print("MP2 pair energy for %d,%d: %f" % (a,b,Eab))
         Emp2 += Eab
-    if verbose: print "MP2 energy: %f" % Eab
+    if verbose: print("MP2 energy: %f" % Eab)
     return Emp2
 
 if __name__ == '__main__': test_mp2()

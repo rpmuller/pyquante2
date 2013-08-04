@@ -3647,4 +3647,4 @@ data['cvwn5'] = data['cvwn']
 if __name__ == '__main__':
     xlda = parsedata(x_lda_data)
     cvwn = parsedata(c_vwn5_data)
-    print (xlda[:,:5] == cvwn[:,:5]).all()
+    print((xlda[:,:5] == cvwn[:,:5]).all())

@@ -16,7 +16,7 @@ class cgbf(object):
     """
     Class for a contracted Gaussian basis function
     >>> s = cgbf(exps=[1],coefs=[1])
-    >>> print s
+    >>> print(s)
     cgbf((0.0, 0.0, 0.0),(0, 0, 0),[1.0],[1.0000000000000002])
     >>> round(s(0,0,0),6)
     0.712705

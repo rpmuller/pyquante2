@@ -2,7 +2,7 @@
 Basis set constructor
 
 >>> from pyquante2.geo.samples import h
->>> print basisset(h,'sto3g')
+>>> print(basisset(h,'sto3g'))
 cgbf((0.0, 0.0, 0.0),(0, 0, 0),[3.42525091, 0.62391373, 0.1688554],[0.1543289707029839, 0.5353281424384733, 0.44463454202535485])
 
 """

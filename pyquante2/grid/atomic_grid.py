@@ -111,8 +111,8 @@ if __name__ == '__main__':
     import pylab
     nrad = 32
     for atno in [8,1]:
-        #print 'lgrid:  ',
-        #print 'elgrid: ',[w for r,w,n in EulerMaclaurinGrid(nrad,atno)]
+        #print('lgrid:  ')
+        #print('elgrid: ',[w for r,w,n in EulerMaclaurinGrid(nrad,atno)])
         pylab.semilogy([w for r,w,n in LegendreGrid(nrad,atno)],label='L%d'%atno)
         pylab.semilogy([w for r,w,n in EulerMaclaurinGrid(nrad,atno)],label='EL%d'%atno)
     pylab.legend(loc='lower right')

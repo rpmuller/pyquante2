@@ -102,7 +102,7 @@ class molecule(object):
         if fobj:
             fobj.write(record)
         else:
-            print record
+            print(record)
         return
 
     def pyquante1(self,name="pyq2 molecule"):
@@ -134,9 +134,9 @@ class molecule(object):
         """
         Generate a stoichiometry string for the molecule:
         >>> from pyquante2 import h2,h2o,c6h6
-        >>> print h2.name,h2.stoich()
+        >>> print(h2.name,h2.stoich())
         Hydrogen H2
-        >>> print c6h6.name,c6h6.stoich()
+        >>> print(c6h6.name,c6h6.stoich())
         Benzene H6C6
         """
         from collections import Counter
