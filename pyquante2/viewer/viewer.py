@@ -326,11 +326,11 @@ class Shapes(object):
         rad = scaling*atom.radius()
         return self.add_sphere(x,y,z,r,g,b,rad)
 
-    def add_bond(self,(at1,at2),**kwargs):
+    def add_bond(self,atoms,**kwargs):
         style = kwargs.get('style','BallStick')
         if style == 'Ball': return []
-        x1,y1,z1 = at1.r
-        x2,y2,z2 = at2.r
+        x1,y1,z1 = atoms[0].r
+        x2,y2,z2 = atoms[1].r
         r = kwargs.get('r',0.5)
         g = kwargs.get('g',0.5)
         b = kwargs.get('b',0.5)
