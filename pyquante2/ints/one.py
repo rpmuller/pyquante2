@@ -4,7 +4,7 @@ One electron integrals.
 
 from numpy import pi,exp,floor,array
 from math import factorial
-from pyquante2.utils import binomial, fact2, Fgamma, norm2
+from pyquante2.utils import binomial, fact2, Fgamma, norm2,isnear
 
 # Notes:
 # The versions S,T,V include the normalization constants
@@ -17,17 +17,15 @@ def S(a,b):
     Simple interface to the overlap function.
     >>> from pyquante2 import pgbf,cgbf
     >>> s = pgbf(1)
-    >>> round(S(s,s),6)
-    1.0
+    >>> isnear(S(s,s),1.0)
+    True
     >>> sc = cgbf(exps=[1],coefs=[1])
-    >>> round(S(sc,sc),6)
-    1.0
+    >>> isnear(S(sc,sc),1.0)
+    True
 
     >>> sc = cgbf(exps=[1],coefs=[1])
-    >>> round(S(sc,s),6)
-    1.0
-    >>> round(S(s,sc),6)
-    1.0
+    >>> isnear(S(sc,s),1.0)
+    >>> isnear(S(s,sc),1.0)
 
     """
     if b.contracted:
@@ -43,18 +41,18 @@ def T(a,b):
     >>> from pyquante2 import pgbf,cgbf
     >>> from pyquante2.basis.pgbf import pgbf
     >>> s = pgbf(1)
-    >>> round(T(s,s),6)
-    1.5
+    >>> isnear(T(s,s),1.5)
+    True
 
     >>> sc = cgbf(exps=[1],coefs=[1])
-    >>> round(T(sc,sc),6)
-    1.5
+    >>> isnear(T(sc,sc),1.5)
+    True
 
     >>> sc = cgbf(exps=[1],coefs=[1])
-    >>> round(T(sc,s),6)
-    1.5
-    >>> round(T(s,sc),6)
-    1.5
+    >>> isnear(T(sc,s),1.5)
+    True
+    >>> isnear(T(s,sc),1.5)
+    True
 
     """
     if b.contracted:
@@ -69,19 +67,19 @@ def V(a,b,C):
     Simple interface to the nuclear attraction function.
     >>> from pyquante2 import pgbf,cgbf
     >>> s = pgbf(1)
-    >>> round(V(s,s,(0,0,0)),6)
-    -1.595769
+    >>> isnear(V(s,s,(0,0,0)),-1.595769)
+    True
 
     >>> sc = cgbf(exps=[1],coefs=[1])
-    >>> round(V(sc,sc,(0,0,0)),6)
-    -1.595769
+    >>> isnear(V(sc,sc,(0,0,0)),-1.595769)
+    True
 
     >>> sc = cgbf(exps=[1],coefs=[1])
-    >>> round(V(sc,s,(0,0,0)),6)
-    -1.595769
+    >>> isnear(V(sc,s,(0,0,0)),-1.595769)
+    True
 
-    >>> round(V(s,sc,(0,0,0)),6)
-    -1.595769
+    >>> isnear(V(s,sc,(0,0,0)),-1.595769)
+    True
 
     """
     if b.contracted:
@@ -94,8 +92,8 @@ def V(a,b,C):
 def overlap(alpha1,lmn1,A,alpha2,lmn2,B):
     """
     Full form of the overlap integral. Taken from THO eq. 2.12
-    >>> round(overlap(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d')),6)
-    1.968701
+    >>> isnear(overlap(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d')),1.968701)
+    True
     """
     l1,m1,n1 = lmn1
     l2,m2,n2 = lmn2
@@ -113,8 +111,8 @@ def overlap(alpha1,lmn1,A,alpha2,lmn2,B):
 def overlap1d(l1,l2,PAx,PBx,gamma):
     """
     The one-dimensional component of the overlap integral. Taken from THO eq. 2.12
-    >>> round(overlap1d(0,0,0,0,1),6)
-    1.0
+    >>> isnear(overlap1d(0,0,0,0,1),1.0)
+    True
     """
     total = 0
     for i in range(1+int(floor(0.5*(l1+l2)))):
@@ -146,8 +144,8 @@ def binomial_prefactor(s,ia,ib,xpa,xpb):
 def kinetic(alpha1,lmn1,A,alpha2,lmn2,B):
     """
     The full form of the kinetic energy integral
-    >>> round(kinetic(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d')),6)
-    2.953052
+    >>> isnear(kinetic(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d')),2.953052)
+    True
     """
     l1,m1,n1 = lmn1
     l2,m2,n2 = lmn2
@@ -172,9 +170,8 @@ def kinetic(alpha1,lmn1,A,alpha2,lmn2,B):
 def nuclear_attraction(alpha1,lmn1,A,alpha2,lmn2,B,C):
     """
     Full form of the nuclear attraction integral
-    >>> round(nuclear_attraction(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),\
-              array((0,0,0),'d'),array((0,0,0),'d')),6)
-    -3.141593
+    >>> isnear(nuclear_attraction(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d'),array((0,0,0),'d')),-3.141593)
+    True
     """
     l1,m1,n1 = lmn1
     l2,m2,n2 = lmn2

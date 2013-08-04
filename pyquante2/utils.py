@@ -42,8 +42,8 @@ def binomial(n,k):
 def Fgamma(m,x):
     """
     Incomplete gamma function
-    >>> round(Fgamma(0,0),10)
-    1.0
+    >>> isnear(Fgamma(0,0),1.0)
+    True
     """
     SMALL=1e-12
     x = max(x,SMALL)
@@ -208,6 +208,8 @@ def colorscale(mag, cmin, cmax):
     red = min((max((4*(x-0.25), 0.)), 1.))
     green = min((max((4*abs(x-0.5)-1., 0.)), 1.))
     return red, green, blue
+
+def isnear(a,b,tol=1e-6): return abs(a-b) < tol
 
 if __name__ == '__main__':
     import doctest

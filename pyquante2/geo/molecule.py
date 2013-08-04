@@ -9,13 +9,13 @@ Stoichiometry = H, Charge = 0, Multiplicity = 2
 import numpy as np
 from pyquante2 import settings
 from pyquante2.geo.atom import atom
-from pyquante2.utils import upairs
+from pyquante2.utils import upairs,isnear
 
 class molecule(object):
     """
     >>> from pyquante2.geo.samples import h2
-    >>> round(h2.nuclear_repulsion(), 6)
-    0.722356
+    >>> isnear(h2.nuclear_repulsion(),0.722356)
+    True
     >>> h2.nel()
     2
     >>> h2.nocc()

@@ -12,22 +12,22 @@
  This program is part of the PyQuante quantum chemistry program suite.
 """
 from numpy import sqrt,exp,pi
-from pyquante2.utils import Fgamma
+from pyquante2.utils import Fgamma,isnear
 from pyquante2.ints.one import gaussian_product_center
 
 def ERI_hgp(a,b,c,d):
     """
     >>> from pyquante2.basis.pgbf import pgbf
     >>> s = pgbf(1)
-    >>> round(ERI_hgp(s,s,s,s),6)
-    1.128379
+    >>> isnear(ERI_hgp(s,s,s,s),1.128379)
+    True
     >>> from pyquante2.basis.cgbf import cgbf
     >>> s = cgbf(exps=[1],coefs=[1])
-    >>> round(ERI_hgp(s,s,s,s),6)
-    1.128379
+    >>> isnear(ERI_hgp(s,s,s,s),1.128379)
+    True
     >>> s2 = cgbf((0,0,1),(0,0,0),[1],[1])
-    >>> round(ERI_hgp(s,s,s2,s2),6)
-    0.842701
+    >>> isenear(ERI_hgp(s,s,s2,s2),0.842701)
+    True
     """ 
     # This should be faster if I can get it to work, but having trouble passing
     # in to double *anorms, etc. 
