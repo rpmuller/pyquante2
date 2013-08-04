@@ -11,7 +11,7 @@ try:
 except:
     pass
 
-from trackball_camera import TrackballCamera
+from pyquante2.viewer.trackball_camera import TrackballCamera
 
 
 # Defaults for kwarg-passed options
