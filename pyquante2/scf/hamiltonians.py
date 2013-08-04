@@ -12,6 +12,7 @@ class hamiltonian(object):
         self.i1 = onee_integrals(bfs,geo)
         self.i2 = twoe_integrals(bfs)
         self.energies = []
+        self.energy = 0
         self.converged = False
 
     def __repr__(self):
