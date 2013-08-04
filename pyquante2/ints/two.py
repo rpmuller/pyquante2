@@ -69,9 +69,9 @@ def coulomb_repulsion(xyza,norma,lmna,alphaa,
     Bz = B_array(na,nb,nc,nd,zp,za,zb,zq,zc,zd,gamma1,gamma2,delta)
 
     sum = 0.
-    for I in xrange(la+lb+lc+ld+1):
-        for J in xrange(ma+mb+mc+md+1):
-            for K in xrange(na+nb+nc+nd+1):
+    for I in range(la+lb+lc+ld+1):
+        for J in range(ma+mb+mc+md+1):
+            for K in range(na+nb+nc+nd+1):
                 sum = sum + Bx[I]*By[J]*Bz[K]*Fgamma(I+J+K,0.25*rpq2/delta)
 
     return 2*pow(pi,2.5)/(gamma1*gamma2*sqrt(gamma1+gamma2)) \
@@ -89,11 +89,11 @@ def B_term(i1,i2,r1,r2,u,l1,l2,l3,l4,Px,Ax,Bx,Qx,Cx,Dx,gamma1,gamma2,delta):
 def B_array(l1,l2,l3,l4,p,a,b,q,c,d,g1,g2,delta):
     Imax = l1+l2+l3+l4+1
     B = [0]*Imax
-    for i1 in xrange(l1+l2+1):
-        for i2 in xrange(l3+l4+1):
-            for r1 in xrange(i1/2+1):
-                for r2 in xrange(i2/2+1):
-                    for u in xrange((i1+i2)/2-r1-r2+1):
+    for i1 in range(l1+l2+1):
+        for i2 in range(l3+l4+1):
+            for r1 in range(i1/2+1):
+                for r2 in range(i2/2+1):
+                    for u in range((i1+i2)/2-r1-r2+1):
                         I = i1+i2-2*(r1+r2)-u
                         B[I] = B[I] + B_term(i1,i2,r1,r2,u,l1,l2,l3,l4,
                                              p,a,b,q,c,d,g1,g2,delta)

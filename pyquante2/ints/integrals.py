@@ -43,7 +43,7 @@ class twoe_integrals_compressed(object):
         nbf = self.nbf
         temp = np.empty(nbf**2,'d')
         kl = 0
-        for k,l in product(xrange(nbf),repeat=2):
+        for k,l in product(range(nbf),repeat=2):
             temp[kl] = 2*self[i,j,k,l]-self[i,k,j,l]
             kl += 1
         return temp
@@ -52,7 +52,7 @@ class twoe_integrals_compressed(object):
         nbf = self.nbf
         temp = np.empty(nbf**2,'d')
         kl = 0
-        for k,l in product(xrange(nbf),repeat=2):
+        for k,l in product(range(nbf),repeat=2):
             temp[kl] = self[i,j,k,l]
             kl += 1
         return temp
@@ -61,7 +61,7 @@ class twoe_integrals_compressed(object):
         nbf = self.nbf
         temp = np.empty(nbf**2,'d')
         kl = 0
-        for k,l in product(xrange(nbf),repeat=2):
+        for k,l in product(range(nbf),repeat=2):
             temp[kl] = self[i,k,j,l]
             kl += 1
         return temp
@@ -70,7 +70,7 @@ class twoe_integrals_compressed(object):
         nbf = self.nbf
         D1 = np.reshape(D,(nbf*nbf,))
         G = np.empty((nbf,nbf),'d')
-        for i,j in pairs(xrange(nbf)):
+        for i,j in pairs(range(nbf)):
             temp = fetcher(i,j) # replace temp with fetcher()
             G[i,j] = G[j,i] = np.dot(D1,temp)
         return G
@@ -129,7 +129,7 @@ class onee_integrals(object):
         self.S = np.empty((nbf,nbf),'d')
         self.T = np.empty((nbf,nbf),'d')
         self.V = np.empty((nbf,nbf),'d')
-        for i,j in pairs(xrange(nbf)):
+        for i,j in pairs(range(nbf)):
             ibf,jbf = bfs[i],bfs[j]
             self.S[i,j] = self.S[j,i] = S(ibf,jbf)
             self.T[i,j] = self.T[j,i] = T(ibf,jbf)
@@ -143,9 +143,9 @@ def iiterator(nbf):
     >>> list(iiterator(2))
     [(0, 0, 0, 0), (0, 0, 0, 1), (0, 0, 1, 1), (0, 1, 0, 1), (0, 1, 1, 1), (1, 1, 1, 1)]
     """
-    for i,j in pairs(xrange(nbf)):
+    for i,j in pairs(range(nbf)):
         ij = i*(i+1)/2+j
-        for k,l in pairs(xrange(nbf)):
+        for k,l in pairs(range(nbf)):
             kl = k*(k+1)/2+l
             if ij <= kl:
                 yield i,j,k,l

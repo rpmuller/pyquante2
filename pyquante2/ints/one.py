@@ -117,7 +117,7 @@ def overlap1d(l1,l2,PAx,PBx,gamma):
     1.0
     """
     total = 0
-    for i in xrange(1+int(floor(0.5*(l1+l2)))):
+    for i in range(1+int(floor(0.5*(l1+l2)))):
         total += binomial_prefactor(2*i,l1,l2,PAx,PBx)* \
                  fact2(2*i-1)/pow(2*gamma,i)
     return total
@@ -137,7 +137,7 @@ def binomial_prefactor(s,ia,ib,xpa,xpb):
     1
     """
     total= 0
-    for t in xrange(s+1):
+    for t in range(s+1):
         if s-ia <= t <= ib:
             total +=  binomial(ia,s-t)*binomial(ib,t)* \
                      pow(xpa,ia-s+t)*pow(xpb,ib-t)
@@ -193,9 +193,9 @@ def nuclear_attraction(alpha1,lmn1,A,alpha2,lmn2,B,C):
     Az = A_array(n1,n2,dPA[2],dPB[2],dPC[2],gamma)
 
     total = 0.
-    for I in xrange(l1+l2+1):
-        for J in xrange(m1+m2+1):
-            for K in xrange(n1+n2+1):
+    for I in range(l1+l2+1):
+        for J in range(m1+m2+1):
+            for K in range(n1+n2+1):
                 total += Ax[I]*Ay[J]*Az[K]*Fgamma(I+J+K,rcp2*gamma)
                 
     return -2*pi/gamma*exp(-alpha1*alpha2*rab2/gamma)*total
@@ -210,9 +210,9 @@ def A_array(l1,l2,PA,PB,CP,g):
     "THO eq. 2.18 and 3.1"
     Imax = l1+l2+1
     A = [0]*Imax
-    for i in xrange(Imax):
-        for r in xrange(int(floor(i/2)+1)):
-            for u in xrange(int(floor((i-2*r)/2)+1)):
+    for i in range(Imax):
+        for r in range(int(floor(i/2)+1)):
+            for u in range(int(floor((i-2*r)/2)+1)):
                 I = i-2*r-u
                 A[I] = A[I] + A_term(i,r,u,l1,l2,PA,PB,CP,g)
     return A

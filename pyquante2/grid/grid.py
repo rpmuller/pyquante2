@@ -21,7 +21,7 @@ class grid(object):
 
 def becke_reweight_atoms(atoms,agrids,**kwargs):
     for iat,agrid in enumerate(agrids):
-        for i in xrange(agrid.npts):
+        for i in range(agrid.npts):
             xyzp = agrid.points[i,:3]
             Ps = [becke_atomic_grid_p(atj,xyzp,atoms,**kwargs) for atj in atoms]
             P = Ps[iat]/sum(Ps)

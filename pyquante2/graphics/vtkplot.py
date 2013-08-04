@@ -22,11 +22,11 @@ def iterator_3d(nxyz,oxyz,sxyz):
     nx,ny,nz = nxyz
     sx,sy,sz = sxyz
     ox,oy,oz = oxyz
-    for i in xrange(nx):
+    for i in range(nx):
         x = ox + i*sx
-        for j in xrange(ny):
+        for j in range(ny):
             y = oy + j*sy
-            for k in xrange(nz):
+            for k in range(nz):
                 z = oz + k*sz
                 yield x,y,z
     return
@@ -47,7 +47,7 @@ def write_vtk(records,nxyz,oxyz,sxyz,names=None,fname = "pyq_orb.vtk"):
     nx,ny,nz = nxyz
     npts = nx*ny*nz
     if not names:
-        names = ["orb%d" % (i+1) for i in xrange(len(records))]
+        names = ["orb%d" % (i+1) for i in range(len(records))]
     recordstrings = make_recordstrings(records,names)
     open(fname,"w").write(vtk_template % locals())
     return

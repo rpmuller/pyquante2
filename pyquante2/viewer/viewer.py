@@ -301,7 +301,7 @@ class Shapes(object):
 
     def add_points(self,points):
         #self.shapelist.append(Points(points)) # only visible from 1 side
-        for i in xrange(points.shape[0]):
+        for i in range(points.shape[0]):
             x,y,z = points[i,:3]
             self.add_sphere(x,y,z,rad=0.02)
         return
@@ -312,7 +312,7 @@ class Shapes(object):
         weights = points[:,3]
         wmin = np.min(weights)
         wmax = np.max(weights)
-        for i in xrange(points.shape[0]):
+        for i in range(points.shape[0]):
             x,y,z = points[i,:3]
             r,g,b = colorscale(weights[i],wmin,wmax)
             self.add_sphere(x,y,z,r,g,b,rad=0.02)
@@ -341,7 +341,7 @@ class Shapes(object):
         from pyquante2.utils import upairs
         from pyquante2.constants import bohr2ang
         self.bonds = []
-        for i,j in upairs(xrange(len(self.atoms))):
+        for i,j in upairs(range(len(self.atoms))):
             ati,atj = self.atoms[i],self.atoms[j]
             r = ati.distance(atj)*bohr2ang
             r0 = ati.radius() + atj.radius()
