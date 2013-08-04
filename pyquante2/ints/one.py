@@ -25,7 +25,9 @@ def S(a,b):
 
     >>> sc = cgbf(exps=[1],coefs=[1])
     >>> isnear(S(sc,s),1.0)
+    True
     >>> isnear(S(s,sc),1.0)
+    True
 
     """
     if b.contracted:

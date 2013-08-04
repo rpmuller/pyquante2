@@ -26,7 +26,7 @@ def ERI_hgp(a,b,c,d):
     >>> isnear(ERI_hgp(s,s,s,s),1.128379)
     True
     >>> s2 = cgbf((0,0,1),(0,0,0),[1],[1])
-    >>> isenear(ERI_hgp(s,s,s2,s2),0.842701)
+    >>> isnear(ERI_hgp(s,s,s2,s2),0.842701)
     True
     """ 
     # This should be faster if I can get it to work, but having trouble passing
