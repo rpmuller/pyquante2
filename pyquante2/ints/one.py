@@ -91,12 +91,14 @@ def V(a,b,C):
     return a.norm*b.norm*nuclear_attraction(a.exponent,a.powers,a.origin,
                                             b.exponent,b.powers,b.origin,C)
 
-def overlap(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
+def overlap(alpha1,lmn1,A,alpha2,lmn2,B):
     """
     Full form of the overlap integral. Taken from THO eq. 2.12
     >>> round(overlap(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d')),6)
     1.968701
     """
+    l1,m1,n1 = lmn1
+    l2,m2,n2 = lmn2
     rab2 = norm2(A-B)
     gamma = alpha1+alpha2
     P = gaussian_product_center(alpha1,A,alpha2,B)
@@ -141,12 +143,14 @@ def binomial_prefactor(s,ia,ib,xpa,xpb):
                      pow(xpa,ia-s+t)*pow(xpb,ib-t)
     return total
 
-def kinetic(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
+def kinetic(alpha1,lmn1,A,alpha2,lmn2,B):
     """
     The full form of the kinetic energy integral
     >>> round(kinetic(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d')),6)
     2.953052
     """
+    l1,m1,n1 = lmn1
+    l2,m2,n2 = lmn2
     term0 = alpha2*(2*(l2+m2+n2)+3)*\
             overlap(alpha1,(l1,m1,n1),A,\
                            alpha2,(l2,m2,n2),B)
@@ -165,13 +169,15 @@ def kinetic(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B):
                                            alpha2,(l2,m2,n2-2),B))
     return term0+term1+term2
 
-def nuclear_attraction(alpha1,(l1,m1,n1),A,alpha2,(l2,m2,n2),B,C):
+def nuclear_attraction(alpha1,lmn1,A,alpha2,lmn2,B,C):
     """
     Full form of the nuclear attraction integral
     >>> round(nuclear_attraction(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),\
               array((0,0,0),'d'),array((0,0,0),'d')),6)
     -3.141593
     """
+    l1,m1,n1 = lmn1
+    l2,m2,n2 = lmn2
     gamma = alpha1+alpha2
 
     P = gaussian_product_center(alpha1,A,alpha2,B)
