@@ -41,7 +41,7 @@ class cgbf(object):
             self.normalize()
         return
 
-    def __getitem__(self,item): return zip(self.coefs,self.pgbfs).__getitem__(item)
+    def __getitem__(self,item): return list(zip(self.coefs,self.pgbfs)).__getitem__(item)
     def __call__(self,*args,**kwargs): return sum(c*p(*args,**kwargs) for c,p in self)
     def __repr__(self): return "cgbf(%s,%s,%s,%s)" % (tuple(self.origin),self.powers,list(self.pexps),list(self.coefs))
 
@@ -73,7 +73,7 @@ class cgbf(object):
         from numpy import sqrt
         Saa = S(self,self)
         Saa_sqrt = sqrt(Saa)
-        for i in xrange(len(self.coefs)):
+        for i in range(len(self.coefs)):
             self.coefs[i] /= Saa_sqrt
         # Is this the right way to do this, or should I have a separate normalization constant?
         return
