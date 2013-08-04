@@ -175,7 +175,7 @@ def clyp_point(rhoa,rhob,gamaa,gamab,gambb,tol=1e-10):
             (1./9.)*rhoa*(1-3*dl-(dl-11)*rhoa/rho)
             -(1./9.)*rhoa*rhob*((3+rhoa/rho)*ddl-(dl-11)*rhoa/rho/rho)
             -2*rhob)
-	d2f_drbdgbb = dw/w*fcgambb - a*b*w*(
+        d2f_drbdgbb = dw/w*fcgambb - a*b*w*(
             (1./9.)*rhoa*(1-3*dl-(dl-11)*rhob/rho)
             -(1./9.)*rhoa*rhob*((3+rhob/rho)*ddl+(dl-11)*rhoa/rho/rho))
         d2f_drbdgab = dw/w*fcgamab-a*b*w*(
