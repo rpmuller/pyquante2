@@ -126,9 +126,9 @@ class rohf(rhf):
     >>> h2_singlet = rohf(h2,bfs,[1],[1])
     >>> h2_triplet = rohf(h2,bfs,[1,1],[0.5,0.5])
     """
-    def __init__(self,geo,bfs,noccsh=[],fi=[]):
+    def __init__(self,geo,bfs,norbsh=[],fi=[]):
         rhf.__init__(self,geo,bfs)
-        self.noccsh = noccsh
+        self.norbsh = norbsh
         self.fi = fi
 
         
