@@ -175,8 +175,8 @@ def iindex(i,j,k,l):
     """
     if i<j: i,j = j,i
     if k<l: k,l = l,k
-    ij = i*(i+1)/2+j
-    kl = k*(k+1)/2+l
+    ij = (i*(i+1))/2+j
+    kl = (k*(k+1))/2+l
     if ij < kl: ij,kl = kl,ij
     return ij*(ij+1)/2+kl
         
