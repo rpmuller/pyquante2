@@ -83,7 +83,7 @@ def _gser(a,x):
         sum=sum+delt
         if abs(delt) < abs(sum)*EPS: break
     else:
-        print 'a too large, ITMAX too small in gser'
+        print('a too large, ITMAX too small in gser')
     gamser=sum*np.exp(-x+a*np.log(x)-gln)
     return gamser,gln
 
@@ -110,7 +110,7 @@ def _gcf(a,x):
         h=h*delt
         if abs(delt-1.) < EPS: break
     else:
-        print 'a too large, ITMAX too small in gcf'
+        print('a too large, ITMAX too small in gcf')
     gammcf=np.exp(-x+a*np.log(x)-gln)*h
     return gammcf,gln
 

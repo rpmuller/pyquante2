@@ -22,8 +22,8 @@ def plot_h2_vtk():
     ens = solver.converge()
 
     # Note: these orbitals are not coming out symmetric. Why not??
-    print solver
-    print solver.orbs
+    print(solver)
+    print(solver.orbs)
     vtk_orbs(h2,solver.orbs,bfs,npts=10)
 
 def plot_orbs():
