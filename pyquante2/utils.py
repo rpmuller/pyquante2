@@ -37,7 +37,7 @@ def binomial(n,k):
     """
     if n==k: return 1
     assert n>k, "Attempting to call binomial(%d,%d)" % (n,k)
-    return factorial(n)/(factorial(k)*factorial(n-k))
+    return factorial(n)//(factorial(k)*factorial(n-k))
 
 def Fgamma(m,x):
     """

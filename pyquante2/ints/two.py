@@ -91,8 +91,8 @@ def B_array(l1,l2,l3,l4,p,a,b,q,c,d,g1,g2,delta):
     B = [0]*Imax
     for i1 in range(l1+l2+1):
         for i2 in range(l3+l4+1):
-            for r1 in range(i1/2+1):
-                for r2 in range(i2/2+1):
+            for r1 in range(i1//2+1):
+                for r2 in range(i2//2+1):
                     for u in range((i1+i2)/2-r1-r2+1):
                         I = i1+i2-2*(r1+r2)-u
                         B[I] = B[I] + B_term(i1,i2,r1,r2,u,l1,l2,l3,l4,
