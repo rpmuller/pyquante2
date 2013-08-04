@@ -125,10 +125,12 @@ def contr_hrr(xyza,norma,lmna,aexps,acoefs,
                      xyzc,normc,(lc,mc,nc),cexps,ccoefs,
                      xyzd,normd,dexps,dcoefs)
 
-def contr_vrr(xyza,norma,(la,ma,na),aexps,acoefs,
+def contr_vrr(xyza,norma,lmna,aexps,acoefs,
               xyzb,normb,bexps,bcoefs,
-              xyzc,normc,(lc,mc,nc),cexps,ccoefs,
+              xyzc,normc,lmnc,cexps,ccoefs,
               xyzd,normd,dexps,dcoefs):
+    la,ma,na = lmna
+    lc,mc,nc = lmnc
     val = 0.
     for i in range(len(aexps)):
         for j in range(len(bexps)):
@@ -141,11 +143,15 @@ def contr_vrr(xyza,norma,(la,ma,na),aexps,acoefs,
                                xyzd,normd[l],dexps[l],0)
     return val
 
-def hrr(xyza,norma,(la,ma,na),alphaa,
-        xyzb,normb,(lb,mb,nb),alphab,
-        xyzc,normc,(lc,mc,nc),alphac,
-        xyzd,normd,(ld,md,nd),alphad):
+def hrr(xyza,norma,lmna,alphaa,
+        xyzb,normb,lmnb,alphab,
+        xyzc,normc,lmnc,alphac,
+        xyzd,normd,lmnd,alphad):
 
+    la,ma,na = lmna
+    lb,mb,nb = lmnb
+    lc,mc,nc = lmnc
+    ld,md,nd = lmnd
     xa,ya,za = xyza
     xb,yb,zb = xyzb
     xc,yc,zc = xyzc
@@ -215,11 +221,13 @@ def hrr(xyza,norma,(la,ma,na),alphaa,
                xyzc,normc,(lc,mc,nc),alphac,
                xyzd,normd,alphad,0)
 
-def vrr(xyza,norma,(la,ma,na),alphaa,
+def vrr(xyza,norma,lmna,alphaa,
         xyzb,normb,alphab,
-        xyzc,normc,(lc,mc,nc),alphac,
+        xyzc,normc,lmnc,alphac,
         xyzd,normd,alphad,M):
 
+    la,ma,na = lmna
+    lc,mc,nc = lmnc
     xa,ya,za = xyza
     xb,yb,zb = xyzb
     xc,yc,zc = xyzc
