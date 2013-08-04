@@ -1,5 +1,5 @@
 import numpy as np
-from lebedev import lebedev
+from pyquante2.grid.lebedev import lebedev
 
 class atomic_grid(object):
     def __init__(self,atom,**kwargs):
