@@ -134,10 +134,10 @@ class molecule(object):
         """
         Generate a stoichiometry string for the molecule:
         >>> from pyquante2 import h2,h2o,c6h6
-        >>> print(h2.name,h2.stoich())
-        Hydrogen H2
-        >>> print(c6h6.name,c6h6.stoich())
-        Benzene H6C6
+        >>> h2.stoich()
+        H2
+        >>> c6h6.stoich()
+        H6C6
         """
         from collections import Counter
         from pyquante2.geo.elements import symbol
