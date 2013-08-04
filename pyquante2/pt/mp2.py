@@ -1,5 +1,6 @@
 import numpy as np
 from itertools import product
+from functools import reduce
 
 def mp2(ints,orbs,orbe,nocc,nvirt,verbose=False):
     moints = ints.transform_mp2(orbs,nocc)

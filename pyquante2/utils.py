@@ -4,6 +4,7 @@ utils.py - Simple utilility funtions used in pyquante2.
 import numpy as np
 from math import factorial,lgamma
 from itertools import combinations_with_replacement,combinations
+from functools import reduce
 
 def pairs(it): return combinations_with_replacement(it,2)
 def upairs(it): return combinations(it,2)
@@ -22,7 +23,7 @@ def fact2(n):
     >>> fact2(-1)
     1
     """
-    return reduce(int.__mul__,xrange(n,0,-2),1)
+    return reduce(int.__mul__,range(n,0,-2),1)
 
 def norm2(a): return np.dot(a,a)
 
@@ -77,7 +78,7 @@ def _gser(a,x):
 
     ap = a
     delt = sum = 1./a
-    for i in xrange(ITMAX):
+    for i in range(ITMAX):
         ap=ap+1.
         delt=delt*x/ap
         sum=sum+delt
@@ -98,7 +99,7 @@ def _gcf(a,x):
     c=1./FPMIN
     d=1./b
     h=d
-    for i in xrange(1,ITMAX+1):
+    for i in range(1,ITMAX+1):
         an=-i*(i-a)
         b=b+2.
         d=an*d+b
@@ -127,14 +128,14 @@ def symorth(S):
     E,U = np.linalg.eigh(S)
     n = len(E)
     Shalf = np.identity(n,'d')
-    for i in xrange(n):
+    for i in range(n):
         Shalf[i,i] /= np.sqrt(E[i])
     return simx(Shalf,U,True)
 
 def canorth(S):
     "Canonical orthogonalization U/sqrt(lambda)"
     E,U = np.linalg.eigh(S)
-    for i in xrange(len(E)):
+    for i in range(len(E)):
         U[:,i] = U[:,i] / np.sqrt(E[i])
     return U
 
