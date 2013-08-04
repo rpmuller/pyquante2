@@ -151,7 +151,7 @@ def clyp_point(rhoa,rhob,gamaa,gamab,gambb,tol=1e-10):
 
         fcgamaa = -a*b*w*((1./9.)*rhoa*rhob*(1-3*dl-(dl-11)*rhoa/rho)-rhob*rhob)
         fcgamab = -a*b*w*((1./9.)*rhoa*rhob*(47-7*dl)-(4./3.)*rho*rho)
-	fcgambb = -a*b*w*((1./9.)*rhoa*rhob*(1-3*dl-(dl-11)*rhob/rho)-rhoa*rhoa)
+        fcgambb = -a*b*w*((1./9.)*rhoa*rhob*(1-3*dl-(dl-11)*rhob/rho)-rhoa*rhoa)
 
         fc = -4*a/(1+d*rhom3)*rhoa*rhob/rho \
              -np.power(2,11./3.)*0.3*np.power(3*np.pi*np.pi,2./3.)*a*b*w \
