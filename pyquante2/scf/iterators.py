@@ -39,7 +39,6 @@ class USCFIterator(SCFIterator):
         self.cup = self.cdown = self.c
         return
 
-    def next(self): return self.__next__()
     def __next__(self):
         self.iterations += 1
         if self.iterations > self.maxiters:
@@ -61,7 +60,6 @@ class AveragingIterator(SCFIterator):
         self.Dold = dmat(self.c,self.H.geo.nocc())
         return
 
-    def next(self): return self.__next__()
     def __next__(self):
         D = (1-self.fraction)*self.Dold + self.fraction*dmat(self.c,self.H.geo.nocc())
         self.Dold = D
