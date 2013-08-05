@@ -3625,7 +3625,7 @@ def parsedata(dataname):
             field = [rhoa,rhob,sigaa,sigab,sigbb]
             fields.append(field)
             for i in range(6):
-                line = f.next()
+                line = next(f)
                 term = parseline(line,'xxf')
                 field.append(term)
         else:
