@@ -58,11 +58,11 @@ class rhf(hamiltonian):
     >>> bfs = basisset(h2,'sto3g')
     >>> h2_rhf = rhf(h2,bfs)
     >>> ens = h2_rhf.converge(SCFIterator)
-    >>> isnear(h2_rhf.energy,-1.117099)
+    >>> isnear(h2_rhf.energy,-1.11709942949)
     True
 
     >>> ens = h2_rhf.converge(AveragingIterator,maxiters=100)
-    >>> isnear(h2_rhf.energy,-1.117093)
+    >>> isnear(h2_rhf.energy,-1.11709325545)
     True
 
     >>> ens = h2_rhf.converge(SCFIterator,maxiters=1)
