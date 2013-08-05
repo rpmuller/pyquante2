@@ -3617,7 +3617,7 @@ def parsedata(dataname):
     f = iter(dataname.splitlines())
     while True:
         try:
-            line = f.next()
+            line = next(f)
         except:
             break
         if line.lstrip().startswith('rhoa'):
