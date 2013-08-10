@@ -48,7 +48,14 @@ class hamiltonian(object):
                 td.text = "%.5f" % energy
         return ET.tostring(top)
 
-    def converge(self,*args,**kwargs): raise Exception("Unimplemented")
+    def converge(self,iterator=SCFIterator,**kwargs):
+        converger = iterator(self,**kwargs)
+        self.energies = []
+        for en in converger:
+            self.energies.append(en)
+        self.converged = converger.converged
+        return self.energies
+
     def update(self,*args,**kwargs): raise Exception("Unimplemented")
 
 class rhf(hamiltonian):
@@ -72,14 +79,6 @@ class rhf(hamiltonian):
     False
     """
     name = 'RHF'
-
-    def converge(self,iterator=SCFIterator,**kwargs):
-        converger = iterator(self,**kwargs)
-        self.energies = []
-        for en in converger:
-            self.energies.append(en)
-        self.converged = converger.converged
-        return self.energies
 
     def update(self,D):
         self.energy = self.geo.nuclear_repulsion()
@@ -147,12 +146,7 @@ class uhf(hamiltonian):
     name = 'UHF'
 
     def converge(self,iterator=USCFIterator,**kwargs):
-        converger = iterator(self,**kwargs)
-        self.energies = []
-        for en in converger:
-            self.energies.append(en)
-        self.converged = converger.converged
-        return self.energies
+        return hamiltonian.converge(self,iterator,**kwargs)
 
     def update(self,Da,Db):
         self.energy = self.geo.nuclear_repulsion()
