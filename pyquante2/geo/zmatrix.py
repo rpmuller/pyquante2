@@ -115,8 +115,6 @@ def cartesians_equal(c1,c2,tol=1e-8,verbose=True):
                 isclose(at1[1],at2[1],tol) and\
                 isclose(at1[2],at2[2],tol) and\
                 isclose(at1[3],at2[3],tol)):
-            if verbose:
-                print "Atoms unequal: ",at1,at2
             return False
     return True
            
