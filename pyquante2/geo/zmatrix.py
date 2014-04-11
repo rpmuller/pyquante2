@@ -85,6 +85,12 @@ def z2xyz(geo):
             xyzs.append([sym]+xyz.tolist())
     return xyzs
 
+def zmatrix_tomolecule(zmt):
+    from pyquante2.geo.elements import sym2no
+    from pyquante2.geo.molecule import molecule
+    atuples = [(sym2atno[sym],x,y,z) for sym,x,y,z in z2xyz(geo)]
+    return molecule(atuples)
+
 def zmatrix_tostring(zmt):
     lines = []
     for i,z in enumerate(zmt):
