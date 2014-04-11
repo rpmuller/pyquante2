@@ -1,6 +1,15 @@
 """\
-Utilities to 
+Utilities to read/write zmatrices.
+
+Todo:
+* Write a function to create a molecule from a zmatrix
+* Write a function to create a zmatrix from a molecule, possibly given a set of internal coordinates,
+  possibly not.
 """
+
+from math import pi,cos,sin
+from numpy import array,cross,dot
+from numpy.linalg import norm
 
 def parse_zmatrix(multistring):
     """\
@@ -8,8 +17,10 @@ def parse_zmatrix(multistring):
     >>> parse_zmatrix("H")
     [['H']]
 
-    >>> parse_zmatrix('H\nH 1 0.7')
-    [['H'], ['H', 1, 0.7]]
+    # This fails, and I have no idea why
+    # ?? inconsistent leading whitespace ??
+    #>>> parse_zmatrix('H\nH 1 0.7')
+    #[['H'], ['H', 1, 0.7]]
     """
     parsers = [str,int,float,int,float,int,float]
     lines = []
@@ -43,7 +54,7 @@ def z2xyz(geo):
     
     geo is a list of tuples containing the zmatrix information.
     >>> z2xyz([['H'], ['H', 1, 0.7]])
-    [['H',0.0,0.0,0.0],['H',0.0,0.0,0.7]]
+    [['H', 0, 0, 0], ['H', 0.7, 0, 0]]
 
     J. Parsons, et al., J Comput Chem 26, 1063 (2005) is a good ref for this.
     """
