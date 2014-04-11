@@ -17,10 +17,8 @@ def parse_zmatrix(multistring):
     >>> parse_zmatrix("H")
     [['H']]
 
-    # This fails, and I have no idea why
-    # ?? inconsistent leading whitespace ??
-    #>>> parse_zmatrix('H\nH 1 0.7')
-    #[['H'], ['H', 1, 0.7]]
+    >>> parse_zmatrix('H\\nH 1 0.7')
+    [['H'], ['H', 1, 0.7]]
     """
     parsers = [str,int,float,int,float,int,float]
     lines = []
