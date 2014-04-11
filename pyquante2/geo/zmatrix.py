@@ -2,7 +2,6 @@
 Utilities to read/write zmatrices.
 
 Todo:
-* Write a function to create a molecule from a zmatrix
 * Write a function to create a zmatrix from a molecule, possibly given a set of internal coordinates,
   possibly not.
 """
@@ -86,6 +85,7 @@ def z2xyz(geo):
     return xyzs
 
 def zmatrix_tomolecule(zmt):
+    "Create a pyquante2 molecule from a zmatrix"
     from pyquante2.geo.elements import sym2no
     from pyquante2.geo.molecule import molecule
     atuples = [(sym2atno[sym],x,y,z) for sym,x,y,z in z2xyz(geo)]
