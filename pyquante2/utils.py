@@ -42,30 +42,51 @@ def binomial(n,k):
 def Fgamma(m,x):
     """
     Incomplete gamma function
-    >>> isnear(Fgamma(0,0),1.0)
+    >>> np.isclose(Fgamma(0,0),1.0)
     True
     """
     SMALL=1e-12
     x = max(x,SMALL)
     return 0.5*pow(x,-m-0.5)*gamm_inc(m+0.5,x)
 
-def gamm_inc(a,x):
+def gamm_inc_scipy(a,x):
     """
-    Incomple gamma function \gamma; computed from NumRec routine gammp.
+    Demonstration on how to replace the gamma calls with scipy.special functions.
+    By default, pyquante only requires numpy, but this may change as scipy
+    builds become more stable.
+
+    >>> np.isclose(gamm_inc_scipy(0.5,1),1.49365)
+    True
+    >>> np.isclose(gamm_inc_scipy(1.5,2),0.6545103)
+    True
+    >>> np.isclose(gamm_inc_scipy(2.5,1e-12),0)
+    True
     """
+    from scipy.special import gamma,gammainc
+    return gamma(a)*gammainc(a,x)
+
+
     gammap,gln = gammp(a,x)
     return np.exp(gln)*gammap
     
-def gammp(a,x):
-    "Returns the incomplete gamma function P(a;x). NumRec sect 6.2."
-    assert (x > 0 and a >= 0), "Invalid arguments in routine gammp: %s,%s" % (x,a)
+def gamm_inc(a,x):
+    """
+    Incomple gamma function \gamma; computed from NumRec routine gammp.
+    >>> np.isclose(gamm_inc(0.5,1),1.49365)
+    True
+    >>> np.isclose(gamm_inc(1.5,2),0.6545103)
+    True
+    >>> np.isclose(gamm_inc(2.5,1e-12),0)
+    True
+    """
+    assert (x > 0 and a >= 0), "Invalid arguments in routine gamm_inc: %s,%s" % (x,a)
 
     if x < (a+1.0): #Use the series representation
-        gamser,gln = _gser(a,x)
-        return gamser,gln
-    #Use the continued fraction representation
-    gammcf,gln = _gcf(a,x)
-    return 1.0-gammcf ,gln  #and take its complement.
+        gam,gln = _gser(a,x)
+    else: #Use continued fractions
+        gamc,gln = _gcf(a,x)
+        gam = 1-gamc
+    return np.exp(gln)*gam
 
 def _gser(a,x):
     "Series representation of Gamma. NumRec sect 6.1."
@@ -209,7 +230,8 @@ def colorscale(mag, cmin, cmax):
     green = min((max((4*abs(x-0.5)-1., 0.)), 1.))
     return red, green, blue
 
-def isnear(a,b,tol=1e-6): return abs(a-b) < tol
+#Todo: replace with np.isclose
+#def isnear(a,b,tol=1e-6): return abs(a-b) < tol
 
 if __name__ == '__main__':
     import doctest

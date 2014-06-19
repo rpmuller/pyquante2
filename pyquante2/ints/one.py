@@ -2,9 +2,9 @@
 One electron integrals.
 """
 
-from numpy import pi,exp,floor,array
+from numpy import pi,exp,floor,array,isclose
 from math import factorial
-from pyquante2.utils import binomial, fact2, Fgamma, norm2,isnear
+from pyquante2.utils import binomial, fact2, Fgamma, norm2
 
 # Notes:
 # The versions S,T,V include the normalization constants
@@ -17,16 +17,16 @@ def S(a,b):
     Simple interface to the overlap function.
     >>> from pyquante2 import pgbf,cgbf
     >>> s = pgbf(1)
-    >>> isnear(S(s,s),1.0)
+    >>> isclose(S(s,s),1.0)
     True
     >>> sc = cgbf(exps=[1],coefs=[1])
-    >>> isnear(S(sc,sc),1.0)
+    >>> isclose(S(sc,sc),1.0)
     True
 
     >>> sc = cgbf(exps=[1],coefs=[1])
-    >>> isnear(S(sc,s),1.0)
+    >>> isclose(S(sc,s),1.0)
     True
-    >>> isnear(S(s,sc),1.0)
+    >>> isclose(S(s,sc),1.0)
     True
 
     """
@@ -43,17 +43,17 @@ def T(a,b):
     >>> from pyquante2 import pgbf,cgbf
     >>> from pyquante2.basis.pgbf import pgbf
     >>> s = pgbf(1)
-    >>> isnear(T(s,s),1.5)
+    >>> isclose(T(s,s),1.5)
     True
 
     >>> sc = cgbf(exps=[1],coefs=[1])
-    >>> isnear(T(sc,sc),1.5)
+    >>> isclose(T(sc,sc),1.5)
     True
 
     >>> sc = cgbf(exps=[1],coefs=[1])
-    >>> isnear(T(sc,s),1.5)
+    >>> isclose(T(sc,s),1.5)
     True
-    >>> isnear(T(s,sc),1.5)
+    >>> isclose(T(s,sc),1.5)
     True
 
     """
@@ -69,18 +69,18 @@ def V(a,b,C):
     Simple interface to the nuclear attraction function.
     >>> from pyquante2 import pgbf,cgbf
     >>> s = pgbf(1)
-    >>> isnear(V(s,s,(0,0,0)),-1.595769)
+    >>> isclose(V(s,s,(0,0,0)),-1.595769)
     True
 
     >>> sc = cgbf(exps=[1],coefs=[1])
-    >>> isnear(V(sc,sc,(0,0,0)),-1.595769)
+    >>> isclose(V(sc,sc,(0,0,0)),-1.595769)
     True
 
     >>> sc = cgbf(exps=[1],coefs=[1])
-    >>> isnear(V(sc,s,(0,0,0)),-1.595769)
+    >>> isclose(V(sc,s,(0,0,0)),-1.595769)
     True
 
-    >>> isnear(V(s,sc,(0,0,0)),-1.595769)
+    >>> isclose(V(s,sc,(0,0,0)),-1.595769)
     True
 
     """
@@ -94,7 +94,7 @@ def V(a,b,C):
 def overlap(alpha1,lmn1,A,alpha2,lmn2,B):
     """
     Full form of the overlap integral. Taken from THO eq. 2.12
-    >>> isnear(overlap(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d')),1.968701)
+    >>> isclose(overlap(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d')),1.968701)
     True
     """
     l1,m1,n1 = lmn1
@@ -113,7 +113,7 @@ def overlap(alpha1,lmn1,A,alpha2,lmn2,B):
 def overlap1d(l1,l2,PAx,PBx,gamma):
     """
     The one-dimensional component of the overlap integral. Taken from THO eq. 2.12
-    >>> isnear(overlap1d(0,0,0,0,1),1.0)
+    >>> isclose(overlap1d(0,0,0,0,1),1.0)
     True
     """
     total = 0
@@ -146,7 +146,7 @@ def binomial_prefactor(s,ia,ib,xpa,xpb):
 def kinetic(alpha1,lmn1,A,alpha2,lmn2,B):
     """
     The full form of the kinetic energy integral
-    >>> isnear(kinetic(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d')),2.953052)
+    >>> isclose(kinetic(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d')),2.953052)
     True
     """
     l1,m1,n1 = lmn1
@@ -172,7 +172,7 @@ def kinetic(alpha1,lmn1,A,alpha2,lmn2,B):
 def nuclear_attraction(alpha1,lmn1,A,alpha2,lmn2,B,C):
     """
     Full form of the nuclear attraction integral
-    >>> isnear(nuclear_attraction(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d'),array((0,0,0),'d')),-3.141593)
+    >>> isclose(nuclear_attraction(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d'),array((0,0,0),'d')),-3.141593)
     True
     """
     l1,m1,n1 = lmn1
@@ -200,13 +200,41 @@ def nuclear_attraction(alpha1,lmn1,A,alpha2,lmn2,B,C):
     return -2*pi/gamma*exp(-alpha1*alpha2*rab2/gamma)*total
 
 def A_term(i,r,u,l1,l2,PAx,PBx,CPx,gamma):
-    "THO eq. 2.18"
+    """
+    THO eq. 2.18
+
+    >>> A_term(0,0,0,0,0,0,0,0,1)
+    1.0
+    >>> A_term(0,0,0,0,1,1,1,1,1)
+    1.0
+    >>> A_term(1,0,0,0,1,1,1,1,1)
+    -1.0
+    >>> A_term(0,0,0,1,1,1,1,1,1)
+    1.0
+    >>> A_term(1,0,0,1,1,1,1,1,1)
+    -2.0
+    >>> A_term(2,0,0,1,1,1,1,1,1)
+    1.0
+    >>> A_term(2,0,1,1,1,1,1,1,1)
+    -0.5
+    >>> A_term(2,1,0,1,1,1,1,1,1)    
+    0.5
+    """
     return pow(-1,i)*binomial_prefactor(i,l1,l2,PAx,PBx)*\
            pow(-1,u)*factorial(i)*pow(CPx,i-2*r-2*u)*\
            pow(0.25/gamma,r+u)/factorial(r)/factorial(u)/factorial(i-2*r-2*u)
 
 def A_array(l1,l2,PA,PB,CP,g):
-    "THO eq. 2.18 and 3.1"
+    """
+    THO eq. 2.18 and 3.1
+
+    >>> A_array(0,0,0,0,0,1)
+    [1.0]
+    >>> A_array(0,1,1,1,1,1)
+    [1.0, -1.0]
+    >>> A_array(1,1,1,1,1,1)
+    [1.5, -2.5, 1.0]
+    """
     Imax = l1+l2+1
     A = [0]*Imax
     for i in range(Imax):

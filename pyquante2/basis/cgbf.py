@@ -11,7 +11,6 @@
 
 import numpy as np
 import array
-from pyquante2.utils import isnear
 
 class cgbf(object):
     """
@@ -19,7 +18,7 @@ class cgbf(object):
     >>> s = cgbf(exps=[1],coefs=[1])
     >>> print(s)
     cgbf((0.0, 0.0, 0.0),(0, 0, 0),[1.0],[1.0000000000000002])
-    >>> isnear(s(0,0,0),0.712705)
+    >>> np.isclose(s(0,0,0),0.712705)
     True
     """
     contracted = True
@@ -87,7 +86,7 @@ def sto(zeta,N=1,L=0,M=0,origin=(0,0,0)):
     Reference: RF Stewart, JCP 52, 431 (1970)
 
     >>> s = sto(1)
-    >>> isnear(s(0,0,0),0.530121)
+    >>> np.isclose(s(0,0,0),0.530121)
     True
     """
     nlm2powers = {

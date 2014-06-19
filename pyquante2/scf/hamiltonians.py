@@ -1,6 +1,6 @@
 from pyquante2.grid.grid import grid
 from pyquante2.ints.integrals import onee_integrals,twoe_integrals
-from pyquante2.utils import trace2, geigh, isnear
+from pyquante2.utils import trace2, geigh
 from pyquante2.scf.iterators import SCFIterator,USCFIterator,AveragingIterator
 import numpy as np
 
@@ -65,15 +65,15 @@ class rhf(hamiltonian):
     >>> bfs = basisset(h2,'sto3g')
     >>> h2_rhf = rhf(h2,bfs)
     >>> ens = h2_rhf.converge(SCFIterator)
-    >>> isnear(h2_rhf.energy,-1.11709942949)
+    >>> np.isclose(h2_rhf.energy,-1.11709942949)
     True
 
     >>> ens = h2_rhf.converge(AveragingIterator,maxiters=100)
-    >>> isnear(h2_rhf.energy,-1.11709325545)
+    >>> np.isclose(h2_rhf.energy,-1.11709325545)
     True
 
     >>> ens = h2_rhf.converge(SCFIterator,maxiters=1)
-    >>> isnear(h2_rhf.energy,0.485554)
+    >>> np.isclose(h2_rhf.energy,0.485554)
     True
     >>> h2_rhf.converged
     False
@@ -140,7 +140,7 @@ class uhf(hamiltonian):
     >>> bfs = basisset(oh,'sto3g')
     >>> solver = uhf(oh,bfs)
     >>> ens = solver.converge(USCFIterator)
-    >>> isnear(solver.energy,-74.146669)
+    >>> np.isclose(solver.energy,-74.146669)
     True
     """
     name = 'UHF'

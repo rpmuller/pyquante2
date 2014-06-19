@@ -2,9 +2,9 @@
 Two electron integrals.
 """
 
-from numpy import array,pi,sqrt,exp
+from numpy import array,pi,sqrt,exp,isclose
 from math import factorial
-from pyquante2.utils import Fgamma, norm2, isnear
+from pyquante2.utils import Fgamma, norm2
 from pyquante2.ints.one import gaussian_product_center, binomial_prefactor
 
 
@@ -12,14 +12,14 @@ def ERI(a,b,c,d):
     """
     >>> from pyquante2.basis.pgbf import pgbf
     >>> s = pgbf(1)
-    >>> isnear(ERI(s,s,s,s),1.128379)
+    >>> isclose(ERI(s,s,s,s),1.128379)
     True
     >>> from pyquante2.basis.cgbf import cgbf
     >>> s = cgbf(exps=[1],coefs=[1])
-    >>> isnear(ERI(s,s,s,s),1.128379)
+    >>> isclose(ERI(s,s,s,s),1.128379)
     True
     >>> s2 = cgbf((0,0,1),(0,0,0),[1],[1])
-    >>> isnear(ERI(s,s,s2,s2),0.842701)
+    >>> isclose(ERI(s,s,s2,s2),0.842701)
     True
     """ 
     if d.contracted:
@@ -39,9 +39,9 @@ def coulomb_repulsion(xyza,norma,lmna,alphaa,
     >>> p1 = array((0.,0.,0.),'d')
     >>> p2 = array((0.,0.,1.),'d')
     >>> lmn = (0,0,0)
-    >>> isnear(coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p1,1.,lmn,1.,p1,1.,lmn,1.),4.373355)
+    >>> isclose(coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p1,1.,lmn,1.,p1,1.,lmn,1.),4.373355)
     True
-    >>> isnear(coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p2,1.,lmn,1.,p2,1.,lmn,1.),3.266127)
+    >>> isclose(coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p2,1.,lmn,1.,p2,1.,lmn,1.),3.266127)
     True
     """
     la,ma,na = lmna

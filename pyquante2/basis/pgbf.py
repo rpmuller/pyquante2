@@ -14,16 +14,16 @@
 """
 
 import numpy as np
-from pyquante2.utils import fact2,norm2,isnear
+from pyquante2.utils import fact2,norm2
 
 class pgbf(object):
     """
     Construct a primitive gaussian basis functions.
     >>> s = pgbf(1.0)
-    >>> isnear(s(0,0,0),0.712705)
+    >>> np.isclose(s(0,0,0),0.712705)
     True
     >>> px = pgbf(1.0,powers=(1,0,0))
-    >>> isnear(px(0,0,0),0.0)
+    >>> np.isclose(px(0,0,0),0.0)
     True
     """
     contracted = False

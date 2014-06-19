@@ -38,7 +38,7 @@ n  Matrix Size    He
 -2.1752209796141289
 """
 import numpy as np
-from pyquante2.utils import geigh,isnear
+from pyquante2.utils import geigh
 
 def kval(l,m,n,spin):
     # This is from Pekeris, except that the last term of the singlet
