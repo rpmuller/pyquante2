@@ -43,6 +43,8 @@ def coulomb_repulsion(xyza,norma,lmna,alphaa,
     True
     >>> isclose(coulomb_repulsion(p1,1.,lmn,1.,p1,1.,lmn,1.,p2,1.,lmn,1.,p2,1.,lmn,1.),3.266127)
     True
+    >>> isclose(coulomb_repulsion(p1,1.,lmn,1.,p2,1.,lmn,1.,p1,1.,lmn,1.,p2,1.,lmn,1.),1.6088672)
+    True
     """
     la,ma,na = lmna
     lb,mb,nb = lmnb
@@ -105,3 +107,5 @@ def fact_ratio2(a,b): return factorial(a)/factorial(b)/factorial(a-2*b)
 
 if __name__ == '__main__':
     import doctest; doctest.testmod()
+
+

@@ -84,10 +84,8 @@ class rhf(hamiltonian):
         self.energy = self.geo.nuclear_repulsion()
         H = self.i1.T + self.i1.V
         self.energy += trace2(H,D)
-
         JK = self.i2.get_2jk(D)
         H = H + JK
-        #print(H)
         self.energy += trace2(H,D)
         E,c = geigh(H,self.i1.S)
         self.orbe = E

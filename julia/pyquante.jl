@@ -7,9 +7,53 @@
 # Utility functions
 factorial2(n) = prod(n:-2:1) # double factorial !!
 dist2(dx,dy,dz) = dx*dx+dy*dy+dz*dz # Is there something in the standard library that does this?
+function pairs(n::Int64,which="diag")
+    function _it()
+        for i in 1:n
+            if which=="diag"
+                upperlimit = i
+            elseif which=="rect"
+                upperlimit = n
+            else # subdiag
+                upperlimit = i-1
+            end
+            for j in 1:upperlimit
+                produce((i,j))
+            end
+        end
+    end
+    Task(_it)
+end
+
+triangle(i::Int64) = div(i*(i+1),2)
+triangle(i::Int64,j::Int64) = i<j ? triangle(j-1)+i : triangle(i-1)+j
+
+function iiterator(n::Int64)
+    function _it()
+        for (i,j) in pairs(n)
+            ij = triangle(i,j)
+            for (k,l) in pairs(n)
+                kl = triangle(k,l)
+                if ij <= kl
+                    produce((i,j,k,l))
+                end
+            end
+        end
+    end
+    Task(_it)
+end
+
+iindex(i::Int64,j::Int64,k::Int64,l::Int64) = triangle(triangle(i,j),triangle(k,l))
+trace2(A,B) = sum(A.*B)
 
 function test_utilities()
     @assert factorial2(6)==48
+    @assert collect(pairs(3)) == {(1,1),(2,1),(2,2),(3,1),(3,2),(3,3)}
+    @assert collect(pairs(3,"subdiag")) == {(2,1),(3,1),(3,2)}
+    @assert collect(pairs(2,"rect")) == {(1,1),(1,2),(2,1),(2,2)}
+    @assert iindex(1,1,1,1) == 1
+    @assert iindex(1,1,1,2) == iindex(1,1,2,1) == iindex(1,2,1,1) == iindex(2,1,1,1) == 2
+    @assert iindex(1,1,2,2) == iindex(2,2,1,1) == 4
 end
 
 # Basis function definitions
@@ -38,7 +82,7 @@ end
 
 function normalize!(a::PGBF)
     olap = overlap(a,a)
-    a.norm = 1/sqrt(olap)
+    a.norm /= sqrt(olap)
 end
 
 
@@ -71,7 +115,7 @@ end
 
 function normalize!(a::CGBF)
     olap = overlap(a,a)
-    a.norm = 1/sqrt(olap)
+    a.norm /= sqrt(olap)
 end
 
 primitives(a::CGBF) = zip(a.coefs,a.pgbfs)
@@ -82,6 +126,30 @@ function push!(cbf::CGBF,expn,coef)
     normalize!(cbf)
 end
 
+function contract(f,a::CGBF,b::CGBF)
+    s = 0
+    for (ca,abf) in primitives(a)
+        for (cb,bbf) in primitives(b)
+            s += ca*cb*f(abf,bbf)
+        end
+    end
+    return a.norm*b.norm*s
+end
+
+function contract(f,a::CGBF,b::CGBF,c::CGBF,d::CGBF)
+    s = 0
+    for (ca,abf) in primitives(a)
+        for (cb,bbf) in primitives(b)
+            for (cc,cbf) in primitives(c)
+                for (cd,dbf) in primitives(d)
+                    s += ca*cb*cc*cd*f(abf,bbf,cbf,dbf)
+                end
+            end
+        end
+    end
+    return a.norm*b.norm*c.norm*d.norm*s
+end
+
 function test_basis()
     s = pgbf(1.0)
     px = pgbf(1.0,0,0,0,1,0,0)
@@ -90,9 +158,11 @@ function test_basis()
     c = cgbf(0.0,0.0,0.0)
     push!(c,1,1)
     @assert isapprox(amplitude(c,0,0,0),0.71270547)
+    c2 = cgbf(0,0,0)
+    push!(c2,1,0.2)
+    push!(c2,0.5,0.2)
+    @assert isapprox(overlap(c2,c2),1)
 end
-
-
 
 # One-electron integrals
 # Overlap matrix elements
@@ -101,6 +171,8 @@ function overlap(a::PGBF,b::PGBF)
     return a.norm*b.norm*overlap(a.expn,a.x,a.y,a.z,a.I,a.J,a.K,
     b.expn,b.x,b.y,b.z,b.I,b.J,b.K)
 end
+
+overlap(a::CGBF,b::CGBF) = contract(overlap,a,b)
 
 function overlap(aexpn,ax,ay,az,aI,aJ,aK,bexpn,bx,by,bz,bI,bJ,bK)
     gamma = aexpn+bexpn
@@ -139,17 +211,11 @@ function binomial_prefactor(s,ia,ib,xpa,xpb)
     return total
 end
 
-function overlap(a::CGBF,b::CGBF)
-    s = 0
-    for (ca,abf) in primitives(a)
-        for (cb,bbf) in primitives(b)
-            s += ca*cb*overlap(abf,bbf)
-        end
-    end
-    return a.norm*b.norm*s
-end
-
 function test_overlap()
+    s = pgbf(1.0)
+    px = pgbf(1.0,0,0,0,1,0,0)
+    c = cgbf(0.0,0.0,0.0)
+    push!(c,1,1)
     @assert overlap1d(0,0,0,0,1) == 1
     @assert gaussian_product_center(s,s) == [0,0,0]
     @assert isapprox(overlap(s,s),1)
@@ -180,17 +246,13 @@ function kinetic(aexpn,ax,ay,az,aI,aJ,aK,bexpn,bx,by,bz,bI,bJ,bK)
     return term0+term1+term2
 end
 
-function kinetic(a::CGBF,b::CGBF)
-    s = 0
-    for (ca,abf) in primitives(a)
-        for (cb,bbf) in primitives(b)
-            s += ca*cb*kinetic(abf,bbf)
-        end
-    end
-    return a.norm*b.norm*s
-end
+
+kinetic(a::CGBF,b::CGBF) = contract(kinetic,a,b)
 
 function test_kinetic()
+    s = pgbf(1.0)
+    c = cgbf(0.0,0.0,0.0)
+    push!(c,1,1)
     @assert isapprox(kinetic(1,0,0,0,0,0,0,1,0,0,0,0,0,0),2.9530518648229536)
     @assert isapprox(kinetic(s,s),1.5)
     @assert isapprox(kinetic(c,c),1.5)
@@ -281,18 +343,16 @@ function gser(a,x,ITMAX=100,EPS=3e-9)
     return s*exp(-x+a*log(x)-gln),gln
 end
 
+# Need a nested scope to squeeze this into the contract function
 function nuclear_attraction(a::CGBF,b::CGBF,cx,cy,cz)
-    s = 0
-    for (ca,abf) in primitives(a)
-        for (cb,bbf) in primitives(b)
-            s += ca*cb*nuclear_attraction(abf,bbf,cx,cy,cz)
-        end
-    end
-    return a.norm*b.norm*s
+    na(a,b) = nuclear_attraction(a,b,cx,cy,cz)
+    contract(na,a,b)
 end
 
-
 function test_nuke()
+    s = pgbf(1.0)
+    c = cgbf(0.0,0.0,0.0)
+    push!(c,1,1)
     @assert Aterm(0,0,0,0,0,0,0,0,0) == 1.0
     @assert Aarray(0,0,0,0,0,1) == [1.0]
     @assert Aarray(0,1,1,1,1,1) == [1.0, -1.0]
@@ -336,7 +396,7 @@ function coulomb(aexpn,ax,ay,az,aI,aJ,aK,
     rcd2 = dist2(cx-dx,cy-dy,cz-dz)
     
     px,py,pz = gaussian_product_center(aexpn,ax,ay,az,bexpn,bx,by,bz)
-    qx,qy,qz = gaussian_product_center(cexpn,cx,cy,cz,dexpn,cx,cy,cz)
+    qx,qy,qz = gaussian_product_center(cexpn,cx,cy,cz,dexpn,dx,dy,dz)
     rpq2 = dist2(px-qx,py-qy,pz-qz)
     g1 = aexpn+bexpn
     g2 = cexpn+dexpn
@@ -408,9 +468,20 @@ function coulomb(a::CGBF,b::CGBF,c::CGBF,d::CGBF)
 end
 
 function test_two()
-    @assert isapprox(coulomb(1, 0,0,0, 0,0,0, 1, 0,0,0, 0,0,0, 1, 0,0,0, 0,0,0, 1, 0,0,0, 0,0,0),4.373355)
+    s = pgbf(1.0)
+    c = cgbf(0.0,0.0,0.0)
+    push!(c,1,1)
+    @assert fB(0,0,0,0.0,0.0,0.0,0,2.0) == 1
+    @assert fB(0,0,0,1.0,1.0,1.0,0,2.0) == 1
+    @assert B0(0,0,2.0) == 1
+    @assert fact_ratio2(0,0) == 1
+    @assert Bterm(0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,0.0,2.0,2.0,0.25)==1
+    @assert isapprox(coulomb(1, 0,0,0, 0,0,0, 1, 0,0,0, 0,0,0, 
+                             1, 0,0,0, 0,0,0, 1, 0,0,0, 0,0,0),4.373355)
     @assert isapprox(coulomb(s,s,s,s),1.128379)
     @assert isapprox(coulomb(c,c,c,c),1.128379)
+    @assert isapprox(coulomb(1, 0,0,0, 0,0,0, 1, 0,0,1, 0,0,0, 
+                             1, 0,0,0, 0,0,0, 1, 0,0,1, 0,0,0),1.6088672)
 end
 
 # Basis Set Data
@@ -561,8 +632,20 @@ function tobohr!(mol::Molecule)
     end
 end
 
+nuclear_repulsion(a::Atom,b::Atom)= a.atno*b.atno/sqrt(dist2(a.x-b.x,a.y-b.y,a.z-b.z))
+function nuclear_repulsion(mol::Molecule)
+    nr = 0
+    for (i,j) in pairs(nat(mol),"subdiag")
+        nr += nuclear_repulsion(mol.atomlist[i],mol.atomlist[j])
+    end
+    return nr
+end
+
+nel(mol::Molecule) = sum([at.atno for at in mol.atomlist])
+nat(mol::Molecule) = length(mol.atomlist)
+
 # Other molecule methods to implement
-# nat, nuclear_repulsion, nel, nocc, nclosed, nopen, nup, ndown, stoich, mass,
+# nocc, nclosed, nopen, nup, ndown, stoich, mass,
 # center_of_mass, center!
 
 # Array of symbols, masses
@@ -618,7 +701,7 @@ function build_basis(mol::Molecule,name="sto3g")
             println(btuple)
             sym,primlist = btuple
             for (I,J,K) in sym2power[sym]
-                cbf = cgbf(at.x,at.y,at.z,I,J,K)
+                cbf = cgbf(atom.x,atom.y,atom.z,I,J,K)
                 push!(basis_set,cbf)
                 for (expn,coef) in primlist
                     push!(cbf,expn,coef)
@@ -635,6 +718,109 @@ sym2power = {
     'D' => [(2,0,0),(0,2,0),(0,0,2),(1,1,0),(1,0,1),(0,1,1)]
     } 
 
+function test_geo()
+    @assert isapprox(nuclear_repulsion(h2),0.7223600367)
+    @assert length(build_basis(h2).bfs) == 2
+    @assert isapprox(nuclear_repulsion(h2),0.7223600367)
+    @assert nel(h2) == 2
+    @assert nel(h2o) == 10
+end
+
+function test_h2_ints()
+    bfs = build_basis(h2)
+    @assert length(bfs.bfs)==2
+    l,r = bfs.bfs
+    @assert isapprox(overlap(l,l),1)
+    @assert isapprox(overlap(r,r),1)
+    @assert isapprox(overlap(l,r),0.66473625)
+    @assert isapprox(kinetic(l,l),0.76003188)
+    @assert isapprox(kinetic(r,r),0.76003188)
+    @assert isapprox(kinetic(l,r),0.24141861181119084)
+    @assert isapprox(coulomb(l,l,l,l), 0.7746059439196398)
+    @assert isapprox(coulomb(r,r,r,r), 0.7746059439196398)
+    @assert isapprox(coulomb(l,l,r,r), 0.5727937653511646)
+    @assert isapprox(coulomb(l,l,l,r), 0.4488373301593464)
+    @assert isapprox(coulomb(l,r,l,r), 0.3025451156654606)
+end
+
+# Hartree Fock code:
+function all_1e_ints(bfs,mol)
+    n = length(bfs.bfs)
+    S = Array(Float64,(n,n))
+    T = Array(Float64,(n,n))
+    V = Array(Float64,(n,n))
+    for (i,j) in pairs(n)
+        a,b = bfs.bfs[i],bfs.bfs[j]
+        S[i,j] = S[j,i] = overlap(a,b)
+        T[i,j] = T[j,i] = kinetic(a,b)
+        V[i,j] = 0
+        for at in mol.atomlist
+            V[i,j] += nuclear_attraction(a,b,at.x,at.y,at.z)
+        end
+        V[j,i] = V[i,j]
+    end
+    return S,T,V
+end
+
+function all_twoe_ints(bflist,ERI=coulomb)
+    n = length(bflist.bfs)
+    totlen = div(n*(n+1)*(n*n+n+2),8)
+    ints2e = Array(Float64,totlen)
+    for (i,j,k,l) in iiterator(n)
+        #println("$i,$j,$k,$l,$(iindex(i,j,k,l))")
+        ints2e[iindex(i,j,k,l)] = ERI(bflist.bfs[i],bflist.bfs[j],bflist.bfs[k],bflist.bfs[l])
+    end
+    return ints2e
+end
+    
+function make2JmK(D,Ints)
+    n = size(D,1)
+    G = Array(Float64,(n,n))
+    D1 = reshape(D,n*n)
+    temp = Array(Float64,n*n)
+    for (i,j) in pairs(n)
+        kl = 1
+        for (k,l) in pairs(n,"rect")
+            temp[kl] = 2*Ints[iindex(i,j,k,l)]-Ints[iindex(i,k,j,l)]
+            kl += 1
+        end
+        G[i,j] = G[j,i] = dot(D1,temp)
+    end
+    return G
+end
+
+dmat(U,nocc) = U[:,1:nocc]*U[:,1:nocc]'
+
+function rhf(mol::Molecule,MaxIter::Int64=8)
+    bfs = build_basis(mol)
+    S,T,V = all_1e_ints(bfs,mol)
+    Ints = all_twoe_ints(bfs)
+    h = T+V
+    E,U = eig(h,S)
+    Enuke = nuclear_repulsion(mol)
+    nclosed,nopen = divrem(nel(mol),2)
+    Eold = 0
+    Energy = 0
+    for iter in 1:MaxIter
+        D = dmat(U,nclosed)
+        G = make2JmK(D,Ints)
+        H = h+G
+        E,U = eig(H,S)
+        Energy = Enuke + trace2(D,h) + trace2(D,H)
+        println("HF: $iter  $Energy")
+        if isapprox(Energy,Eold)
+            break
+        end
+        Eold  = Energy
+    end
+    return Energy,E,U
+end
+
+function test_hf()
+    Energy,E,U = rhf(h2)
+    @assert isapprox(Energy,-1.1170996)
+end
+
 # Test functions
 function test()
     test_utilities()
@@ -642,6 +828,11 @@ function test()
     test_overlap()
     test_kinetic()
     test_nuke()
+    test_geo()
     test_two()
+    test_h2_ints()
+    test_hf()
 end
+
+test()
 
