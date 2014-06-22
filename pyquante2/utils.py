@@ -49,25 +49,20 @@ def Fgamma(m,x):
     x = max(x,SMALL)
     return 0.5*pow(x,-m-0.5)*gamm_inc(m+0.5,x)
 
-def gamm_inc_scipy(a,x):
-    """
-    Demonstration on how to replace the gamma calls with scipy.special functions.
-    By default, pyquante only requires numpy, but this may change as scipy
-    builds become more stable.
-
-    >>> np.isclose(gamm_inc_scipy(0.5,1),1.49365)
-    True
-    >>> np.isclose(gamm_inc_scipy(1.5,2),0.6545103)
-    True
-    >>> np.isclose(gamm_inc_scipy(2.5,1e-12),0)
-    True
-    """
-    from scipy.special import gamma,gammainc
-    return gamma(a)*gammainc(a,x)
-
-
-    gammap,gln = gammp(a,x)
-    return np.exp(gln)*gammap
+# def gamm_inc_scipy(a,x):
+#     """
+#     Demonstration on how to replace the gamma calls with scipy.special functions.
+#     By default, pyquante only requires numpy, but this may change as scipy
+#     builds become more stable.
+#     >>> np.isclose(gamm_inc_scipy(0.5,1),1.49365)
+#     True
+#     >>> np.isclose(gamm_inc_scipy(1.5,2),0.6545103)
+#     True
+#     >>> np.isclose(gamm_inc_scipy(2.5,1e-12),0)
+#     True
+#     """
+#     from scipy.special import gamma,gammainc
+#     return gamma(a)*gammainc(a,x)
     
 def gamm_inc(a,x):
     """
