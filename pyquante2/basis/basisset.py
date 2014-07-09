@@ -39,10 +39,6 @@ class basisset(object):
             self.bfmesh[:,i] = bf.mesh(points)
         return self.bfmesh
             
-# Can define shellbasisset here, which is essentially a normal basis
-# set, but has the functions shorted into shells. Overload the normal
-# basis set.
-
 if __name__ == '__main__':
     import doctest
     doctest.testmod()

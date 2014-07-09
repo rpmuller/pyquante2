@@ -1,8 +1,9 @@
 """\
 Basis set constructor
 
-#>>> from pyquante2.geo.samples import h
-#>>> print(shell_basisset(h,'sto3g'))
+>>> from pyquante2.geo.samples import h
+
+>>> print(shell_basisset(h,'sto3g'))
 cgbf((0.0, 0.0, 0.0),(0, 0, 0),[3.42525091, 0.62391373, 0.1688554],[0.1543289707029839, 0.5353281424384733, 0.44463454202535485])
 
 """
@@ -19,8 +20,8 @@ class shell(object):
         self.exps = exps
         self.coefs = coefs
         self.bfs = []
-        for power in am2pow[sym]:
-            self.bfs.append(cgbf(atom.r,power,exps,coefs))
+        for power in am2pow[am]:
+            self.bfs.append(cgbf(origin,power,exps,coefs))
         return
 
 class shell_basisset(object):
@@ -35,8 +36,24 @@ class shell_basisset(object):
                 exps = [e for e,c in prims]
                 coefs = [c for e,c in prims]
                 self.shells.append(shell(sym2am[sym],atom.r,exps,coefs))
+        # currently redundant for backwards compatibility:
+        self.bfs = [bf for sh in self.shells for bf in sh.bfs]
         return
 
-    def __len__(self): return sum(len(sh.bfs) for sh in self.shells)
-    def bfs(self): return (bf for sh in self.shells for bf in sh.bfs)
+    def __getitem__(self,i): return self.bfs.__getitem__(i)
+    def __repr__(self): return "\n".join(repr(bf) for bf in self.bfs)
+    def __len__(self): return len(self.bfs)
+
+    def mesh(self,points):
+        nbf = len(self.bfs)
+        ng,sb3 = points.shape
+        self.bfmesh = np.empty((ng,nbf),'d')
+        for i,bf in enumerate(self.bfs):
+            self.bfmesh[:,i] = bf.mesh(points)
+        return self.bfmesh
+
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
 
