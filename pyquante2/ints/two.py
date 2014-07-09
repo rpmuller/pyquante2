@@ -14,6 +14,11 @@ def ERI(a,b,c,d):
     >>> s = pgbf(1)
     >>> isclose(ERI(s,s,s,s),1.128379)
     True
+    >>> px = pgbf(1.0,powers=(1,0,0))
+    >>> isclose(ERI(s,s,px,px),0.940315972579)
+    True
+    >>> isclose(ERI(s,s,s,px),0)
+    True
     >>> from pyquante2.basis.cgbf import cgbf
     >>> s = cgbf(exps=[1],coefs=[1])
     >>> isclose(ERI(s,s,s,s),1.128379)
@@ -35,7 +40,7 @@ def coulomb_repulsion(xyza,norma,lmna,alphaa,
                       xyzd,normd,lmnd,alphad):
     """
     Return the coulomb repulsion between four primitive gaussians a,b,c,d with the given origin
-    x,y,z, normalization constants norm, angular momena l,m,n, and exponent alpha.
+,    x,y,z, normalization constants norm, angular momena l,m,n, and exponent alpha.
     >>> p1 = array((0.,0.,0.),'d')
     >>> p2 = array((0.,0.,1.),'d')
     >>> lmn = (0,0,0)
@@ -82,11 +87,12 @@ def coulomb_repulsion(xyza,norma,lmna,alphaa,
 
 def B_term(i1,i2,r1,r2,u,l1,l2,l3,l4,Px,Ax,Bx,Qx,Cx,Dx,gamma1,gamma2,delta):
     "THO eq. 2.22"
-    return fB(i1,l1,l2,Px,Ax,Bx,r1,gamma1) \
+    val= fB(i1,l1,l2,Px,Ax,Bx,r1,gamma1) \
            *pow(-1,i2)*fB(i2,l3,l4,Qx,Cx,Dx,r2,gamma2) \
            *pow(-1,u)*fact_ratio2(i1+i2-2*(r1+r2),u) \
            *pow(Qx-Px,i1+i2-2*(r1+r2)-2*u) \
            /pow(delta,i1+i2-2*(r1+r2)-u)
+    return val
 
 def B_array(l1,l2,l3,l4,p,a,b,q,c,d,g1,g2,delta):
     Imax = l1+l2+l3+l4+1

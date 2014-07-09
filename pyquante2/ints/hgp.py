@@ -254,6 +254,8 @@ def vrr(xyza,norma,lmna,alphaa,
     for im in range(mtot-1,-1,-1):
         Fgterms[im]=(2.*T*Fgterms[im+1]+exp(-T))/(2.*im+1)
 
+    # Todo: setup this as a regular array
+
     # Store the vrr values as a 7 dimensional array
     # vrr_terms[la,ma,na,lc,mc,nc,m]
     vrr_terms = {}
@@ -262,6 +264,7 @@ def vrr(xyza,norma,lmna,alphaa,
             norma*normb*normc*normd*Kab*Kcd/sqrt(zeta+eta)*Fgterms[im]
             )
 
+    # Todo: use itertools.product() for the nested for loops
     for i in range(la):
         for im in range(mtot-i):
             vrr_terms[i+1,0,0, 0,0,0, im] = (
