@@ -175,7 +175,6 @@ def nuclear_attraction(alpha1,lmn1,A,alpha2,lmn2,B,C):
     >>> isclose(nuclear_attraction(1,(0,0,0),array((0,0,0),'d'),1,(0,0,0),array((0,0,0),'d'),array((0,0,0),'d')),-3.141593)
     True
     """
-    print "na(",alpha1,lmn1,A,alpha2,lmn2,B,C,")=",
     l1,m1,n1 = lmn1
     l2,m2,n2 = lmn2
     gamma = alpha1+alpha2
@@ -199,8 +198,6 @@ def nuclear_attraction(alpha1,lmn1,A,alpha2,lmn2,B,C):
                 total += Ax[I]*Ay[J]*Az[K]*Fgamma(I+J+K,rcp2*gamma)
                 
     val= -2*pi/gamma*exp(-alpha1*alpha2*rab2/gamma)*total
-    print val
-    print Ax,Ay,Az,rcp2*gamma,Fgamma(0,rcp2*gamma)
     return val
 
 def A_term(i,r,u,l1,l2,PAx,PBx,CPx,gamma):
@@ -249,22 +246,4 @@ def A_array(l1,l2,PA,PB,CP,g):
     return A
 
 if __name__ == '__main__':
-    #import doctest; doctest.testmod()
-    import numpy as np
-    from pyquante2.geo.samples import lih
-    from pyquante2.basis.basisset import basisset
-    li,h = lih
-    bfs = basisset(lih)
-    s1,s2,x,y,z,h1s = bfs
-    print h.atno,h.r
-    print s1
-    #print li.atno*V(s1,s1,li.r),h.atno*V(s1,s1,h.r)
-    #for (ci,si) in zip(s1.coefs,s1.pgbfs):
-    #    for (cj,sj) in zip(s1.coefs,s1.pgbfs):
-    #        print ci*cj*h.atno*V(si,sj,h.r),
-    #    print ""
-    ca = s1.coefs[0]
-    sa = s1.pgbfs[0]
-    print ca*ca*h.atno*V(sa,sa,h.r)
-    for r in np.linspace(0,300,11):
-        print r,Fgamma(0,r)
+    import doctest; doctest.testmod()
