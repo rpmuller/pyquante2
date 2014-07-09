@@ -11,7 +11,7 @@ import numpy as np
 from pyquante2 import settings
 from pyquante2.basis import data
 from pyquante2.basis.cgbf import cgbf
-from pyquante2.basis.tools import sym2pow
+from pyquante2.basis.tools import sym2pow,sym2am
 
 class basisset(object):
     def __init__(self,atoms,name='sto3g',**kwargs):
