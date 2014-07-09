@@ -1,11 +1,13 @@
 """\
 Basis set constructor
 
->>> from pyquante2.geo.samples import h
->>> print(shell_basisset(h,'sto3g'))
+#>>> from pyquante2.geo.samples import h
+#>>> print(shell_basisset(h,'sto3g'))
 cgbf((0.0, 0.0, 0.0),(0, 0, 0),[3.42525091, 0.62391373, 0.1688554],[0.1543289707029839, 0.5353281424384733, 0.44463454202535485])
 
 """
+import numpy as np
+from pyquante2 import settings
 from pyquante2.basis import data
 from pyquante2.basis.cgbf import cgbf
 from pyquante2.basis.tools import sym2pow,sym2am,am2pow

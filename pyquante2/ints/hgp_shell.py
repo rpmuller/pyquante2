@@ -194,7 +194,7 @@ def vrr_shell(aexpn,xyza,bexpn,xyzb,cexpn,xyzc,dexpn,xyzd,maxa,maxc):
                                 terms[s1,s2,s3, s4,s5,s6,m] -\
                                 zezpe[ind]*terms[s1,s2,s3, s4,s5,s6,m+1])
                         if cval>0:
-                            terms[aI,aJ,aK, cI,cJ,cK, m] += 0.5*cval/ze[cind]*terms[t1,t2,t3,t4,t5,t6,m+1])
+                            terms[aI,aJ,aK, cI,cJ,cK, m] += 0.5*cval/ze[cind]*terms[t1,t2,t3,t4,t5,t6,m+1]
                     #end m
                 #end bijk
             #end aijk
