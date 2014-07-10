@@ -3,9 +3,9 @@ Basis set constructor
 
 >>> from pyquante2.geo.samples import h
 >>> bfs = basisset(h,'sto3g')
->>> print bfs
+>>> bfs
 cgbf((0.0, 0.0, 0.0),(0, 0, 0),[3.42525091, 0.62391373, 0.1688554],[0.1543289707029839, 0.5353281424384733, 0.44463454202535485])
->>> print bfs.shells
+>>> bfs.shells
 [S shell: [3.42525091, 0.62391373, 0.1688554],[0.15432897, 0.53532814, 0.44463454]]
 """
 
