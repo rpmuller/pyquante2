@@ -21,7 +21,55 @@ def vrr(xyza,norma,lmna,alphaa,
     return norma*normb*normc*normd*vrr_core(xyza,lmna,alphaa,xyzb,alphab,
                                             xyzc,lmnc,alphac,xyzd,alphad)
 
+def vrr_shell(aexpn,xyza,bexpn,xyzb,cexpn,xyzc,dexpn,xyzd,maxa,maxc):
+    # This is wasteful. For example, for d shells, maxa=2. We would
+    # compute integrals through (2,2,2) when we don't need them.
+    # The shell_iterator function does a better job of looping through the
+    # requisite terms, but the code required for it is completely different,
+    # and thus I don't see a simple path to getting it working.
+    terms = vrr_array(xyza,(maxa,maxa,maxa),aexpn,xyzb,bexpn,
+                      xyzc,(maxc,maxc,maxc),cexpn,xyzd,dexpn)
+
+    # We can reduce the size of the values returned using one of the pack_
+    # functions. However, it's good to minimize this, since it gives a good idea
+    # of just how wasteful the current scheme is.
+    #return pack_full(terms,maxa,maxc)
+    return pack_m(terms)
+
+# Different methods of reducing the size of the integral record:
+def pack_full(d,maxa,maxc,tol=1e-10):
+    newd = {}
+    for ama in xrange(maxa+1):
+        for amc in xrange(maxc+1):
+            for aI,aJ,aK in shell_iterator(ama):
+                for cI,cJ,cK in shell_iterator(amc):
+                    t = d[aI,aJ,aK,cI,cJ,cK,0]
+                    if abs(t) > tol:
+                        newd[aI,aJ,aK,cI,cJ,cK] = t
+    return newd
+
+def pack_nonzero(d,tol=1e-10):
+    newd = {}
+    for key,value in d.items():
+        if abs(value) > tol:
+            newd[key] = value
+    #return {key: value for (key,value) in d if abs(value)>tol}
+    return newd
+
+def pack_m(d):
+    newd = {}
+    for key,value in d.items():
+        if key[-1] == 0:
+            newd[key[:-1]] = value
+    return newd
+
 def vrr_core(xyza,lmna,alphaa,xyzb,alphab,
+             xyzc,lmnc,alphac,xyzd,alphad):
+    terms = vrr_array(xyza,lmna,alphaa,xyzb,alphab,
+                      xyzc,lmnc,alphac,xyzd,alphad)
+    return terms[lmna[0],lmna[1],lmna[2],lmnc[0],lmnc[1],lmnc[2],0]
+
+def vrr_array(xyza,lmna,alphaa,xyzb,alphab,
              xyzc,lmnc,alphac,xyzd,alphad):
 
     la,ma,na = lmna
@@ -48,7 +96,7 @@ def vrr_core(xyza,lmna,alphaa,xyzb,alphab,
 
     mtot = sum(lmna)+sum(lmnc)
 
-    vrr_terms = zeros((la+1,ma+1,na+1,lc+1,mc+1,nc+1,mtot+1),'d')
+    vrr_terms = {}#zeros((la+1,ma+1,na+1,lc+1,mc+1,nc+1,mtot+1),'d')
     for m in xrange(mtot+1):
         vrr_terms[0,0,0,0,0,0,m] = Fgamma(m,T)*Kab*Kcd/sqrt(zpe)
 
@@ -113,7 +161,7 @@ def vrr_core(xyza,lmna,alphaa,xyzb,alphab,
                     - zeta/zpe*vrr_terms[i,j,k,q,r,s-1,m+1])
             if k>0:
                 vrr_terms[i,j,k,q,r,s+1,m] += k/2./zpe*vrr_terms[i,j,k-1,q,r,s,m+1]
-    return vrr_terms[la,ma,na,lc,mc,nc,0]
+    return vrr_terms
 
 def shell_iterator(am): # From the libint manual
     for i in range(am+1):
@@ -125,6 +173,8 @@ def term0(aexpn,xyza,bexpn,xyzb,cexpn,xyzc,dexpn,xyzd,mtot):
     zeta,eta = float(aexpn+bexpn),float(cexpn+dexpn)
     zpe = zeta+eta
 
+    xyzp = gaussian_product_center(aexpn,xyza,bexpn,xyzb)
+    xyzq = gaussian_product_center(cexpn,xyzc,dexpn,xyzd)
     rab2 = norm2(xyza-xyzb)
     Kab = sqrt(2)*pow(pi,1.25)/(aexpn+bexpn)\
           *exp(-aexpn*bexpn/(aexpn+bexpn)*rab2)
@@ -144,17 +194,28 @@ def copy_and_decrement(input,*args):
         # Return an invalid array to trigger errors
         return [None]*len(input) 
     return l
-    
 
-def vrr_shell(aexpn,xyza,bexpn,xyzb,cexpn,xyzc,dexpn,xyzd,maxa,maxc):
-    import operator,copy
-    mtot = 3*maxa+3*maxb
+def indmax(l):
+    import operator
+    ind,val=max(enumerate(l),key=operator.itemgetter(1))
+    return ind
+
+def vrr_shell_2(aexpn,xyza,bexpn,xyzb,cexpn,xyzc,dexpn,xyzd,maxa,maxc):
+    # This uses a more intelligent method of looping over the am's to
+    # generate the powers required
+    import copy
+    xyzp = gaussian_product_center(aexpn,xyza,bexpn,xyzb)
+    xyzq = gaussian_product_center(cexpn,xyzc,dexpn,xyzd)
+    zeta,eta = float(aexpn+bexpn),float(cexpn+dexpn)
+    xyzw = gaussian_product_center(zeta,xyzp,eta,xyzq)
+    zpe = zeta+eta
+    mtot = 3*maxa+3*maxc
     # Don't need all of these terms:
     #terms = zeros((maxa+1,maxa+1,maxa+1,maxc+1,maxc+1,maxc+1,mtot+1),'d')
     terms = {}
     # Do ama=amc=0 term first:
     ama,amc = 0,0
-    for m,t in enumerate(term0(aexpn,xyza,bexpn,xyzb,cexpn,xyzc,mtot)):
+    for m,t in enumerate(term0(aexpn,xyza,bexpn,xyzb,cexpn,xyzc,dexpn,xyzd,mtot)):
         terms[0,0,0, 0,0,0, m] = t
 
     #ama>0, amc=0
@@ -162,10 +223,10 @@ def vrr_shell(aexpn,xyza,bexpn,xyzb,cexpn,xyzc,dexpn,xyzd,maxa,maxc):
         for aI,aJ,aK in shell_iterator(ama):
             for m in xrange(mtot-aI-aJ-aK):
                 l = [aI,aJ,aK, 0,0,0]
-                ind,val = max(enumerate(l),key=operator.itermgetter(1))
+                ind = indmax(l)
                 reference = copy.copy(l)
                 reference[ind] -= 1
-                term[aI,aJ,aK, 0,0,0, m] = None
+                terms[aI,aJ,aK, 0,0,0, m] = None
             #end m
         #end cijk
     #end amc
@@ -173,15 +234,18 @@ def vrr_shell(aexpn,xyza,bexpn,xyzb,cexpn,xyzc,dexpn,xyzd,maxa,maxc):
     # ama>0, amc>0
     for ama in xrange(1,maxa+1):
         for amc in xrange(1,maxc+1):
-            pqac = (xp-xa,yp-ya,zp-za,xq-xc,yq-yc,zq-zc)
-            wpq = (xw-xp,yw-yp,zw-zp,xw-xq,yw-yq-zw-zq)
+            pqac = (xyzp[0]-xyza[0],xyzp[1]-xyza[1],xyzp[2]-xyza[2],
+                    xyzq[0]-xyzc[0],xyzq[1]-xyzc[1],xyzq[2]-xyzc[2])
+            wpq = (xyzw[0]-xyzp[0],xyzw[1]-xyzp[1],xyzw[2]-xyzp[2],
+                   xyzw[0]-xyzq[0],xyzw[1]-xyzq[1],xyzw[2]-xyzq[2])
             ze = (eta,eta,eta,zeta,zeta,zeta)
             zezpe = [zei/zpe for zei in ze]
             
             for aI,aJ,aK in shell_iterator(ama):
                 for cI,cJ,cK in shell_iterator(amc):
                     l = [aI,aJ,aK, cI,cJ,cK]
-                    ind,val = max(enumerate(l),key=operator.itermgetter(1))
+                    ind = indmax(l)
+                    val = l[ind]
                     cind,cval = conj_ind_val(l,ind,val)
                     r1,r2,r3,r4,r5,r6 = copy_and_decrement(l,ind)
                     s1,s2,s3,s4,s5,s6 = copy_and_decrement(l,ind,ind)
@@ -248,22 +312,29 @@ def test_vrr():
 
 
         t0 = time.time()
-        val1 = vrr(array((ax,ay,az)),1,(aI,aJ,aK),aexpn,
-                   array((bx,by,bz)),1,bexpn,
-                   array((cx,cy,cz)),1,(cI,cJ,cK),cexpn,
-                   array((dx,dy,dz)),1,dexpn)
+        xyza = array((ax,ay,az))
+        aIJK = aI,aJ,aK
+        xyzb = array((bx,by,bz))
+        xyzc = array((cx,cy,cz))
+        cIJK = cI,cJ,cK
+        xyzd = array((dx,dy,dz))
+        val1 = vrr(xyza,1,aIJK,aexpn,xyzb,1,bexpn,
+                   xyzc,1,cIJK,cexpn,xyzd,1,dexpn)
         t1 = time.time()
-        val2 = vrr(array((cx,cy,cz)),1,(cI,cJ,cK),cexpn,
-                   array((dx,dy,dz)),1,dexpn,
-                   array((ax,ay,az)),1,(aI,aJ,aK),aexpn,
-                   array((bx,by,bz)),1,bexpn)
+        val2 = vrr(xyzc,1,cIJK,cexpn,xyzd,1,dexpn,
+                   xyza,1,aIJK,aexpn,xyzb,1,bexpn)
         t2 = time.time()
         assert isclose(val1,val2)
         assert isclose(val1,result)
-        print t1-t0,t2-t1
+        #print (t1-t0,t2-t1)
+        maxa = max(aIJK)
+        maxc = max(cIJK)
+        print (aIJK,cIJK,val1)
+        print (vrr_shell(aexpn,xyza,bexpn,xyzb,cexpn,xyzc,dexpn,xyzd,maxa,maxc))
     return
 
 
 if __name__ == '__main__':
     test_vrr()
-    test_iteration()
+    
+    
