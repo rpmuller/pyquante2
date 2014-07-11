@@ -34,18 +34,19 @@ def vrr_shell(aexpn,xyza,bexpn,xyzb,cexpn,xyzc,dexpn,xyzd,maxa,maxc):
     # functions. However, it's good to minimize this, since it gives a good idea
     # of just how wasteful the current scheme is.
     #return pack_full(terms,maxa,maxc)
-    return pack_m(terms)
+    return pack_full(terms,maxa,maxc)
 
 # Different methods of reducing the size of the integral record:
-def pack_full(d,maxa,maxc,tol=1e-10):
+def pack_full(d,maxa,maxc,tol=False):
     newd = {}
-    for ama in xrange(maxa+1):
-        for amc in xrange(maxc+1):
-            for aI,aJ,aK in shell_iterator(ama):
-                for cI,cJ,cK in shell_iterator(amc):
-                    t = d[aI,aJ,aK,cI,cJ,cK,0]
-                    if abs(t) > tol:
-                        newd[aI,aJ,aK,cI,cJ,cK] = t
+    #for ama in xrange(maxa+1):
+    #    for amc in xrange(maxc+1):
+    ama,amc = maxa,maxc
+    for aI,aJ,aK in shell_iterator(ama):
+        for cI,cJ,cK in shell_iterator(amc):
+            t = d[aI,aJ,aK,cI,cJ,cK,0]
+            if not tol or abs(t) > tol:
+                newd[aI,aJ,aK,cI,cJ,cK] = t
     return newd
 
 def pack_nonzero(d,tol=1e-10):
@@ -199,6 +200,15 @@ def indmax(l):
     import operator
     ind,val=max(enumerate(l),key=operator.itemgetter(1))
     return ind
+# This one takes the later of equal values
+# def indmax(l):
+#     maxval = -1e10
+#     maxind = None
+#     for i,li in enumerate(l):
+#         if li >= maxval:
+#             maxval = li
+#             maxind = i
+#     return maxind
 
 def vrr_shell_2(aexpn,xyza,bexpn,xyzb,cexpn,xyzc,dexpn,xyzd,maxa,maxc):
     # This uses a more intelligent method of looping over the am's to
@@ -217,54 +227,83 @@ def vrr_shell_2(aexpn,xyza,bexpn,xyzb,cexpn,xyzc,dexpn,xyzd,maxa,maxc):
     ama,amc = 0,0
     for m,t in enumerate(term0(aexpn,xyza,bexpn,xyzb,cexpn,xyzc,dexpn,xyzd,mtot)):
         terms[0,0,0, 0,0,0, m] = t
+    #end m
 
+    pqac = (xyzp[0]-xyza[0],xyzp[1]-xyza[1],xyzp[2]-xyza[2],
+            xyzq[0]-xyzc[0],xyzq[1]-xyzc[1],xyzq[2]-xyzc[2])
+    wpq = (xyzw[0]-xyzp[0],xyzw[1]-xyzp[1],xyzw[2]-xyzp[2],
+           xyzw[0]-xyzq[0],xyzw[1]-xyzq[1],xyzw[2]-xyzq[2])
+    ze = (eta,eta,eta,zeta,zeta,zeta)
+    zezpe = [zei/zpe for zei in ze]
+            
     #ama>0, amc=0
     for ama in xrange(1,maxa+1):
         for aI,aJ,aK in shell_iterator(ama):
+            l = [aI,aJ,aK, 0,0,0]
+            ind = indmax(l)
+            val = l[ind]
+            r1,r2,r3,r4,r5,r6 = copy_and_decrement(l,ind)
+            s1,s2,s3,s4,s5,s6 = copy_and_decrement(l,ind,ind)
             for m in xrange(mtot-aI-aJ-aK):
-                l = [aI,aJ,aK, 0,0,0]
-                ind = indmax(l)
-                reference = copy.copy(l)
-                reference[ind] -= 1
-                terms[aI,aJ,aK, 0,0,0, m] = None
+                terms[aI,aJ,aK, 0,0,0, m] = pqac[ind]*terms[r1,r2,r3, r4,r5,r6,m] +\
+                                               wpq[ind]*terms[r1,r2,r3, r4,r5,r6,m+1]
+                if val>1:
+                    terms[aI,aJ,aK, 0,0,0, m] += 0.5*(val-1)/ze[ind]*(
+                        terms[s1,s2,s3, s4,s5,s6,m] -\
+                        zezpe[ind]*terms[s1,s2,s3, s4,s5,s6,m+1])
             #end m
         #end cijk
+    #end ama
+
+    # ama=0, amc>0 here:
+    for amc in xrange(1,maxc+1):
+        for cI,cJ,cK in shell_iterator(amc):
+            l = [0,0,0, cI,cJ,cK]
+            ind = indmax(l)
+            val = l[ind]
+            r1,r2,r3,r4,r5,r6 = copy_and_decrement(l,ind)
+            s1,s2,s3,s4,s5,s6 = copy_and_decrement(l,ind,ind)
+            for m in xrange(mtot-cI-cJ-cK):
+                terms[0,0,0, cI,cJ,cK, m] = pqac[ind]*terms[r1,r2,r3, r4,r5,r6,m] +\
+                                            wpq[ind]*terms[r1,r2,r3, r4,r5,r6,m+1]
+                if val>1:
+                    terms[0,0,0, cI,cJ,cK, m] += 0.5*(val-1)/ze[ind]*(
+                        terms[s1,s2,s3, s4,s5,s6,m] -\
+                        zezpe[ind]*terms[s1,s2,s3, s4,s5,s6,m+1])
+            #end m
+        #end cIJK
     #end amc
                 
     # ama>0, amc>0
     for ama in xrange(1,maxa+1):
         for amc in xrange(1,maxc+1):
-            pqac = (xyzp[0]-xyza[0],xyzp[1]-xyza[1],xyzp[2]-xyza[2],
-                    xyzq[0]-xyzc[0],xyzq[1]-xyzc[1],xyzq[2]-xyzc[2])
-            wpq = (xyzw[0]-xyzp[0],xyzw[1]-xyzp[1],xyzw[2]-xyzp[2],
-                   xyzw[0]-xyzq[0],xyzw[1]-xyzq[1],xyzw[2]-xyzq[2])
-            ze = (eta,eta,eta,zeta,zeta,zeta)
-            zezpe = [zei/zpe for zei in ze]
-            
             for aI,aJ,aK in shell_iterator(ama):
                 for cI,cJ,cK in shell_iterator(amc):
                     l = [aI,aJ,aK, cI,cJ,cK]
                     ind = indmax(l)
                     val = l[ind]
-                    cind,cval = conj_ind_val(l,ind,val)
+                    cind = (ind+3)%6
+                    cval = l[cind]
                     r1,r2,r3,r4,r5,r6 = copy_and_decrement(l,ind)
                     s1,s2,s3,s4,s5,s6 = copy_and_decrement(l,ind,ind)
                     t1,t2,t3,t4,t5,t6 = copy_and_decrement(l,ind,cind)
                     for m in xrange(mtot-aI-aJ-aK-cI-cJ-cK):
                         terms[aI,aJ,aK, cI,cJ,cK, m] = pqac[ind]*terms[r1,r2,r3, r4,r5,r6,m] +\
                                                        wpq[ind]*terms[r1,r2,r3, r4,r5,r6,m+1]
-                        if val>0:
-                            terms[aI,aJ,aK, cI,cJ,cK, m] += 0.5*val/ze[ind]*(
+                        # should this be ...0.5*(val-1)/... ?
+                        if val>1:
+                            terms[aI,aJ,aK, cI,cJ,cK, m] += 0.5*(val-1)/ze[ind]*(
                                 terms[s1,s2,s3, s4,s5,s6,m] -\
                                 zezpe[ind]*terms[s1,s2,s3, s4,s5,s6,m+1])
+                        #print 'c',(aI,aJ,aK,cI,cJ,cK,m),terms[aI,aJ,aK,cI,cJ,cK,m]
                         if cval>0:
-                            terms[aI,aJ,aK, cI,cJ,cK, m] += 0.5*cval/ze[cind]*terms[t1,t2,t3,t4,t5,t6,m+1]
+                            terms[aI,aJ,aK, cI,cJ,cK, m] += 0.5*cval/zpe*terms[t1,t2,t3,t4,t5,t6,m+1]
                     #end m
                 #end bijk
             #end aijk
         #end amc
     #end ama
-    return terms # and unpack later
+    return pack_full(terms,maxa,maxc) # and unpack later
     # Here's how you repack here. Seems silly to do this, if we're just going
     # to directly unpack into the integral array:
     #smaller_terms = {}
@@ -327,14 +366,22 @@ def test_vrr():
         assert isclose(val1,val2)
         assert isclose(val1,result)
         #print (t1-t0,t2-t1)
-        maxa = max(aIJK)
-        maxc = max(cIJK)
-        print (aIJK,cIJK,val1)
-        print (vrr_shell(aexpn,xyza,bexpn,xyzb,cexpn,xyzc,dexpn,xyzd,maxa,maxc))
+        maxa = sum(aIJK)
+        maxc = sum(cIJK)
+        terms2 = vrr_shell_2(aexpn,xyza,bexpn,xyzb,cexpn,xyzc,dexpn,xyzd,maxa,maxc)
+        terms = vrr_shell(aexpn,xyza,bexpn,xyzb,cexpn,xyzc,dexpn,xyzd,maxa,maxc)
+        val2 = terms2[aI,aJ,aK,cI,cJ,cK]
+        val3 = terms[aI,aJ,aK,cI,cJ,cK]
+        print (aIJK,cIJK,val1,val2,val3)
+        if abs(val1-val2)>1e-7:
+            print (terms2)
+        print ("")
+
     return
 
 
 if __name__ == '__main__':
     test_vrr()
+    #print list(shell_iterator(1))
     
     
