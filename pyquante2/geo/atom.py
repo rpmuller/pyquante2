@@ -16,7 +16,8 @@ from pyquante2.geo.elements import symbol
 
 class atom(object):
     def __init__(self,atno,x,y,z,**kwargs):
-        self.atno = atno
+        self.atno = int(round(atno))
+        self.Z = atno
         self.r = np.array([x,y,z],'d')
         self.units = kwargs.get('units','bohr').lower()
         assert self.units[:4] in ['bohr','angs']

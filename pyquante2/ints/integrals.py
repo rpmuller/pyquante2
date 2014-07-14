@@ -133,7 +133,7 @@ class onee_integrals(object):
             ibf,jbf = bfs[i],bfs[j]
             self.S[i,j] = self.S[j,i] = S(ibf,jbf)
             self.T[i,j] = self.T[j,i] = T(ibf,jbf)
-            self.V[i,j] = self.V[j,i] = sum(at.atno*V(ibf,jbf,at.r) for at in geo)
+            self.V[i,j] = self.V[j,i] = sum(at.Z*V(ibf,jbf,at.r) for at in geo)
         return
         
 
