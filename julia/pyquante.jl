@@ -551,7 +551,7 @@ function coulomb(aexpn::Float64,ax::Float64,ay::Float64,az::Float64,
             end
         end
     end
-    return 2*pi^(2.5)/(g1*g2*sqrt(g1+g2))*exp(-aexpn*bexpn*rab2/g1)*exp(-cexpn*dexpn*rcd2/g2)*s
+    return 2pi^(2.5)/(g1*g2*sqrt(g1+g2))*exp(-aexpn*bexpn*rab2/g1)*exp(-cexpn*dexpn*rcd2/g2)*s
 end
 
 function coulomb(a::PGBF,b::PGBF,c::PGBF,d::PGBF)
@@ -801,8 +801,8 @@ function vrr(aexpn::Float64,ax::Float64,ay::Float64,az::Float64,aI::Int64,aJ::In
     rcd2 = dist2(cx-dx,cy-dy,cz-dz)
     rpq2 = dist2(px-qx,py-qy,pz-qz)
     T = zeta*eta/(zeta+eta)*rpq2
-    Kab = sqrt(2)*pi^1.25/zeta*exp(-aexpn*bexpn*rab2/zeta)
-    Kcd = sqrt(2)*pi^1.25/eta*exp(-cexpn*dexpn*rcd2/eta)
+    Kab = sqrt(2)pi^1.25/zeta*exp(-aexpn*bexpn*rab2/zeta)
+    Kcd = sqrt(2)pi^1.25/eta*exp(-cexpn*dexpn*rcd2/eta)
     #println("rab2=$rab2,rcd2=$rcd2,rpq2=$rpq2,T=$T,Kab=$Kab,Kcd=$Kcd")
     return Kab*Kcd/sqrt(zeta+eta)*Fgamma(m,T)
 end
@@ -820,14 +820,11 @@ function vrr_iter(aexpn::Float64,ax::Float64,ay::Float64,az::Float64,aI::Int64,a
     rcd2 = dist2(cx-dx,cy-dy,cz-dz)
     rpq2 = dist2(px-qx,py-qy,pz-qz)
     T = zeta*eta/(zeta+eta)*rpq2
-    Kab = sqrt(2)*pi^1.25/zeta*exp(-aexpn*bexpn*rab2/zeta)
-    Kcd = sqrt(2)*pi^1.25/eta*exp(-cexpn*dexpn*rcd2/eta)
+    Kab = sqrt(2)pi^1.25/zeta*exp(-aexpn*bexpn*rab2/zeta)
+    Kcd = sqrt(2)pi^1.25/eta*exp(-cexpn*dexpn*rcd2/eta)
     mtot = aI+aJ+aK+cI+cJ+cK+M
 
     vrr_terms = zeros(Float64,(aI+1,aJ+1,aK+1,cI+1,cJ+1,cK+1,mtot+1))
-    #vrr_terms = zeros(Float64,(aI+2,aJ+2,aK+2,cI+2,cJ+2,cK+2,mtot+6))
-    
-    @show (aI,aJ,aK,cI,cJ,cK)
     
     for m in 0:mtot
         vrr_terms[1,1,1, 1,1,1, m+1] = Fgamma(m,T)*Kab*Kcd/sqrt(zeta+eta)
@@ -835,17 +832,10 @@ function vrr_iter(aexpn::Float64,ax::Float64,ay::Float64,az::Float64,aI::Int64,a
     
     for i in 0:(aI-1)
         for m in 0:(mtot-i-1)
-            @show i m
-            @show vrr_terms[i+2,1,1, 1,1,1, m+1]
-            @show vrr_terms[i+1,1,1, 1,1,1, m+1]
-            @show vrr_terms[i+1,1,1, 1,1,1, m+2]
-            @show (px-ax,wx-px)
-            
             vrr_terms[i+2,1,1, 1,1,1, m+1] = (
                  (px-ax)*vrr_terms[i+1,1,1, 1,1,1, m+1] + 
                  (wx-px)*vrr_terms[i+1,1,1, 1,1,1, m+2])
 
-            @show vrr_terms[i+2,1,1, 1,1,1, m+1]
             if i>0
                 vrr_terms[i+2,1,1, 1,1,1, m+1] += i/2/zeta*(
                     vrr_terms[i,1,1, 1,1,1, m+1] -
