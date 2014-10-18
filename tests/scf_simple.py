@@ -81,11 +81,11 @@ def uhf_simple(geo,basisname='sto3g',maxiter=25,verbose=False):
     
 
 if __name__ == '__main__':
-    print "LiH energy should be -7.8607"
+    print ("LiH energy should be -7.8607")
     scf_simple(lih)
-    print "H2O energy should be -74.9598"
+    print ("H2O energy should be -74.9598")
     scf_simple(h2o)
-    print "OH energy should be -73.3602"
+    print ("OH energy should be -73.3602")
     scf_simple(oh)
-    print "Li energy should be -7.3155"
+    print ("Li energy should be -7.3155")
     scf_simple(li)
