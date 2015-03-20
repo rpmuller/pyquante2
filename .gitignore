@@ -1,6 +1,9 @@
 build
 make.out
 profile.out
+.DS_Store
+*.so
+*.pyc
 *~
 *.png
 *.vtk
