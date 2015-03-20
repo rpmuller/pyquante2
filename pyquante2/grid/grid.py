@@ -19,6 +19,26 @@ class grid(object):
     def __len__(self): return self.ng
     def __getitem__(self,*args): self.points.__getitem__(*args)
 
+    def setbfamps(self,bfs):
+        nbf = len(bfs)
+        self.bfamps = np.zeros((self.npts,nbf),'d')
+        for j,bf in enumerate(bfs):
+            for i,(x,y,z,w) in enumerate(self.points):
+                self.bfamps[i,j] = bf(x,y,z)
+        return
+
+    def getdens_naive(self,D):
+        # Naive version of getdens
+        rho = np.zeros(self.npts,'d')
+        for i,pt in enumerate(self.points):
+            bfs = self.bfamps[i,:]
+            rho[i] = 2*np.dot(bfs,np.dot(D,bfs))
+        return rho
+            
+    def getdens(self,D):
+        return 2*np.einsum('pI,pJ,IJ->p',self.bfamps,self.bfamps,D)
+
+
 def becke_reweight_atoms(atoms,agrids,**kwargs):
     for iat,agrid in enumerate(agrids):
         for i in range(agrid.npts):
