@@ -94,23 +94,26 @@ class rhf(hamiltonian):
 
 class rdft(rhf):
     "Hamiltonian for DFT calculations. Adds a grid to RHF iterator."
-    def __init__(self,geo,bfs):
+    def __init__(self,geo,bfs,xcname):
         rhf.__init__(self,geo,bfs)
         self.grid = grid(geo)
-        # make grid here.
+        self.xcname = xcname
+        return
 
     def update(self,D):
-        self.energy = self.geo.nuclear_repulsion()
+        E0 = self.geo.nuclear_repulsion()
+        self.energy = E0
         H = self.i1.T + self.i1.V
-        self.energy += trace2(H,D)
+        E1 = trace2(H,D)
+        self.energy += E1
 
         J = self.i2.get_2j(D)
-        H = H + J
 
-        # XC = ???
+        #Exc,XC = getXC(self.grid,D)
         # H = H + XC
 
-        self.energy += trace2(H,D)
+        E2 = trace2(H,D)
+        self.energy += E2
         E,c = geigh(H,self.i1.S)
         self.orbe = E
         self.orbs = c
