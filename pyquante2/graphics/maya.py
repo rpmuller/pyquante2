@@ -37,45 +37,11 @@ def view_orb(mol,orb,bfs,npts=50,doshow=True):
     x, y, z = np.mgrid[xmin:xmax:(npts*1j),ymin:ymax:(npts*1j),zmin:zmax:(npts*1j)]
 
     fxyz = np.zeros((npts, npts, npts))
-    for ibf in range(len(bfs)):
-        fxyz += orb[ibf]*bfs[ibf](x, y, z)
+    for i,bf in enumerate(bfs):
+        fxyz += orb[i]*bf(x, y, z)
     fxyz = np.abs(fxyz)**2
     src = mlab.pipeline.scalar_field(x, y, z, fxyz)
     mlab.pipeline.iso_surface(src, contours=[fxyz.min()+0.02*fxyz.ptp(),], opacity=0.6)
     if doshow: mlab.show()
     return
 
-def plot_orbs(molcule, orb, bfs):
-    from mayavi import mlab
-    #mlab.figure(1, bgcolor=(0, 0, 0), size=(750, 750))
-    #mlab.clf()
-    
-    xarray = np.zeros((len(molecule), ))
-    yarray = np.zeros((len(molecule), ))
-    zarray = np.zeros((len(molecule), ))
-    white = (1,1,1)
-    gray = (0.5, 0.5, 0.5)
-    red = (1, 0, 0)
-    green = (0, 1, 0)
-    blue = (0, 0, 1)
-    color_dict = {1: (1, 1, 1), 7: blue, 6: gray, 8: red}
-    scale_dict = {1: 1, 7: 1.5, 6: 1.5, 8: 1.5}
-
-    for i in range(len(molecule)):
-        (xarray[i], yarray[i], zarray[i]) = molecule[i].r
-        at = mlab.points3d(xarray[i], yarray[i], zarray[i],
-                       scale_factor=scale_dict[molecule[i].atno],
-                       resolution=20,
-                       color=color_dict[molecule[i].atno],
-                       scale_mode='none')
-    
-    x, y, z = np.mgrid[min(xarray)-10.0:max(xarray)+10.0:100j,
-                       min(yarray)-10.0:max(yarray)+10.0:100j, 
-                       min(zarray)-10.0:max(zarray)+10.0:100j]
-    fxyz = np.zeros((100, 100, 100))
-    for ibf in range(len(bfs)):
-        fxyz += orb[ibf]*bfs[ibf](x, y, z)
-    fxyz = np.abs(fxyz)**2
-    src = mlab.pipeline.scalar_field(x, y, z, fxyz)
-    mlab.pipeline.iso_surface(src, contours=[fxyz.min()+0.02*fxyz.ptp(),], opacity=0.6)
-    mlab.show()
