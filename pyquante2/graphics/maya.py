@@ -31,17 +31,23 @@ def view_mol(mol,doshow=True):
     if doshow: mlab.show()
     return
 
-def view_orb(mol,orb,bfs,npts=50,doshow=True):
+def view_orb(mol,orb,bfs,npts=50,posval=0.05,doshow=True,planes=[]):
     from mayavi import mlab
     xmin,xmax,ymin,ymax,zmin,zmax = mol.bbox()
     x, y, z = np.mgrid[xmin:xmax:(npts*1j),ymin:ymax:(npts*1j),zmin:zmax:(npts*1j)]
 
     fxyz = np.zeros((npts, npts, npts))
-    for i,bf in enumerate(bfs):
-        fxyz += orb[i]*bf(x, y, z)
-    fxyz = np.abs(fxyz)**2
+    for c,bf in zip(orb,bfs):
+        fxyz += c*bf(x, y, z)
+
     src = mlab.pipeline.scalar_field(x, y, z, fxyz)
-    mlab.pipeline.iso_surface(src, contours=[fxyz.min()+0.02*fxyz.ptp(),], opacity=0.6)
+    mlab.pipeline.iso_surface(src, contours=[-posval,posval], opacity=0.6)
+    for d,ind in planes:
+        if not ind: ind = npts//2
+        mlab.pipeline.image_plane_widget(src,
+                                         plane_orientation='%s_axes' % d,
+                                         slice_index=ind)
+        
     if doshow: mlab.show()
     return
 
