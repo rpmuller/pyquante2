@@ -1,7 +1,7 @@
 import numpy as np
-from mayavi import mlab
 
 def view_dft_density(grid,D,bbox,npts=50,doshow=True):
+    from mayavi import mlab
     rho = grid.getdens_interpolated(D,bbox,npts)
     # mlab.contour3d(rho,contours=8,opacity=0.5)
     mlab.pipeline.image_plane_widget(mlab.pipeline.scalar_field(rho),
