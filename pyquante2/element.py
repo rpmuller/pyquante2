@@ -27,7 +27,7 @@ symbol = [
 
 
 sym2no = {}
-for i in xrange(len(symbol)):
+for i in range(len(symbol)):
     sym2no[symbol[i]] = i
     sym2no[symbol[i].lower()] = i
     
@@ -53,7 +53,7 @@ name = [
     "polonium","astatine","radon"]
 
 name2no = {}
-for i in xrange(len(name)):
+for i in range(len(name)):
     name2no[name[i]] = i
     name2no[name[i].upper()] = i
 
