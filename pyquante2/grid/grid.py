@@ -38,6 +38,12 @@ class grid(object):
     def getdens(self,D):
         return 2*np.einsum('pI,pJ,IJ->p',self.bfamps,self.bfamps,D)
 
+    def getdens_interpolated(self,D,bbox,npts=50):
+        from scipy.interpolate import griddata
+        xmin,xmax,ymin,ymax,zmin,zmax = bbox
+        xi,yi,zi = np.mgrid[xmin:xmax:(npts*1j),ymin:ymax:(npts*1j),zmin:zmax:(npts*1j)]
+        rho = self.getdens(D)
+        return griddata(self.points[:,:3],rho,(xi,yi,zi))
 
 def becke_reweight_atoms(atoms,agrids,**kwargs):
     for iat,agrid in enumerate(agrids):
