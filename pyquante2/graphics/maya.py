@@ -18,16 +18,25 @@ def view_dft_density(grid,D,bbox,npts=50,doshow=True):
 
 
 # Thanks to Thomas Markovich for this code:
-def view_mol(mol,doshow=True):
-    from pyquante2.element import color,radius
+def view_mol(mol,doshow=True,scale=1.0):
     from mayavi import mlab
     for at in mol:
-        rgb = tuple(c/255. for c in color[at.Z])
         mlab.points3d(at.r[0],at.r[1],at.r[2],
-                      scale_factor=radius[at.Z],color=rgb,
+                      scale_factor=scale*at.radius(),color=at.color(),
                       resolution=20,scale_mode='none')
     # Draw bonds?
     # Draw in cylinder mode?
+    if doshow: mlab.show()
+    return
+
+def view_bonds(mol,doshow=True):
+    from mayavi import mlab
+    for i,j in mol.bonds():
+        mlab.plot3d([mol.atoms[i].r[0], mol.atoms[j].r[0]],
+                    [mol.atoms[i].r[1], mol.atoms[j].r[1]],
+                    [mol.atoms[i].r[2], mol.atoms[j].r[2]],
+                    tube_radius=0.2,
+                    tube_sides=20)
     if doshow: mlab.show()
     return
 
