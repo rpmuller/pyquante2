@@ -162,6 +162,16 @@ class molecule(object):
             at.r = at.r - r_com
         return
 
+    def bonds(self,scale=1.1):
+        from pyquante2.utils import pairs
+        bonds = []
+        for i,ati in enumerate(self.atoms):
+            for j in range(i):
+                atj = self.atoms[j]
+                if ati.distance(atj) < scale*(ati.radius()+atj.radius()):
+                    bonds.append((i,j))
+        return bonds
+
 def read_xyz(fname):
     f = open(fname)
     line = f.readline()
