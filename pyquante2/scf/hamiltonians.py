@@ -119,7 +119,7 @@ class dft(rhf):
         H = H + 2*J + 2*Vxc
         self.energy += Ej+2*Exc
         
-        if self.verbose: print self.energy,E1,Ej,2*Exc,E0
+        if self.verbose: print(self.energy,E1,Ej,2*Exc,E0)
         E,c = geigh(H,self.i1.S)
         self.orbe = E
         self.orbs = c
