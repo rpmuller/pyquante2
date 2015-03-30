@@ -118,8 +118,9 @@ class test_dft(unittest.TestCase):
     @unittest.skip("DFT solver not implemented yet")
     def test_he_triplet_xlda(self):
         from pyquante2.geo.samples import he
-        bfs = basisset(he)
-        solver = dft(he,bfs,'xs',None)
+        he.multiplicity = 3
+        bfs = basisset(he,'sto-3g')
+        solver = dft(he,bfs,'xs')
         ens = solver.converge()
         self.assertAlmostEqual(solver.energy,-1.7819689849)
 
