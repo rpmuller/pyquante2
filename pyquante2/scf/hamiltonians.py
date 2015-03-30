@@ -92,28 +92,34 @@ class rhf(hamiltonian):
         self.orbs = c
         return c
 
-class rdft(rhf):
+class dft(rhf):
     "Hamiltonian for DFT calculations. Adds a grid to RHF iterator."
-    def __init__(self,geo,bfs,xcname):
+    def __init__(self,geo,bfs,xcname='lda',verbose=False):
         rhf.__init__(self,geo,bfs)
         self.grid = grid(geo)
         self.xcname = xcname
+        self.grid.setbfamps(bfs)
+        self.verbose = verbose
         return
 
     def update(self,D):
+        from pyquante2.dft.dft import get_xc
         E0 = self.geo.nuclear_repulsion()
         self.energy = E0
         H = self.i1.T + self.i1.V
-        E1 = trace2(H,D)
+        E1 = 2*trace2(H,D)
         self.energy += E1
 
-        J = self.i2.get_2j(D)
+        J = self.i2.get_j(D)
+        Ej = 2*trace2(J,D)
 
-        #Exc,XC = getXC(self.grid,D)
-        # H = H + XC
-
-        E2 = trace2(H,D)
-        self.energy += E2
+        # The 0.5 before the D comes from making the alpha density from the total density
+        Exc,Vxc = get_xc(self.grid,0.5*D,xcname=self.xcname)
+        # The factors of 2 here come from taking identical alpha/beta xc potentials:
+        H = H + 2*J + 2*Vxc
+        self.energy += Ej+2*Exc
+        
+        if self.verbose: print self.energy,E1,Ej,2*Exc,E0
         E,c = geigh(H,self.i1.S)
         self.orbe = E
         self.orbs = c

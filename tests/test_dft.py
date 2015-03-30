@@ -3,6 +3,7 @@ import numpy as np
 from pyquante2 import basisset
 from pyquante2.dft.functionals import xs,cvwn5,xb88,xpbe,clyp,cpbe
 from pyquante2.dft.reference import data
+from pyquante2.scf.hamiltonians import dft
 
 try:
     import pylab as pyl
@@ -107,13 +108,12 @@ class test_dft(unittest.TestCase):
         self.assertAlmostEqual(max_dfa,0)
         self.assertAlmostEqual(max_dfb,0)
 
-    @unittest.skip("DFT solver not implemented yet")
     def test_he_xlda(self):
         from pyquante2.geo.samples import he
-        bfs = basisset(he)
-        solver = dft(he,bfs,'xs',None)
+        bfs = basisset(he,'sto-3g')
+        solver = dft(he,bfs,'xs')
         ens = solver.converge()
-        self.assertAlmostEqual(solver.energy,-2.7229973821)
+        self.assertAlmostEqual(solver.energy,-2.65731226258)
 
     @unittest.skip("DFT solver not implemented yet")
     def test_he_triplet_xlda(self):
