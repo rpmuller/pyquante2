@@ -116,10 +116,11 @@ class dft(rhf):
         # The 0.5 before the D comes from making the alpha density from the total density
         Exc,Vxc = get_xc(self.grid,0.5*D,xcname=self.xcname)
         # The factors of 2 here come from taking identical alpha/beta xc potentials:
-        H = H + 2*J + 2*Vxc
-        self.energy += Ej+2*Exc
+        Exc = 2*Exc 
+        H = H + 2*J + Vxc
+        self.energy += Ej+Exc
         
-        if self.verbose: print(self.energy,E1,Ej,2*Exc,E0)
+        if self.verbose: print(self.energy,E1,Ej,Exc,E0)
         E,c = geigh(H,self.i1.S)
         self.orbe = E
         self.orbs = c

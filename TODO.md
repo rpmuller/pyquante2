@@ -1,9 +1,9 @@
 # PyQuante 2 Todo List
 
 ## Soon
-* Get He/XS dft test working with 6-31G**.
 * Get He triplet XS dft test working. Probably involves changing the
-  iterator to the USCF one.
+iterator to the USCF one.
+* Get LDA working
 
 ## Easy stuff to add:
 * Get cvwn working
