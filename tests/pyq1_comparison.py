@@ -30,9 +30,6 @@ def pyq1_dft(atomtuples=[(2,(0,0,0))],basis = '6-31G**',maxit=10,
     orbe,orbs = geigh(h,S)
     eold = 0
 
-    print "grid weights"
-    print gr.weights()
-    
     for i in range(maxit):
         D = mkdens(orbs,0,nclosed)
         gr.setdens(D)
@@ -40,8 +37,7 @@ def pyq1_dft(atomtuples=[(2,(0,0,0))],basis = '6-31G**',maxit=10,
         J = getJ(Ints,D)
 
         Exc,Vxc = getXC(gr,nel,functional=xcname)
-        print Exc
-        print Vxc
+
         F = h+2*J+Vxc
         orbe,orbs = geigh(F,S)
         
@@ -70,8 +66,8 @@ def func_compare():
     plt.show()
 
 def pyq2_dft(atomtuples=[(2,0,0,0)],basis = '6-31G**',maxit=10,xcname='svwn'):
-    print ("pyq2 DFT run")
     import pyquante2 as pyq2
+    print ("pyq2 DFT run")
     geo = pyq2.molecule(atomtuples)
     bfs = pyq2.basisset(geo,name=basis)
     i1 = pyq2.onee_integrals(bfs,geo)
@@ -83,22 +79,14 @@ def pyq2_dft(atomtuples=[(2,0,0,0)],basis = '6-31G**',maxit=10,xcname='svwn'):
     grid.setbfamps(bfs)
     E0 = geo.nuclear_repulsion()
 
-    print "grid weights"
-    print grid.points[:,3]
-    
     for i in range(maxit):
         D = pyq2.dmat(orbs,geo.nocc())
         E1 = 2*pyq2.trace2(h,D)
-
-        print "nel on grid:",np.dot(grid.points[:,3],grid.getdens(D))
 
         J = i2.get_j(D)
         Ej = 2*pyq2.trace2(J,D)
 
         Exc,Vxc = pyq2.get_xc(grid,0.5*D,xcname=xcname)
-
-        print Exc
-        print Vxc
 
         energy = E0+E1+Ej+Exc
         F = h+2*J+Vxc
