@@ -2,8 +2,6 @@
 #  the bugs when implementing pyquante2.
 
 import numpy as np
-import matplotlib.pyplot as plt
-
 def pyq1_dft(atomtuples=[(2,(0,0,0))],basis = '6-31G**',maxit=10,
              xcname='SVWN'):
     from PyQuante import Ints,settings,Molecule
@@ -58,6 +56,7 @@ def pyq1_dft(atomtuples=[(2,(0,0,0))],basis = '6-31G**',maxit=10,
     return energy
 
 def func_compare():
+    import matplotlib.pyplot as plt
     import pyquante2 as pyq2
     from PyQuante.DFunctionals import cvwn
     ns = np.linspace(0.,100)
