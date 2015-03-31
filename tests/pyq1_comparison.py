@@ -2,9 +2,10 @@
 #  the bugs when implementing pyquante2.
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 def pyq1_dft(atomtuples=[(2,(0,0,0))],basis = '6-31G**',maxit=10,
-             xcname='S0'):
+             xcname='SVWN'):
     from PyQuante import Ints,settings,Molecule
     from PyQuante.dft import getXC
     from PyQuante.MG2 import MG2 as MolecularGrid
@@ -30,6 +31,9 @@ def pyq1_dft(atomtuples=[(2,(0,0,0))],basis = '6-31G**',maxit=10,
 
     orbe,orbs = geigh(h,S)
     eold = 0
+
+    print "grid weights"
+    print gr.weights()
     
     for i in range(maxit):
         D = mkdens(orbs,0,nclosed)
@@ -37,8 +41,10 @@ def pyq1_dft(atomtuples=[(2,(0,0,0))],basis = '6-31G**',maxit=10,
 
         J = getJ(Ints,D)
 
-        Exc,XC = getXC(gr,nel,functional=xcname)
-        F = h+2*J+XC
+        Exc,Vxc = getXC(gr,nel,functional=xcname)
+        print Exc
+        print Vxc
+        F = h+2*J+Vxc
         orbe,orbs = geigh(F,S)
         
         Ej = 2*trace2(D,J)
@@ -51,7 +57,20 @@ def pyq1_dft(atomtuples=[(2,(0,0,0))],basis = '6-31G**',maxit=10,
         eold = energy
     return energy
 
-def pyq2_dft(atomtuples=[(2,0,0,0)],basis = '6-31G**',maxit=10,xcname='xs'):
+def func_compare():
+    import pyquante2 as pyq2
+    from PyQuante.DFunctionals import cvwn
+    ns = np.linspace(0.,100)
+    c2 = pyq2.dft.functionals.cvwn5(ns,ns)
+    fc1 = [cvwn(n,n)[0] for n in ns]
+    dfc1 = [cvwn(n,n)[1] for n in ns]
+    plt.plot(ns,c2[0],label='f_vwn5/pyq2')#,marker='o',linestyle='None')
+    plt.plot(ns,fc1,label='f_vwn5/pyq1')
+    plt.plot(ns,c2[1],label='df_vwn5/pyq2')#,marker='o',linestyle='None')
+    plt.plot(ns,dfc1,label='df_vwn5/pyq1')
+    plt.show()
+
+def pyq2_dft(atomtuples=[(2,0,0,0)],basis = '6-31G**',maxit=10,xcname='svwn'):
     print ("pyq2 DFT run")
     import pyquante2 as pyq2
     geo = pyq2.molecule(atomtuples)
@@ -64,16 +83,23 @@ def pyq2_dft(atomtuples=[(2,0,0,0)],basis = '6-31G**',maxit=10,xcname='xs'):
     eold = 0
     grid.setbfamps(bfs)
     E0 = geo.nuclear_repulsion()
+
+    print "grid weights"
+    print grid.points[:,3]
     
     for i in range(maxit):
         D = pyq2.dmat(orbs,geo.nocc())
         E1 = 2*pyq2.trace2(h,D)
 
+        print "nel on grid:",np.dot(grid.points[:,3],grid.getdens(D))
+
         J = i2.get_j(D)
         Ej = 2*pyq2.trace2(J,D)
 
         Exc,Vxc = pyq2.get_xc(grid,0.5*D,xcname=xcname)
-        Exc = 2*Exc
+
+        print Exc
+        print Vxc
 
         energy = E0+E1+Ej+Exc
         F = h+2*J+Vxc
@@ -91,4 +117,5 @@ def pyq2_dft(atomtuples=[(2,0,0,0)],basis = '6-31G**',maxit=10,xcname='xs'):
 if __name__ == '__main__':
     pyq1_dft()
     pyq2_dft()
+    #func_compare()
     

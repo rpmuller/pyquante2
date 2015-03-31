@@ -122,6 +122,13 @@ class test_dft(unittest.TestCase):
         ens = solver.converge()
         self.assertAlmostEqual(solver.energy,-2.7146407379057935)
 
+    def test_he_lda_631(self):
+        from pyquante2.geo.samples import he
+        bfs = basisset(he,'6-31G**')
+        solver = dft(he,bfs,'lda')
+        ens = solver.converge()
+        self.assertAlmostEqual(solver.energy,-2.8266972953683389)
+
     @unittest.skip("DFT solver not implemented yet")
     def test_he_triplet_xlda(self):
         from pyquante2.geo.samples import he

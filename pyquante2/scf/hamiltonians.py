@@ -115,8 +115,7 @@ class dft(rhf):
 
         # The 0.5 before the D comes from making the alpha density from the total density
         Exc,Vxc = get_xc(self.grid,0.5*D,xcname=self.xcname)
-        # The factors of 2 here come from taking identical alpha/beta xc potentials:
-        Exc = 2*Exc 
+
         H = H + 2*J + Vxc
         self.energy += Ej+Exc
         
