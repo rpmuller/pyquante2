@@ -1,24 +1,28 @@
 import numpy as np
-from pyquante2.dft.functionals import xs#,cvwn
+from pyquante2.dft.functionals import xs,cvwn5
 
 # Maybe move these to the functionals module and import from there?
-xname = dict(lda=xs,xs=xs)
-#cname = dict(lda=cvwn)
+xname = dict(lda=xs,xs=xs,svwn=xs)
+cname = dict(lda=cvwn5,svwn=cvwn5,xs=None)
 
 def get_xc(grid,D,**kwargs):
     xcname = kwargs.get('xcname','lda')
     # Does not work on either gradient corrected functionals or spin-polarized functionals yet.
 
-    xfunctional = xname[xcname]
-    #cfunctional = cname[xcname]
+    xfunc = xname[xcname]
+    cfunc = cname[xcname]
         
     rho = grid.getdens(D)
-    fx,dfx = xfunctional(rho)
-    #fc,dfc = cfunctional(rho)
-    # Is it faster to avoid the slice operation on points[:,3] to get the weights, and just
-    #  hack the einsum command further?
+    fx,dfxa = xfunc(rho)
+    if cfunc:
+        fc,dfca,dfcb = cfunc(rho,rho)
+    else:
+        fc=dfca=dfcb=0
+        
     w = grid.points[:,3]
-    Vx = np.einsum('g,g,gI,gJ->IJ',w,dfx,grid.bfamps,grid.bfamps)
-    Ex = np.dot(w,fx)
-    return Ex,Vx
+    Vxc = np.einsum('g,g,gI,gJ->IJ',w,dfxa+dfca,grid.bfamps,grid.bfamps)
+    # The fx comes from either the up or the down spin, whereas the fc comes from
+    #  both (which is why x is called with either one, and c is called with both
+    Exc = np.dot(w,2*fx+fc)
+    return Exc,Vxc
     
