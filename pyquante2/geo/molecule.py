@@ -1,9 +1,24 @@
 """
 Create a molecule for use in pyquante
+
 >>> h = molecule([(1,0,0,0)])
 >>> h
 Stoichiometry = H, Charge = 0, Multiplicity = 2
 1 H     0.000000     0.000000     0.000000
+
+>>> he = molecule([(2,0,0,0)])
+>>> he
+Stoichiometry = He, Charge = 0, Multiplicity = 1
+2 He     0.000000     0.000000     0.000000
+>>> he.nclosed(),he.nopen(),he.nup(),he.ndown()
+(1, 0, 1, 1)
+
+>>> he_trip = molecule([(2,0,0,0)], multiplicity=3)
+>>> he_trip
+Stoichiometry = He, Charge = 0, Multiplicity = 3
+2 He     0.000000     0.000000     0.000000
+>>> he_trip.nclosed(),he_trip.nopen(),he_trip.nup(),he_trip.ndown()
+(0, 2, 2, 0)
 
 """
 import numpy as np
@@ -84,9 +99,12 @@ class molecule(object):
         return sum(atom.atno for atom in self) - self.charge
     
     def nocc(self): return sum(divmod(self.nel(),2))
-    def nclosed(self): return self.nel()//2
-    def nopen(self): return divmod(self.nel(),2)[1]
-    def nup(self): return self.nocc()
+    def nclosed(self):
+        nc,ierr = divmod(self.nel()-self.nopen(),2)
+        assert ierr == 0, "Error in molecule, multiplicity, nclosed, nopen"
+        return nc
+    def nopen(self): return self.multiplicity-1
+    def nup(self): return self.nclosed()+self.nopen()
     def ndown(self): return self.nclosed()
 
     def xyz(self,title=None,fobj=None):
