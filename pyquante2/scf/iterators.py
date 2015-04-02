@@ -23,7 +23,10 @@ class SCFIterator(object):
         self.iterations += 1
         if self.iterations > self.maxiters:
             raise StopIteration
-        D = dmat(self.c,self.H.geo.nocc())
+        nc,no = self.H.geo.nclosed(),self.H.geo.nopen()
+        if no != 0:
+            print ("Warning: nopen != 0 in SCF Iterator: %d" % no )
+        D = dmat(self.c,nc,no)
         self.c = self.H.update(D)
         E = self.H.energy
         if abs(E-self.Eold) < self.tol:
