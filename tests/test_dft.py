@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from pyquante2 import basisset
+from pyquante2 import basisset, molecule
 from pyquante2.dft.functionals import xs,cvwn5,xb88,xpbe,clyp,cpbe
 from pyquante2.dft.reference import data
 from pyquante2.scf.hamiltonians import dft
@@ -129,14 +129,12 @@ class test_dft(unittest.TestCase):
         ens = solver.converge()
         self.assertAlmostEqual(solver.energy,-2.8266972953683389)
 
-    @unittest.skip("DFT solver not implemented yet")
-    def test_he_triplet_xlda(self):
-        from pyquante2.geo.samples import he
-        he.multiplicity = 3
-        bfs = basisset(he,'sto-3g')
-        solver = dft(he,bfs,'xs')
+    def test_he_triplet_lda(self):
+        he_trip = molecule([(2,0,0,0)], multiplicity=3)
+        bfs = basisset(he_trip,'6-31G**')
+        solver = dft(he_trip,bfs,'lda')
         ens = solver.converge()
-        self.assertAlmostEqual(solver.energy,-1.7819689849)
+        self.assertAlmostEqual(solver.energy,-1.1784857927828982)
 
 def runsuite(verbose=True):
     if verbose: verbosity=2
