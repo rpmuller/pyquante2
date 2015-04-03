@@ -56,14 +56,14 @@ class test_scf(unittest.TestCase):
         ens = solver.converge(AveragingIterator)
         self.assertAlmostEqual(solver.energy,-74.959847457272502,match_digits)
 
-    def test_oh(self):
+    def test_oh_uhf(self):
         from pyquante2 import oh
         bfs = basisset(oh,'sto3g')
         solver = uhf(oh,bfs)
         Es = solver.converge()
         self.assertAlmostEqual(solver.energy,-74.3602416207,match_digits)
 
-    def test_li(self):
+    def test_li_uhf(self):
         from pyquante2 import li
         bfs = basisset(li,'sto3g')
         solver = uhf(li,bfs)
