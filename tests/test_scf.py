@@ -1,5 +1,5 @@
 import unittest
-from pyquante2 import molecule,rhf,uhf,h2,h2o,lih,basisset
+from pyquante2 import molecule,rhf,uhf,rohf,h2,h2o,lih,basisset
 
 match_digits = 5
 
@@ -69,6 +69,20 @@ class test_scf(unittest.TestCase):
         solver = uhf(li,bfs)
         Es = solver.converge()
         self.assertAlmostEqual(solver.energy,-7.31552585354,match_digits)
+
+    def test_oh_rohf(self):
+        from pyquante2 import oh
+        bfs = basisset(oh,'sto3g')
+        solver = rohf(oh,bfs)
+        Es = solver.converge()
+        self.assertAlmostEqual(solver.energy,-74.3591663559,match_digits)
+
+    def test_li_rohf(self):
+        from pyquante2 import li
+        bfs = basisset(li,'sto3g')
+        solver = rohf(li,bfs)
+        Es = solver.converge()
+        self.assertAlmostEqual(solver.energy,-7.31552591799,match_digits)
 
 
 def runsuite(verbose=True):
