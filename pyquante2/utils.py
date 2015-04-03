@@ -170,6 +170,9 @@ def simx(A,B,transpose=False):
         return np.dot(B,np.dot(A,B.T))
     return np.dot(B.T,np.dot(A,B))
 
+def ao2mo(H,C): return simx(H,C)
+def mo2ao(H,C,S): return simx(H,np.dot(S,C),transpose=True)
+
 def geigh(H,S):
     "Solve the generalized eigensystem Hc = ESc"
     A = cholorth(S)
