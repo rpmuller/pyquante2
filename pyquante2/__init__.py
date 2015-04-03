@@ -9,7 +9,7 @@ from pyquante2.grid.grid import grid
 from pyquante2.ints.one import S,T,V
 from pyquante2.ints.integrals import onee_integrals,twoe_integrals
 from pyquante2.pt.mp2 import mp2
-from pyquante2.scf.hamiltonians import rhf,uhf
+from pyquante2.scf.hamiltonians import rhf,uhf,rohf
 from pyquante2.utils import trace2,geigh,dmat
 
 try:
