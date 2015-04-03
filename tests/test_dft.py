@@ -11,7 +11,7 @@ try:
 except:
     have_pylab = False
 
-def amax(x): return np.amax(np.absolute(x))
+def aamax(x): return np.amax(np.absolute(x))
 
 class test_dft(unittest.TestCase):
     def test_xs(self):
@@ -19,9 +19,9 @@ class test_dft(unittest.TestCase):
         nb = data['xs'][:,1]
         fa,dfa = xs(na)
         fb,dfb = xs(nb)
-        max_f = amax(fa+fb-data['xs'][:,5])
-        max_dfa = amax(dfa-data['xs'][:,6])
-        max_dfb = amax(dfb-data['xs'][:,7])
+        max_f = aamax(fa+fb-data['xs'][:,5])
+        max_dfa = aamax(dfa-data['xs'][:,6])
+        max_dfb = aamax(dfb-data['xs'][:,7])
         #print(np.column_stack([na,nb,data['xs'][:,5]-fa-fb]))
         self.assertAlmostEqual(max_f,0,5) ## Fix this!
         self.assertAlmostEqual(max_dfa,0)
@@ -32,9 +32,9 @@ class test_dft(unittest.TestCase):
         na = data['cvwn'][:,0]
         nb = data['cvwn'][:,1]
         f,dfa,dfb = cvwn5(na,nb)
-        max_f = amax(f-data['cvwn'][:,5])
-        max_dfa = amax(dfa-data['cvwn'][:,6])
-        max_dfb = amax(dfb-data['cvwn'][:,7])
+        max_f = aamax(f-data['cvwn'][:,5])
+        max_dfa = aamax(dfa-data['cvwn'][:,6])
+        max_dfb = aamax(dfb-data['cvwn'][:,7])
         np.set_printoptions(precision=3)
         print(np.column_stack([na,nb,data['cvwn'][:,5],f,data['cvwn'][:,6],dfb]))
         #pyl.plot(data['cvwn'][:,5]-f)
@@ -51,9 +51,9 @@ class test_dft(unittest.TestCase):
         gbb = data['xb88'][:,4]
         fa,dfa,dfga = xb88(na,gaa)
         fb,dfb,dfgb = xb88(nb,gbb)
-        max_f = amax(fa+fb-data['xb88'][:,5])
-        max_dfa = amax(dfa-data['xb88'][:,6])
-        max_dfb = amax(dfb-data['xb88'][:,7])
+        max_f = aamax(fa+fb-data['xb88'][:,5])
+        max_dfa = aamax(dfa-data['xb88'][:,6])
+        max_dfb = aamax(dfb-data['xb88'][:,7])
         #print(np.column_stack([na,nb,data['xb88'][:,5]-fa-fb]))
         self.assertAlmostEqual(max_f,0,5)
         self.assertAlmostEqual(max_dfa,0)
@@ -66,9 +66,9 @@ class test_dft(unittest.TestCase):
         gbb = data['xpbe'][:,4]
         fa,dfa,dfga = xpbe(na,gaa)
         fb,dfb,dfgb = xpbe(nb,gbb)
-        max_f = amax(fa+fb-data['xpbe'][:,5])
-        max_dfa = amax(dfa-data['xpbe'][:,6])
-        max_dfb = amax(dfb-data['xpbe'][:,7])
+        max_f = aamax(fa+fb-data['xpbe'][:,5])
+        max_dfa = aamax(dfa-data['xpbe'][:,6])
+        max_dfb = aamax(dfb-data['xpbe'][:,7])
         #print(np.column_stack([na,nb,data['xpbe'][:,5]-fa-fb]))
         self.assertAlmostEqual(max_f,0,5)
         self.assertAlmostEqual(max_dfa,0)
@@ -83,9 +83,9 @@ class test_dft(unittest.TestCase):
         gbb = data['clyp'][:,4]
         fc,dfa,dfb,dfga,dfgab,dfgb = clyp(na,nb,gaa,gab,gbb)
 
-        max_f = amax(fc-data['clyp'][:,5])
-        max_dfa = amax(dfa-data['clyp'][:,6])
-        max_dfb = amax(dfb-data['clyp'][:,7])
+        max_f = aamax(fc-data['clyp'][:,5])
+        max_dfa = aamax(dfa-data['clyp'][:,6])
+        max_dfb = aamax(dfb-data['clyp'][:,7])
         #print(np.column_stack([na,nb,data['clyp'][:,5]-fa-fb]))
         self.assertAlmostEqual(max_f,0,5)
         self.assertAlmostEqual(max_dfa,0)
@@ -100,9 +100,9 @@ class test_dft(unittest.TestCase):
         gbb = data['cpbe'][:,4]
         fc,dfa,dfb,dfga,dfgab,dfgb = cpbe(na,nb,gaa,gab,gbb)
 
-        max_f = amax(fc-data['cpbe'][:,5])
-        max_dfa = amax(dfa-data['cpbe'][:,6])
-        max_dfb = amax(dfb-data['cpbe'][:,7])
+        max_f = aamax(fc-data['cpbe'][:,5])
+        max_dfa = aamax(dfa-data['cpbe'][:,6])
+        max_dfb = aamax(dfb-data['cpbe'][:,7])
         #print(np.column_stack([na,nb,data['cpbe'][:,5]-fa-fb]))
         self.assertAlmostEqual(max_f,0,5)
         self.assertAlmostEqual(max_dfa,0)
