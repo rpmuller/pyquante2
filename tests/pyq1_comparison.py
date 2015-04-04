@@ -40,7 +40,7 @@ def pyq1_rohf(atomtuples=[(2,(0,0,0))],basis = '6-31G**',maxit=10,mult=3):
         eone = (trace2(Da,h) + trace2(Db,h))/2
         etwo = (trace2(Da,Fa) + trace2(Db,Fb))/2
         energy = (energya+energyb)/2 + enuke
-        print i,energy,eone,etwo,enuke
+        print (i,energy,eone,etwo,enuke)
         if abs(energy-eold) < 1e-5: break
         eold = energy
 
@@ -108,7 +108,7 @@ def pyq1_rohf(atomtuples=[(2,(0,0,0))],basis = '6-31G**',maxit=10,mult=3):
         eone = (trace2(Da,h) + trace2(Db,h))/2
         etwo = (trace2(Da,Fa) + trace2(Db,Fb))/2
         energy = (energya+energyb)/2 + enuke
-        print i,energy,eone,etwo,enuke
+        print (i,energy,eone,etwo,enuke)
         if abs(energy-eold) < 1e-5: break
         eold = energy
 
