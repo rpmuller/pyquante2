@@ -23,7 +23,7 @@ class grid(object):
         assert sb4==4
         return
 
-    def __len__(self): return self.ng
+    def __len__(self): return self.npts
     def __getitem__(self,*args): self.points.__getitem__(*args)
 
     def setbfamps(self,bfs):
