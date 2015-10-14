@@ -33,7 +33,7 @@ def EulerMaclaurinGrid(Z,**opts):
         grid = [(r,w,nang) for r,w in radial]
     return grid
 
-def LegendreGrid(nrad,Z,**kwargs):
+def LegendreGrid(Z,**kwargs):
     from pyquante2.constants import ang2bohr
     from pyquante2.grid.data import Bragg
     from pyquante2.grid.legendre import legendre
