@@ -1,3 +1,5 @@
+import numpy as np
+
 def becke_reweight_atoms(atoms,agrids,**kwargs):
     for iat,agrid in enumerate(agrids):
         for i in range(agrid.npts):
