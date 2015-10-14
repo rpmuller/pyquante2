@@ -39,7 +39,7 @@ def LegendreGrid(Z,**kwargs):
     from pyquante2.grid.legendre import legendre
     Rmax = 0.5*Bragg[Z]*ang2bohr
 
-    nard = kwargs.get('nrad',32)
+    nrad = kwargs.get('nrad',32)
     fineness = kwargs.get('fineness',1)
     radial = legendre[nrad]
     grid = []
