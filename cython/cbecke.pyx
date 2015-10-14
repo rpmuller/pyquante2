@@ -28,11 +28,9 @@ def becke_reweight_atoms(atoms,agrids,**kwargs):
             xyzp = agrid.points[p,:3]
             rjps[at,p] = np.linalg.norm(atoms[at].r-xyzp)
 
-    #cdef int[:] atnos = array.array('i') 
     cdef int[:] atnos = np.empty(len(atoms),dtype=np.intc) 
     for iat in xrange(0,len(atoms)):
         atnos[iat] = atoms[iat].atno
-        #atnos.append(atoms[iat].atno)
 
     Ps = np.empty(len(atoms),'d')
     cdef long g
