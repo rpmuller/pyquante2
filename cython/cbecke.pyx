@@ -32,7 +32,6 @@ def becke_reweight_atoms(atoms,agrids,**kwargs):
     npts = sum(agrid.npts for agrid in agrids)
 
     # Need list of all grid points of all atoms
-    cdef long g
     cdef long g_abs = 0
     cdef double[:,:] all_points = np.empty((npts,3))
     for agrid in agrids:
@@ -55,11 +54,10 @@ def becke_reweight_atoms(atoms,agrids,**kwargs):
         atnos[iat] = atoms[iat].atno
 
     Ps = np.empty(nat,'d')
-    cdef long jat
     g_abs = 0
     for iat,agrid in enumerate(agrids):
-        for g from 0 <= g < agrid.npts:
-            for jat from 0 <= jat < nat:
+        for g in xrange(agrid.npts):
+            for jat in xrange(nat):
                 Ps[jat] = becke_atomic_grid_p(jat,g_abs,rijs,rjps,atnos,do_becke_hetero,cBragg)
             P = Ps[iat]/sum(Ps)
             agrid.points[g,3] = P*agrid.points[g,3]
@@ -68,12 +66,11 @@ def becke_reweight_atoms(atoms,agrids,**kwargs):
 
 cdef inline double becke_atomic_grid_p(long jat,long g,double[:,:] rijs,double[:,:] rjps,int[:] atnos,int do_becke_hetero,double[:] cBragg):
     cdef double sprod = 1
-    cdef long kat
     cdef double mu
     cdef double chi
     cdef double u
     cdef double a
-    for kat from 0 <= kat < rijs.shape[0]:
+    for kat in xrange(rijs.shape[0]):
         if jat == kat: continue
         mu = (rjps[jat,g]-rjps[kat,g])/rijs[jat,kat]
         if do_becke_hetero != 0 and atnos[jat] != atnos[kat]:
@@ -87,8 +84,7 @@ cdef inline double becke_atomic_grid_p(long jat,long g,double[:,:] rijs,double[:
     return sprod
 
 cdef inline double fbecke(double x,int n=3):
-    cdef int i
-    for i from 0 <= i < n: x = pbecke(x)
+    for i in xrange(n): x = pbecke(x)
     return x
 cdef inline double pbecke(double x): 
     cdef double c1 = 1.5
