@@ -2,7 +2,6 @@
 import numpy as np
 cimport numpy as np
 from pyquante2.grid.data import Bragg
-import time
 from libc.math cimport sqrt
 
 def becke_reweight_atoms(atoms,agrids,**kwargs):
@@ -25,30 +24,22 @@ def becke_reweight_atoms(atoms,agrids,**kwargs):
     for i in xrange(nat):
         for j in xrange(nat):
             rijs[i,j] = 0.0
-            diff = (rs[i][0]-rs[j][0])
-            rijs[i,j] += diff*diff
-            diff = (rs[i][1]-rs[j][1])
-            rijs[i,j] += diff*diff
-            diff = (rs[i][2]-rs[j][2])
-            rijs[i,j] += diff*diff
+            for k in xrange(3):
+                diff = (rs[i][k]-rs[j][k])
+                rijs[i,j] += diff*diff
             rijs[i,j] = sqrt(rijs[i,j])
 
     npts = sum(agrid.npts for agrid in agrids)
 
-    t0 = time.time()
     # Need list of all grid points of all atoms
     cdef long g
     cdef long g_abs = 0
     cdef double[:,:] all_points = np.empty((npts,3))
     for agrid in agrids:
         for g in xrange(agrid.npts):
-            all_points[g_abs,0] = agrid.points[g,0]
-            all_points[g_abs,1] = agrid.points[g,1]
-            all_points[g_abs,2] = agrid.points[g,2]
+            for k in xrange(3):
+                all_points[g_abs,k] = agrid.points[g,k]
             g_abs += 1
-    t1 = time.time()
-    print "0:"
-    print t1 - t0
 
     cdef double[:,:] rjps = np.empty((nat,npts),'d',order="C")
     for at in xrange(nat):
@@ -58,9 +49,6 @@ def becke_reweight_atoms(atoms,agrids,**kwargs):
                 diff = rs[at,k] - all_points[g,k]
                 rjps[at,g] += diff*diff
             rjps[at,g] = sqrt(rjps[at,g])
-    t2 = time.time()            
-    print "1: "
-    print t2 - t1
 
     cdef int[:] atnos = np.empty(nat,dtype=np.intc) 
     for iat in xrange(nat):
