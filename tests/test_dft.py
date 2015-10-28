@@ -136,6 +136,13 @@ class test_dft(unittest.TestCase):
         ens = solver.converge()
         self.assertAlmostEqual(solver.energy,-1.1784857927828982)
 
+    def test_h2_svwn(self):
+        h2 = molecule([(1,0,0,-0.368),(1,0,0,0.368)],units='angs',nrad=50,do_sg1=False)
+        bfs = basisset(h2,'sto3g')
+        solver = dft(h2,bfs,'svwn')
+        ens = solver.converge()
+        self.assertAlmostEqual(solver.energy, -1.1212155284066108)
+
 def runsuite(verbose=True):
     if verbose: verbosity=2
     else: verbosity=1

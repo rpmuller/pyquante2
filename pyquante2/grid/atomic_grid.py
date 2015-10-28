@@ -4,12 +4,11 @@ from pyquante2.grid.lebedev import lebedev
 class atomic_grid(object):
     def __init__(self,atom,**kwargs):
         atno,x,y,z = atom.atuple()
-        nrad = kwargs.get('nrad',32)
-        
+
         if kwargs.get('radial','EulerMaclaurin') == 'Legendre':
-            grid_params = LegendreGrid(nrad,atno,**kwargs)
+            grid_params = LegendreGrid(atno,**kwargs)
         else:
-            grid_params = EulerMaclaurinGrid(nrad,atno,**kwargs)
+            grid_params = EulerMaclaurinGrid(atno,**kwargs)
         self.points = []
         for rrad,wrad,nang in grid_params:
             for xang,yang,zang,wang in lebedev[nang]:
@@ -23,7 +22,8 @@ class atomic_grid(object):
 # The ri's are properly adjusted to go to the proper distances.
 # The wi's are adjusted to only have to be multiplied by wrad from
 # the lebedev shell
-def EulerMaclaurinGrid(nrad,Z,**opts):
+def EulerMaclaurinGrid(Z,**opts):
+    nrad = opts.get('nrad',32)
     do_sg1 = opts.get('do_sg1',True)
     nang = opts.get('nang',194)
     radial = EulerMaclaurinRadialGrid(nrad,Z)
@@ -33,12 +33,13 @@ def EulerMaclaurinGrid(nrad,Z,**opts):
         grid = [(r,w,nang) for r,w in radial]
     return grid
 
-def LegendreGrid(nrad,Z,**kwargs):
+def LegendreGrid(Z,**kwargs):
     from pyquante2.constants import ang2bohr
     from pyquante2.grid.data import Bragg
     from pyquante2.grid.legendre import legendre
     Rmax = 0.5*Bragg[Z]*ang2bohr
 
+    nrad = kwargs.get('nrad',32)
     fineness = kwargs.get('fineness',1)
     radial = legendre[nrad]
     grid = []

@@ -2,6 +2,7 @@
 
 from distutils.core import setup
 from distutils.extension import Extension
+import numpy as np
 
 try:
     from Cython.Distutils import build_ext
@@ -32,6 +33,8 @@ if use_cython:
         Extension("pyquante2.cutils",["cython/cutils.pyx"]),
         Extension("pyquante2.cone",["cython/cone.pyx","cython/cints.c"]),
         Extension("pyquante2.ctwo",["cython/ctwo.pyx","cython/cints.c","cython/chgp.c"]),
+        Extension("pyquante2.cbecke",["cython/cbecke.pyx"],
+                   include_dirs=[np.get_include()])
         ]
     cmdclass.update({'build_ext': build_ext})
 else:
