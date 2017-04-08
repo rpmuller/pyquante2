@@ -4,14 +4,15 @@ import math
 import numpy as np
 
 from pyquante2.geo.elements import sym2no
+from builtins import input # For 2-3 compatibility
+from pyquante2.viewer.trackball_camera import TrackballCamera
+
 
 try:
     from pyglet.gl import *
     from pyglet import window
 except:
     pass
-
-from pyquante2.viewer.trackball_camera import TrackballCamera
 
 
 # Defaults for kwarg-passed options
@@ -180,8 +181,8 @@ class Viewer(object):
     def quit(self): pyglet.app.exit()
 
     def input_geo(self):
-        fname = raw_input("filename: ")
-        print fname
+        fname = input("filename: ")
+        print(fname)
         return
 
     def calllist(self, shapes):
