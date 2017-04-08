@@ -6,12 +6,6 @@ import numpy as np
 from pyquante2.geo.elements import sym2no
 from pyquante2.viewer.trackball_camera import TrackballCamera
 
-# For 2-3 compatibility:
-try:
-   input = raw_input
-except NameError:
-   pass
-
 try:
     from pyglet.gl import *
     from pyglet import window
@@ -153,7 +147,6 @@ class Viewer(object):
         self.win.on_mouse_press = self.on_mouse_press
         self.win.on_mouse_drag = self.on_mouse_drag
         self.win.on_mouse_scroll = self.on_mouse_scroll
-        self.win.on_key_press = self.on_key_press
 
         self.win.set_size(self.width,self.height)
 
@@ -182,12 +175,6 @@ class Viewer(object):
         return
 
     def run(self): pyglet.app.run()
-    def quit(self): pyglet.app.exit()
-
-    def input_geo(self):
-        fname = input("filename: ")
-        print(fname)
-        return
 
     def calllist(self, shapes):
         glNewList(self.clnum,GL_COMPILE)
@@ -226,17 +213,6 @@ class Viewer(object):
                 norm1(x, self.width),
                 norm1(y,self.height),
                 False)
-        return
-
-    def on_key_press(self, key, modifiers):
-        if key == window.key.I:
-            self.input_geo()
-        elif key == window.key.LEFT:
-            self.prev_geo()
-        elif key == window.key.RIGHT:
-            self.next_geo()
-        elif key == window.key.Q:
-            self.quit()
         return
 
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
