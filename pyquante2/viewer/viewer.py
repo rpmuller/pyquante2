@@ -141,12 +141,14 @@ class Viewer(object):
         self.win = window.Window(visible=True,resizable=True,
                                  config=self.config, caption='PyQuante Viewer')
 
-        # set callbacks
+        # set callbacks. I think I could do all of these with
+        # @window.event callbacks
         self.win.on_resize = self.on_resize
         self.win.on_draw = self.on_draw
         self.win.on_mouse_press = self.on_mouse_press
         self.win.on_mouse_drag = self.on_mouse_drag
         self.win.on_mouse_scroll = self.on_mouse_scroll
+        self.win.on_key_press = self.on_key_press
 
         self.win.set_size(self.width,self.height)
 
@@ -175,6 +177,12 @@ class Viewer(object):
         return
 
     def run(self): pyglet.app.run()
+    def quit(self): pyglet.app.exit()
+
+    def input_geo(self):
+        fname = raw_input("filename: ")
+        print fname
+        return
 
     def calllist(self, shapes):
         glNewList(self.clnum,GL_COMPILE)
@@ -213,6 +221,17 @@ class Viewer(object):
                 norm1(x, self.width),
                 norm1(y,self.height),
                 False)
+        return
+
+    def on_key_press(self, key, modifiers):
+        if key == window.key.I:
+            self.input_geo()
+        elif key == window.key.LEFT:
+            self.prev_geo()
+        elif key == window.key.RIGHT:
+            self.next_geo()
+        elif key == window.key.Q:
+            self.quit()
         return
 
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
