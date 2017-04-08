@@ -1,4 +1,4 @@
-from pyquante2.viewer import Viewer
+from pyquante2.viewer.viewer import Viewer
 
 class NWViewer(Viewer):
     def __init__(self):
