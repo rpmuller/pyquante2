@@ -4,9 +4,13 @@ import math
 import numpy as np
 
 from pyquante2.geo.elements import sym2no
-from builtins import input # For 2-3 compatibility
 from pyquante2.viewer.trackball_camera import TrackballCamera
 
+# For 2-3 compatibility:
+try:
+   input = raw_input
+except NameError:
+   pass
 
 try:
     from pyglet.gl import *
