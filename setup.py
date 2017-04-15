@@ -12,19 +12,6 @@ else:
     use_cython = True
 
 
-classifiers = """\
-Development Status :: 3 - Alpha
-Intended Audience :: Developers
-Intended Audience :: Science/Research
-License :: OSI Approved :: BSD License
-Programming Language :: Python
-Topic :: Scientific/Engineering
-Topic :: Software Development :: Libraries :: Python Modules
-Operating System :: Microsoft :: Windows
-Operating System :: Unix
-Operating System :: MacOS
-"""
-    
 cmdclass = {}
 ext_modules = []
 
@@ -66,6 +53,11 @@ setup(name='pyquante2',
                 'pyquante2.scf',
                 'pyquante2.viewer',
                 ],
+      classifiers = ["Development Status :: 3 - Alpha",
+                     "License :: OSI Approved :: BSD License",
+                     "Programming Language :: Python",
+                     "Topic :: Scientific/Engineering",
+                     ],
       cmdclass = cmdclass,
       ext_modules = ext_modules,
       )
