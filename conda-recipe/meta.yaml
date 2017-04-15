@@ -15,11 +15,6 @@ requirements:
     - python
     - numpy
 
-test:
-  requires:
-    - nose
-  
-
 about:
   home: http://github.com/rpmuller/pyquante2
   license: BSD
