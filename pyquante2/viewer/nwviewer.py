@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+"""Viewer/editor for nwchem files.
+"""
+
 from pyquante2.viewer.viewer import Viewer
 
 # For 2-3 compatibility:

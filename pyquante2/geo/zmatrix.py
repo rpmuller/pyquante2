@@ -2,8 +2,8 @@
 Utilities to read/write zmatrices.
 
 Todo:
-* Write a function to create a zmatrix from a molecule, possibly given a set of internal coordinates,
-  possibly not.
+- Write a function to create a zmatrix from a molecule, possibly given
+  a set of internal coordinates, possibly not.
 """
 
 from math import pi,cos,sin

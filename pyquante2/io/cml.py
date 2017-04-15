@@ -1,3 +1,11 @@
+"""
+CML module
+
+This module contains some general functions I use for parsing CML
+files. It currently uses an intermediate representation to store the data
+rather than pyquante2 data structures.
+"""
+
 import cStringIO
 import numpy
 import xml.etree.ElementTree as ET
