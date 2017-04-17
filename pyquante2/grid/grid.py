@@ -7,11 +7,7 @@ point.
 import numpy as np
 from pyquante2.grid.atomic_grid import atomic_grid
 
-try:
-    from pyquante2.cbecke import becke_reweight_atoms
-except:
-    print("Couldn't find cython becke routine")
-    from pyquante2.grid.becke import becke_reweight_atoms
+from pyquante2.grid.becke import becke_reweight_atoms
 
 
 class grid(object):

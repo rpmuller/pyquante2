@@ -1,35 +1,6 @@
 #!/usr/bin/env python
 
 from setuptools import setup
-from setuptools.extension import Extension
-import numpy as np
-
-try:
-    from Cython.Distutils import build_ext
-except ImportError:
-    use_cython = False
-else:
-    use_cython = True
-
-
-cmdclass = {}
-ext_modules = []
-
-if use_cython:
-    ext_modules += [
-        Extension("pyquante2.cutils",["cython/cutils.pyx"]),
-        Extension("pyquante2.cone",["cython/cone.pyx","cython/cints.c"]),
-        Extension("pyquante2.ctwo",["cython/ctwo.pyx","cython/cints.c","cython/chgp.c"]),
-        Extension("pyquante2.cbecke",["cython/cbecke.pyx"],
-                   include_dirs=[np.get_include()])
-        ]
-    cmdclass.update({'build_ext': build_ext})
-else:
-    ext_modules += [
-        Extension("pyquante2.cutils",["cython/cutils.c"]),
-        Extension("pyquante2.cone",["cython/cone.c","cython/cints.c"]),
-        Extension("pyquante2.ctwo",["cython/ctwo.c","cython/cints.c","cython/chgp.c"]),
-        ]
 
 with open('README.md') as file:
     long_description = file.read()
@@ -58,6 +29,4 @@ setup(name='pyquante2',
                      "Programming Language :: Python",
                      "Topic :: Scientific/Engineering",
                      ],
-      cmdclass = cmdclass,
-      ext_modules = ext_modules,
       )
