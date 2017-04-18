@@ -52,8 +52,12 @@ much time as I feel I need to do this properly.
 
 ## Installation via conda
 There are now [conda installers](http://anaconda.org/rpmuller) for the full pyquante2 package on linux and mac, and a pure python version (that will be much slower) available on windows. To do this, just
+
     % conda install -c rpmuller pyquante2
+
 on linux/mac, or
+
     % conda install -c rpmuller pyquante2_pure
+
 on windows.
 
