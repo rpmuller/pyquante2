@@ -1,4 +1,19 @@
 # PyQuante2
+PyQuante is an open-source suite of programs for developing quantum chemistry methods. The program is written in the Python programming language, but has many “rate-determining” modules also written in C for speed. The resulting code, though not as fast as Jaguar, NWChem, Gaussian, or MPQC, is much easier to understand and modify. The goal of this software is not necessarily to provide a working quantum chemistry program (although it will hopefully do that), but rather to provide a well-engineered set of tools so that scientists can construct their own quantum chemistry programs without going through the tedium of having to write every low-level routine.
+
+## Installation
+I try to keep the required packages minimal (mostly just numpy). If you're building from source, you'll also need cython and a c compiler. However, I strongly recommend using conda.
+
+## Installation via conda
+There are now [conda installers](http://anaconda.org/rpmuller) for the full pyquante2 package on linux and mac, and a pure python version (that will be much slower) available on windows. To do this, just
+
+    % conda install -c rpmuller pyquante2
+
+on linux/mac, or
+
+    % conda install -c rpmuller pyquante2_pure
+
+on windows.
 
 ## Why rewrite PyQuante?
 [PyQuante](http://pyquante.sf.net) is a Quantum Chemistry Suite
@@ -32,12 +47,6 @@ There is an IPython notebook surveying some of the new features that
 can be viewed as a [gist](https://gist.github.com/rpmuller/5745404) or
 [on nbviewer](http://nbviewer.ipython.org/5745404). 
 
-## Requirements:
-* Python 2.7
-* Numpy >= 1.7
-* The test suites run without matplotlib or pyglet, but there is extra
-  functionality using both.
-
 ## What works so far:
 * Huzinaga and HGP integral methods, both in Python and with Cython wrappers to C
 * RHF, UHF wave functions
@@ -49,15 +58,4 @@ can be viewed as a [gist](https://gist.github.com/rpmuller/5745404) or
 Feel free to fork this if it interests you. The PyQuante code is still
 around, so I'm not rushing through the process, I'm just taking as
 much time as I feel I need to do this properly.
-
-## Installation via conda
-There are now [conda installers](http://anaconda.org/rpmuller) for the full pyquante2 package on linux and mac, and a pure python version (that will be much slower) available on windows. To do this, just
-
-    % conda install -c rpmuller pyquante2
-
-on linux/mac, or
-
-    % conda install -c rpmuller pyquante2_pure
-
-on windows.
 
