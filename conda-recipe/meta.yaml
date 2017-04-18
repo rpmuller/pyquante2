@@ -15,6 +15,9 @@ requirements:
     - python
     - numpy
 
+build:
+  noarch_python: True
+
 test:
   import:
     - pyquante2
