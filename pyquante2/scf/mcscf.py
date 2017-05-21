@@ -119,12 +119,12 @@ def rhf(geo,basisname='sto3g',maxiter=25,verbose=False):
         # Perform the ROTION step:
 
         
-        print "Iteration %d: Energy %.2f" % (it,E)
+        print("Iteration %d: Energy %.2f" % (it,E))
         if np.isclose(E,Eold):
-            print "Energy converged"
+            print("Energy converged")
             break
     else:
-        print "Maximum iterations (%d) reached without convergence" % (maxit)
+        print("Maximum iterations (%d) reached without convergence" % (maxit))
     return
 
 def orbital_to_shell_mapping(ncore,nopen,npair):
