@@ -87,8 +87,6 @@ def rhf(geo,basisname='sto3g',maxiter=25,verbose=False):
     nsh = len(orbs_per_shell)
     shells = orbital_to_shell_mapping(ncore,nopen,npair)
     
-    #TODO: Make fab range over shells, not orbs
-    #TODO: make a shell function that maps orbitals to shells
     f,a,b = fab(ncore,nopen,npair)
 
     Eold = 0
@@ -179,7 +177,18 @@ def guess_gvb_ci_coeffs(npair):
 
 def fab(ncore,nopen,npair,coeffs=None):
     """\
-    Create a GVB occupation array f:
+    Create arrays over shells for the coefficients of the
+    energy expression:
+      E = 2 f_i h_ii + a_ij J_ij + b_ij K_ij
+    Here
+      f_i   Occupations of orbital i
+      a_ij  Coulombic coefficient for orbitals i,j
+      b_ij  Exchange coefficient for orbitals i,j
+
+    Shells in GVB are a little confusing. All core orbitals are
+    in a single shell, and then each occupied orbital has its own
+    shell.
+    
     >>> f,a,b = fab(1,0,0)
     >>> f
     array([ 1.])
@@ -204,46 +213,47 @@ def fab(ncore,nopen,npair,coeffs=None):
     array([[ 0., -0.],
            [-0.,  0.]])
     """
-    nocc = ncore+nopen+2*npair
-    f = np.zeros(nocc,'d')
-    a = np.zeros((nocc,nocc),'d')
-    b = np.zeros((nocc,nocc),'d')
+    ncoresh = 1 if ncore else 0
+    nsh = ncoresh+nopen+2*npair
+    f = np.zeros(nsh,'d')
+    a = np.zeros((nsh,nsh),'d')
+    b = np.zeros((nsh,nsh),'d')
 
     if npair > 0 and coeffs is None:
         coeffs = guess_gvb_ci_coeffs(npair)
 
     # f array
-    for i in range(ncore):
-        f[i] = 1
-    for i in range(ncore,ncore+nopen):
-        f[i] = 0.5
+    if ncore:
+        f[0] = 1
+    for i in range(nopen):
+        f[ncoresh+i] = 0.5
 
     # This is a little tricky:
     # Assume that the coeffs are arranged p1n1,p1n2,p2n1,p2n2,...
     # But the orbitals are arranged by occupation, p1n1,p2n1,...,p1n2,p2n2,...
     # I may rethink this -- seems unnaturally complex
     for p in range(npair):
-        i = ncore+nopen+p
+        i = ncoresh+nopen+p
         f[i] = coeffs[2*p]
         f[i+npair] = coeffs[2*p+1]
 
     # Basic a,b assumptions:
-    for i in range(nocc):
-        for j in range(nocc):
+    for i in range(nsh):
+        for j in range(nsh):
             a[i,j] = 2*f[i]*f[j]
             b[i,j] = -f[i]*f[j]
             
     # Corrections
     # b_ij = -1/2               If i and j are both open-shell
-    for i in range(ncore,ncore+nopen):
-        for j in range(ncore,ncore+nopen):
+    for i in range(ncoresh,ncoresh+nopen):
+        for j in range(ncoresh,ncoresh+nopen):
             b[i,j] = -0.5
     # a_ii = f_i, b_ii = 0      If i is a pair orbital
-    for i in range(ncore+nopen,ncore+nopen+2*npair):
+    for i in range(ncoresh+nopen,ncoresh+nopen+2*npair):
         a[i,i] = f[i]
         b[i,i] = 0
     # a_ij = 0, b_ij = -c_i c_j If i and j are in the same pair
-    for i in range(ncore+nopen,ncore+nopen+npair):
+    for i in range(ncoresh+nopen,ncoresh+nopen+npair):
         a[i,i+npair] = a[i+npair,i] = 0
         b[i,i+npair] = b[i+npair,i] = -coeffs[i]*coeffs[i+npair]
     return f,a,b
