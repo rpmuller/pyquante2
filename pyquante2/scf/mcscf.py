@@ -54,17 +54,18 @@ except that:
 
 """
 import numpy as np
-from pyquante2.geo.samples import h2o,lih,oh,li
+from pyquante2.geo.samples import h2,lih
 from pyquante2.basis.basisset import basisset
-from pyquante2.utils import trace2,geigh,dmat
+from pyquante2.utils import trace2,geigh,ao2mo,simx
 from pyquante2.ints.integrals import onee_integrals, twoe_integrals
-from pyquante2.ints.two import ERI
 
 def rhf(geo,basisname='sto3g',maxiter=25,verbose=False):
     """\
     This is a trivial test for the mcscf module, because other
     pyquante modules are simpler if you're doing closed shell rhf,
     and should give the same results.
+
+    >>> rhf(h2,verbose=True)    # -1.117099582955609
     """
     # Get the basis set and the integrals
     bfs = basisset(geo,basisname)
@@ -74,6 +75,7 @@ def rhf(geo,basisname='sto3g',maxiter=25,verbose=False):
 
     # Get a guess for the orbitals
     E,U = geigh(h,i1.S)
+    print U
 
     # Set the parameters based on the molecule
     nopen = geo.nopen()
@@ -85,8 +87,8 @@ def rhf(geo,basisname='sto3g',maxiter=25,verbose=False):
     virt = range(nocc,norb)
     orbs_per_shell = get_orbs_per_shell(ncore,nopen,npair)
     nsh = len(orbs_per_shell)
-    shells = orbital_to_shell_mapping(ncore,nopen,npair)
-    
+    shell = orbital_to_shell_mapping(ncore,nopen,npair)
+
     f,a,b = fab(ncore,nopen,npair)
 
     Eold = 0
@@ -94,8 +96,8 @@ def rhf(geo,basisname='sto3g',maxiter=25,verbose=False):
         # Make all of the density matrices:
         Ds = [dmat_gen(U,orbs) for orbs in orbs_per_shell]
         # Make the 2e matrices
-        Js = [i2.get_j(D) for D in Dmats]
-        Ks = [i2.get_j(K) for D in Dmats]
+        Js = [i2.get_j(D) for D in Ds]
+        Ks = [i2.get_k(D) for D in Ds]
         # Make the Fock matrices
         Fs = [f[i]*h + sum(a[i,j]*Js[j] + b[i,j]*Ks[j] for j in range(nsh))
               for i in range(nsh)]
@@ -103,14 +105,18 @@ def rhf(geo,basisname='sto3g',maxiter=25,verbose=False):
         # Compute the one-electron part of the energy
         hmo = ao2mo(h,U)
         Eone = sum(f[shell[i]]*hmo[i,i] for i in range(nocc))
+        Jmo = ao2mo(Js[0],U)
+        print 2*hmo[0,0]+Jmo[0,0]
 
         # Perform the OCBSE step
         E = Eone
         Unew = np.zeros(U.shape,'d') # We'll put the new orbitals here
         for i,orbs in enumerate(orbs_per_shell):
-            space = orbs + virts
-            F = ao2mo(H,U[:,space])
-            Ei,C = eigh(F)
+            space = orbs + virt
+            F = ao2mo(Fs[i],U[:,space])
+            Ei,C = np.linalg.eigh(F)
+            print Ei
+            print C
             E += sum(Ei[orbs])
             Ui = np.dot(C.T,U[:,space])
             Unew[:,space] = Ui
@@ -119,13 +125,14 @@ def rhf(geo,basisname='sto3g',maxiter=25,verbose=False):
         # Perform the ROTION step:
 
         
-        print("Iteration %d: Energy %.2f" % (it,E))
+        print("Iteration %d: Energy %.6f" % (it,E))
         if np.isclose(E,Eold):
             print("Energy converged")
             break
+        Eold = E
     else:
-        print("Maximum iterations (%d) reached without convergence" % (maxit))
-    return
+        print("Maximum iterations (%d) reached without convergence" % (maxiter))
+    return E
 
 def orbital_to_shell_mapping(ncore,nopen,npair):
     """\
