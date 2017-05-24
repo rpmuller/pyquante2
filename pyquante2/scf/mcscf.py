@@ -52,6 +52,11 @@ except that:
   a_ii = f_i, b_ii = 0      If i is a pair orbital
   a_ij = 0, b_ij = -c_i c_j If i and j are in the same pair
 
+
+The module is currently written to only go as complex as a GVB
+wave function. However, you can implement a general MC-SCF wave
+function by implementing a more complicated routine to update
+the CI coefficients. 
 """
 import numpy as np
 from pyquante2.geo.samples import h2,lih
@@ -65,7 +70,7 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
     pyquante modules are simpler if you're doing closed shell rhf,
     and should give the same results.
 
-    >>> mcscf(h2,maxiter=2,verbose=True)    # -1.117099582955609
+    # >>> mcscf(h2,maxiter=2,verbose=True)    # -1.117099582955609
     """
     # Get the basis set and the integrals
     bfs = basisset(geo,basisname)
