@@ -78,8 +78,8 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
     >>> mcscf(h2)    # doctest: +ELLIPSIS
     -1.117099...
 
-    #>>> mcscf(lih,maxiter=5,verbose=True)   # doctest: +ELLIPSIS
-    -7.8607...
+    >>> mcscf(lih,maxiter=5)   # doctest: +ELLIPSIS
+    -7.8607355...
     """
     # Get the basis set and the integrals
     bfs = basisset(geo,basisname)
@@ -103,6 +103,7 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
 
     f,a,b = fab(ncore,nopen,npair)
     if verbose:
+        np.set_printoptions(precision=4)
         print("**** PyQuante MCSCF ****")
         print(geo)
         print("Nuclear repulsion energy: %.3f" % Enuke)
@@ -131,8 +132,6 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
         # Compute the one-electron part of the energy
         hmo = ao2mo(h,U)
         Eone = sum(f[shell[i]]*hmo[i,i] for i in range(nocc))
-        Jmo = ao2mo(Js[0],U)
-        Kmo = ao2mo(Ks[0],U)
 
         # Perform the OCBSE step
         Etwo = 0
@@ -146,7 +145,7 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
                 print(Ei)
                 print(C)
             Etwo += sum(Ei[orbs])
-            Ui = np.dot(C.T,U[:,space])
+            Ui = np.dot(U[:,space],C)
             Unew[:,space] = Ui
         U = Unew
         E = Enuke+Eone+Etwo
@@ -154,14 +153,8 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
         # Perform the ROTION step:
 
         if verbose:
-            print ("---- %d   %10.4f : %10.4f %10.4f %10.4f" % ((it+1),E,Enuke,Eone,Etwo))
-            print(2*hmo[0,0]+Jmo[0,0])
-            print("h_mo:\n%s"%hmo)
-            print("J_mo:\n%s"%Jmo)
-            print("K_mo:\n%s"%Jmo)
+            print ("---- %d :  %10.4f %10.4f %10.4f %10.4f" % ((it+1),E,Enuke,Eone,Etwo))
         # Update CI coefs
-        if verbose:
-            print("Iteration %d: Energy %.6f" % (it,E))
         if np.isclose(E,Eold):
             if verbose:
                 print("Energy converged")
@@ -303,4 +296,5 @@ def fab(ncore,nopen,npair,coeffs=None):
     return f,a,b
     
 if __name__ == '__main__':
-    import doctest; doctest.testmod()
+    #import doctest; doctest.testmod()
+    mcscf(lih,maxiter=5,verbose=True)   # doctest: +ELLIPSIS
