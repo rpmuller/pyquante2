@@ -59,7 +59,7 @@ function by implementing a more complicated routine to update
 the CI coefficients. 
 """
 import numpy as np
-from pyquante2.geo.samples import h2,lih
+from pyquante2.geo.samples import h,h2,lih
 from pyquante2.basis.basisset import basisset
 from pyquante2.utils import trace2,geigh,ao2mo,simx
 from pyquante2.ints.integrals import onee_integrals, twoe_integrals
@@ -70,7 +70,10 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
     pyquante modules are simpler if you're doing closed shell rhf,
     and should give the same results.
 
-    # >>> mcscf(h2,maxiter=2,verbose=True)    # -1.117099582955609
+    >>> mcscf(h,maxiter=2)     # -0.46658184546856041 from uhf/sto3g
+    -0.46658184546856041
+
+    #>>> mcscf(h2,maxiter=2,verbose=True)    # -1.117099582955609
     """
     # Get the basis set and the integrals
     bfs = basisset(geo,basisname)
@@ -100,10 +103,10 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
         print("Basis set: %s" % basisname)
         print("Ncore/open/pair: %d,%d,%d" % (ncore,nopen,npair))
         print("Nocc/bf/orb: %d,%d,%d" % (nocc,len(bfs),norb))
-        print("f,a,b")
-        print(f)
-        print(a)
-        print(b)
+        for i in range(nsh):
+            print("Shell %d occupation = %.2f" % (i,f[i]))
+            print("Orbitals in shell %s" % orbs_per_shell[i])
+            print("Couplings to other shells %s,%s" % (a[i,:],b[i,:]))
 
     Eold = 0
     for it in range(maxiter):
@@ -148,9 +151,11 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
         # Perform the ROTION step:
 
         # Update CI coefs
-        print("Iteration %d: Energy %.6f" % (it,E))
+        if verbose:
+            print("Iteration %d: Energy %.6f" % (it,E))
         if np.isclose(E,Eold):
-            print("Energy converged")
+            if verbose:
+                print("Energy converged")
             break
         Eold = E
     else:
