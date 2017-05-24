@@ -138,14 +138,8 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
         Unew = np.zeros(U.shape,'d') # We'll put the new orbitals here
         for i,orbs in enumerate(orbs_per_shell):
             space = list(orbs) + list(virt)
-            F = ao2mo(Fs[i],U[:,space])
-            Ei,C = np.linalg.eigh(F)
-            if verbose:
-                print("OCBSE evals/vecs:")
-                print(Ei)
-                print(C)
+            Ei,Ui = OCBSE(Fs[i],U[:,space])
             Etwo += sum(Ei[orbs])
-            Ui = np.dot(U[:,space],C)
             Unew[:,space] = Ui
         U = Unew
         E = Enuke+Eone+Etwo
@@ -163,6 +157,17 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
     else:
         print("Maximum iterations (%d) reached without convergence" % (maxiter))
     return E
+
+def OCBSE(F,U):
+    """\
+    Perform an Orthogonality Constrained Basis Set Expansion
+    to mix the occupied orbitals with the virtual orbitals.
+    See Bobrowicz/Goddard Sect 5.1.
+    """
+    Fm = ao2mo(F,U)
+    Ei,Ci = np.linalg.eigh(Fm)
+    Ui = np.dot(U,Ci)
+    return Ei,Ui
 
 def orbital_to_shell_mapping(ncore,nopen,npair):
     """\
