@@ -136,7 +136,7 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
         E = Eone
         Unew = np.zeros(U.shape,'d') # We'll put the new orbitals here
         for i,orbs in enumerate(orbs_per_shell):
-            space = orbs + virt
+            space = list(orbs) + list(virt)
             F = ao2mo(Fs[i],U[:,space])
             Ei,C = np.linalg.eigh(F)
             if verbose:
