@@ -59,13 +59,13 @@ from pyquante2.basis.basisset import basisset
 from pyquante2.utils import trace2,geigh,ao2mo,simx
 from pyquante2.ints.integrals import onee_integrals, twoe_integrals
 
-def rhf(geo,basisname='sto3g',maxiter=25,verbose=False):
+def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
     """\
     This is a trivial test for the mcscf module, because other
     pyquante modules are simpler if you're doing closed shell rhf,
     and should give the same results.
 
-    >>> rhf(h2,verbose=True)    # -1.117099582955609
+    >>> mcscf(h2,maxiter=2,verbose=True)    # -1.117099582955609
     """
     # Get the basis set and the integrals
     bfs = basisset(geo,basisname)
@@ -75,12 +75,11 @@ def rhf(geo,basisname='sto3g',maxiter=25,verbose=False):
 
     # Get a guess for the orbitals
     E,U = geigh(h,i1.S)
-    print U
+    if verbose:
+        print("Starting guess at orbitals:\n%s"%U)
 
     # Set the parameters based on the molecule
     nopen = geo.nopen()
-    assert nopen == 0
-    npair = 0
     ncore = geo.nclosed() - npair
     nocc = ncore + nopen + 2*npair
     norb = len(bfs)
@@ -90,6 +89,16 @@ def rhf(geo,basisname='sto3g',maxiter=25,verbose=False):
     shell = orbital_to_shell_mapping(ncore,nopen,npair)
 
     f,a,b = fab(ncore,nopen,npair)
+    if verbose:
+        print("PyQuante MCSCF")
+        print(geo)
+        print("Basis set: %s" % basisname)
+        print("Ncore/open/pair: %d,%d,%d" % (ncore,nopen,npair))
+        print("Nocc/bf/orb: %d,%d,%d" % (nocc,len(bfs),norb))
+        print("f,a,b")
+        print(f)
+        print(a)
+        print(b)
 
     Eold = 0
     for it in range(maxiter):
@@ -106,7 +115,14 @@ def rhf(geo,basisname='sto3g',maxiter=25,verbose=False):
         hmo = ao2mo(h,U)
         Eone = sum(f[shell[i]]*hmo[i,i] for i in range(nocc))
         Jmo = ao2mo(Js[0],U)
-        print 2*hmo[0,0]+Jmo[0,0]
+        Kmo = ao2mo(Ks[0],U)
+        if verbose:
+            print("Energy components:")
+            print("Eone: %f"%Eone)
+            print(2*hmo[0,0]+Jmo[0,0])
+            print("h_mo:\n%s"%hmo)
+            print("J_mo:\n%s"%Jmo)
+            print("K_mo:\n%s"%Jmo)
 
         # Perform the OCBSE step
         E = Eone
@@ -115,8 +131,10 @@ def rhf(geo,basisname='sto3g',maxiter=25,verbose=False):
             space = orbs + virt
             F = ao2mo(Fs[i],U[:,space])
             Ei,C = np.linalg.eigh(F)
-            print Ei
-            print C
+            if verbose:
+                print("OCBSE evals/vecs:")
+                print(Ei)
+                print(C)
             E += sum(Ei[orbs])
             Ui = np.dot(C.T,U[:,space])
             Unew[:,space] = Ui
@@ -124,7 +142,7 @@ def rhf(geo,basisname='sto3g',maxiter=25,verbose=False):
 
         # Perform the ROTION step:
 
-        
+        # Update CI coefs
         print("Iteration %d: Energy %.6f" % (it,E))
         if np.isclose(E,Eold):
             print("Energy converged")
