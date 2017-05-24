@@ -61,7 +61,7 @@ the CI coefficients.
 import numpy as np
 from pyquante2.geo.samples import h,h2,lih
 from pyquante2.basis.basisset import basisset
-from pyquante2.utils import trace2,geigh,ao2mo,simx
+from pyquante2.utils import geigh,ao2mo
 from pyquante2.ints.integrals import onee_integrals, twoe_integrals
 
 def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
@@ -133,9 +133,18 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
         hmo = ao2mo(h,U)
         Eone = sum(f[shell[i]]*hmo[i,i] for i in range(nocc))
 
+
+        # Perform the ROTION step:
+        if nsh > 1:
+            Gamma = ROTION_Gamma(Js,Ks,a,b,nsh)
+            Delta = ROTION_Delta(Fs,Gamma,nocc,shell)
+            eD = expm(Delta)
+            Uocc = np.dot(U[:,:nocc],eD)
+            U[:,:nocc] = Uocc
+        
         # Perform the OCBSE step
+        Unew = np.zeros(U.shape,'d')
         Etwo = 0
-        Unew = np.zeros(U.shape,'d') # We'll put the new orbitals here
         for i,orbs in enumerate(orbs_per_shell):
             space = list(orbs) + list(virt)
             Ei,Ui = OCBSE(Fs[i],U[:,space])
@@ -143,8 +152,6 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
             Unew[:,space] = Ui
         U = Unew
         E = Enuke+Eone+Etwo
-
-        # Perform the ROTION step:
 
         if verbose:
             print ("---- %d :  %10.4f %10.4f %10.4f %10.4f" % ((it+1),E,Enuke,Eone,Etwo))
@@ -168,6 +175,41 @@ def OCBSE(F,U):
     Ei,Ci = np.linalg.eigh(Fm)
     Ui = np.dot(U,Ci)
     return Ei,Ui
+
+def ROTION_Gamma(Js,Ks,a,b,nsh):
+    Gamma = np.zeros((norb,norb),'d')
+    for i in range(norb):
+        ish = shell(i)
+        for j in range(norb):
+            jsh = shell(j)
+            if ish == jsh: continue
+            Jij = J[ish][j,j]
+            Kij = K[ish][j,j]
+            Gamma[i,j] = 2(a[ish,ish]+a[jsh,jsh]-2*a[ish,jsh])*Kij \
+                         +(b[ish,ish]+b[jsh,jsh]-2*b[ish,jsh])*(Jij+Kij)
+    return Gamma
+
+def ROTION_Delta(Fs,Gamma,nocc,shell):
+    """\
+    Minimize the orbital mixing between occupied orbitals.
+    This is Bobrowicz/Goddard eq 115b, primarily
+    """
+    # Make the orbital correction matrix Delta
+    Delta = np.zeros((norb,norb),'d')
+    for i in range(norb):
+        ish = shell(i)
+        for j in range(norb):
+            jsh = shell(j)
+            if ish == jsh: continue
+            Delta[i,j] = (Fs[jsh][i,j]-Fs[ish][i,j])/\
+                         (Fs[jsh][i,i]-Fs[jsh][j,j]-Fs[ish][i,i]+Fs[ish][i,i]+Gamma[i,j])
+    return Delta
+
+
+    # Take the matrix exponent:
+    # Good time to cite "Nineteen Dubious Ways to Compute the Exponential of a Matrix",
+    # Moler and Van Loan.
+            
 
 def orbital_to_shell_mapping(ncore,nopen,npair):
     """\
