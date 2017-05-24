@@ -71,12 +71,15 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
     and should give the same results.
 
     # -0.46658184546856041 from uhf/sto3g
-    >>> mcscf(h,maxiter=2)     # doctest: +ELLIPSIS
+    >>> mcscf(h)     # doctest: +ELLIPSIS
     -0.4665818...
 
     #  -1.117099582955609 from rhf/sto3g
-    #>>> mcscf(h2,maxiter=2,verbose=True)    # doctest: +ELLIPSIS
+    >>> mcscf(h2)    # doctest: +ELLIPSIS
     -1.117099...
+
+    #>>> mcscf(lih,maxiter=5,verbose=True)   # doctest: +ELLIPSIS
+    -7.8607...
     """
     # Get the basis set and the integrals
     bfs = basisset(geo,basisname)
@@ -86,8 +89,6 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
 
     # Get a guess for the orbitals
     E,U = geigh(h,i1.S)
-    if verbose:
-        print("Starting guess at orbitals:\n%s"%U)
 
     # Set the parameters based on the molecule
     nopen = geo.nopen()
@@ -98,18 +99,23 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
     orbs_per_shell = get_orbs_per_shell(ncore,nopen,npair)
     nsh = len(orbs_per_shell)
     shell = orbital_to_shell_mapping(ncore,nopen,npair)
+    Enuke = geo.nuclear_repulsion()
 
     f,a,b = fab(ncore,nopen,npair)
     if verbose:
-        print("PyQuante MCSCF")
+        print("**** PyQuante MCSCF ****")
         print(geo)
+        print("Nuclear repulsion energy: %.3f" % Enuke)
         print("Basis set: %s" % basisname)
-        print("Ncore/open/pair: %d,%d,%d" % (ncore,nopen,npair))
-        print("Nocc/bf/orb: %d,%d,%d" % (nocc,len(bfs),norb))
+        print("  ncore/open/pair: %d,%d,%d" % (ncore,nopen,npair))
+        print("  occ/bf/orb: %d,%d,%d" % (nocc,len(bfs),norb))
         for i in range(nsh):
-            print("Shell %d occupation = %.2f" % (i,f[i]))
-            print("Orbitals in shell %s" % orbs_per_shell[i])
-            print("Couplings to other shells %s,%s" % (a[i,:],b[i,:]))
+            print("Shell %d" % i)
+            print("  occupation = %.2f" % f[i])
+            print("  orbitals in shell %s" % orbs_per_shell[i])
+            print("  couplings to other shells %s,%s" % (a[i,:],b[i,:]))
+        print("Starting guess at orbitals:\n%s"%U)
+        print("****")
 
     Eold = 0
     for it in range(maxiter):
@@ -127,16 +133,9 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
         Eone = sum(f[shell[i]]*hmo[i,i] for i in range(nocc))
         Jmo = ao2mo(Js[0],U)
         Kmo = ao2mo(Ks[0],U)
-        if verbose:
-            print("Energy components:")
-            print("Eone: %f"%Eone)
-            print(2*hmo[0,0]+Jmo[0,0])
-            print("h_mo:\n%s"%hmo)
-            print("J_mo:\n%s"%Jmo)
-            print("K_mo:\n%s"%Jmo)
 
         # Perform the OCBSE step
-        E = Eone
+        Etwo = 0
         Unew = np.zeros(U.shape,'d') # We'll put the new orbitals here
         for i,orbs in enumerate(orbs_per_shell):
             space = list(orbs) + list(virt)
@@ -146,13 +145,20 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
                 print("OCBSE evals/vecs:")
                 print(Ei)
                 print(C)
-            E += sum(Ei[orbs])
+            Etwo += sum(Ei[orbs])
             Ui = np.dot(C.T,U[:,space])
             Unew[:,space] = Ui
         U = Unew
+        E = Enuke+Eone+Etwo
 
         # Perform the ROTION step:
 
+        if verbose:
+            print ("---- %d   %10.4f : %10.4f %10.4f %10.4f" % ((it+1),E,Enuke,Eone,Etwo))
+            print(2*hmo[0,0]+Jmo[0,0])
+            print("h_mo:\n%s"%hmo)
+            print("J_mo:\n%s"%Jmo)
+            print("K_mo:\n%s"%Jmo)
         # Update CI coefs
         if verbose:
             print("Iteration %d: Energy %.6f" % (it,E))
