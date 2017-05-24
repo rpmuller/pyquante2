@@ -70,10 +70,13 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
     pyquante modules are simpler if you're doing closed shell rhf,
     and should give the same results.
 
-    >>> mcscf(h,maxiter=2)     # -0.46658184546856041 from uhf/sto3g
-    -0.46658184546856041
+    # -0.46658184546856041 from uhf/sto3g
+    >>> mcscf(h,maxiter=2)     # doctest: +ELLIPSIS
+    -0.4665818...
 
-    #>>> mcscf(h2,maxiter=2,verbose=True)    # -1.117099582955609
+    #  -1.117099582955609 from rhf/sto3g
+    #>>> mcscf(h2,maxiter=2,verbose=True)    # doctest: +ELLIPSIS
+    -1.117099...
     """
     # Get the basis set and the integrals
     bfs = basisset(geo,basisname)
