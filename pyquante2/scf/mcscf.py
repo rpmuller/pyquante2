@@ -59,7 +59,7 @@ function by implementing a more complicated routine to update
 the CI coefficients. 
 """
 import numpy as np
-from pyquante2.geo.samples import h,h2,lih
+from pyquante2.geo.samples import h,h2,lih,li
 from pyquante2.basis.basisset import basisset
 from pyquante2.utils import geigh,ao2mo
 from pyquante2.ints.integrals import onee_integrals, twoe_integrals
@@ -136,8 +136,14 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
 
         # Perform the ROTION step:
         if nsh > 1:
-            Gamma = ROTION_Gamma(Js,Ks,a,b,nsh)
+            Gamma = ROTION_Gamma(Js,Ks,a,b,nocc,shell)
+            if verbose:
+                print("ROTION Gamma Matrix")
+                print(Gamma)
             Delta = ROTION_Delta(Fs,Gamma,nocc,shell)
+            if verbose:
+                print("ROTION Delta Matrix")
+                print(Delta)
             eD = expm(Delta)
             Uocc = np.dot(U[:,:nocc],eD)
             U[:,:nocc] = Uocc
@@ -176,17 +182,17 @@ def OCBSE(F,U):
     Ui = np.dot(U,Ci)
     return Ei,Ui
 
-def ROTION_Gamma(Js,Ks,a,b,nsh):
-    Gamma = np.zeros((norb,norb),'d')
-    for i in range(norb):
-        ish = shell(i)
-        for j in range(norb):
-            jsh = shell(j)
+def ROTION_Gamma(Js,Ks,a,b,nocc,shell):
+    Gamma = np.zeros((nocc,nocc),'d')
+    for i in range(nocc):
+        ish = shell[i]
+        for j in range(nocc):
+            jsh = shell[j]
             if ish == jsh: continue
-            Jij = J[ish][j,j]
-            Kij = K[ish][j,j]
-            Gamma[i,j] = 2(a[ish,ish]+a[jsh,jsh]-2*a[ish,jsh])*Kij \
-                         +(b[ish,ish]+b[jsh,jsh]-2*b[ish,jsh])*(Jij+Kij)
+            Jij = Js[ish][j,j]
+            Kij = Ks[ish][j,j]
+            Gamma[i,j] = 2*(a[ish,ish]+a[jsh,jsh]-2*a[ish,jsh])*Kij \
+                         + (b[ish,ish]+b[jsh,jsh]-2*b[ish,jsh])*(Jij+Kij)
     return Gamma
 
 def ROTION_Delta(Fs,Gamma,nocc,shell):
@@ -195,11 +201,11 @@ def ROTION_Delta(Fs,Gamma,nocc,shell):
     This is Bobrowicz/Goddard eq 115b, primarily
     """
     # Make the orbital correction matrix Delta
-    Delta = np.zeros((norb,norb),'d')
-    for i in range(norb):
-        ish = shell(i)
-        for j in range(norb):
-            jsh = shell(j)
+    Delta = np.zeros((nocc,nocc),'d')
+    for i in range(nocc):
+        ish = shell[i]
+        for j in range(nocc):
+            jsh = shell[j]
             if ish == jsh: continue
             Delta[i,j] = (Fs[jsh][i,j]-Fs[ish][i,j])/\
                          (Fs[jsh][i,i]-Fs[jsh][j,j]-Fs[ish][i,i]+Fs[ish][i,i]+Gamma[i,j])
@@ -344,4 +350,4 @@ def fab(ncore,nopen,npair,coeffs=None):
     
 if __name__ == '__main__':
     #import doctest; doctest.testmod()
-    mcscf(lih,maxiter=5,verbose=True)   # doctest: +ELLIPSIS
+    mcscf(li,maxiter=5,verbose=True)   # -7.3155
