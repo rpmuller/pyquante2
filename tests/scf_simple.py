@@ -33,7 +33,8 @@ def rhf_simple(geo,basisname='sto3g',maxiter=25,verbose=False):
         D = dmat(U,nocc)
         if verbose: print ("D=\n%s" % D)
         Eone = trace2(h,D)
-        G = i2.get_2jk(D)
+        #G = i2.get_2jk(D)
+        G = 2*i2.get_j(D)-i2.get_k(D)
         H = h+G
         Etwo = trace2(H,D)
         E,U = geigh(H,i1.S)
@@ -78,9 +79,8 @@ def uhf_simple(geo,basisname='sto3g',maxiter=25,verbose=False):
     else:
         print ("Warning: Maxiter %d hit in scf_simple" % maxiter)
     return Energy,E,U
-    
 
-if __name__ == '__main__':
+def testall():
     print ("LiH energy should be -7.8607")
     scf_simple(lih)
     print ("H2O energy should be -74.9598")
@@ -89,3 +89,7 @@ if __name__ == '__main__':
     scf_simple(oh)
     print ("Li energy should be -7.3155")
     scf_simple(li)
+    
+
+if __name__ == '__main__':
+    scf_simple(lih,verbose=True)

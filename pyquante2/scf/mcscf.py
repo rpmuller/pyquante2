@@ -64,21 +64,21 @@ from pyquante2.basis.basisset import basisset
 from pyquante2.utils import geigh,ao2mo
 from pyquante2.ints.integrals import onee_integrals, twoe_integrals
 
-def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
+def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
     """\
-    This is a trivial test for the mcscf module, because other
+    This is a trivial test for the gvb module, because other
     pyquante modules are simpler if you're doing closed shell rhf,
     and should give the same results.
 
     # -0.46658184546856041 from uhf/sto3g
-    >>> mcscf(h)     # doctest: +ELLIPSIS
+    >>> gvb(h)     # doctest: +ELLIPSIS
     -0.4665818...
 
     #  -1.117099582955609 from rhf/sto3g
-    >>> mcscf(h2)    # doctest: +ELLIPSIS
+    >>> gvb(h2)    # doctest: +ELLIPSIS
     -1.117099...
 
-    >>> mcscf(lih,maxiter=5)   # doctest: +ELLIPSIS
+    >>> gvb(lih,maxiter=5)   # doctest: +ELLIPSIS
     -7.8607355...
     """
     # Get the basis set and the integrals
@@ -104,7 +104,7 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
     f,a,b = fab(ncore,nopen,npair)
     if verbose:
         np.set_printoptions(precision=4)
-        print("**** PyQuante MCSCF ****")
+        print("**** PyQuante GVB ****")
         print(geo)
         print("Nuclear repulsion energy: %.3f" % Enuke)
         print("Basis set: %s" % basisname)
@@ -373,4 +373,4 @@ def fab(ncore,nopen,npair,coeffs=None):
     
 if __name__ == '__main__':
     #import doctest; doctest.testmod()
-    mcscf(li,maxiter=5,verbose=True)   # -7.3155
+    gvb(li,maxiter=5,verbose=True)   # -7.3155
