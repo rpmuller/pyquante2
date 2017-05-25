@@ -146,7 +146,7 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
                 print(Delta)
             eD = expm(Delta)
             Uocc = np.dot(U[:,:nocc],eD)
-            #U[:,:nocc] = Uocc
+            U[:,:nocc] = Uocc
         
         # Perform the OCBSE step
         Unew = np.zeros(U.shape,'d')
@@ -212,7 +212,8 @@ def ROTION_Delta(Fs,Gamma,nocc,shell):
             jsh = shell[j]
             if ish == jsh: continue
             Delta[i,j] = (Fs[jsh][i,j]-Fs[ish][i,j])/\
-                         (Fs[jsh][i,i]-Fs[jsh][j,j]-Fs[ish][i,i]+Fs[ish][j,j]+Gamma[i,j])
+                         (Fs[jsh][i,i]-Fs[jsh][j,j]-Fs[ish][i,i]+Fs[ish][j,j]\
+                          +Gamma[i,j])
     return Delta
     # Take the matrix exponent:
 
@@ -233,8 +234,7 @@ def expm(M,tol=1e-6,maxit=30):
             break
         eM += factor*X
     else:
-        print(tol)
-        print(X)
+        print("expm remainder = \n%s" % X)
         raise Exception("Maximum iterations reached in expm")
     return eM
 
