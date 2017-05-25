@@ -140,6 +140,8 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
             if verbose:
                 print("ROTION Gamma Matrix")
                 print(Gamma)
+            # Zero Gamma temporarily
+            #Gamma[:,:] = 0
             Delta = ROTION_Delta(Fs,Gamma,nocc,shell)
             if verbose:
                 print("ROTION Delta Matrix")
@@ -202,7 +204,7 @@ def ROTION_Gamma(Js,Ks,a,b,nocc,shell):
 def ROTION_Delta(Fs,Gamma,nocc,shell):
     """\
     Minimize the orbital mixing between occupied orbitals.
-    This is Bobrowicz/Goddard eq 115b, primarily
+    This is Bobrowicz/Goddard eq 115b (or 128, equivalently)
     """
     # Make the orbital correction matrix Delta
     Delta = np.zeros((nocc,nocc),'d')
@@ -211,7 +213,7 @@ def ROTION_Delta(Fs,Gamma,nocc,shell):
         for j in range(nocc):
             jsh = shell[j]
             if ish == jsh: continue
-            Delta[i,j] = (Fs[jsh][i,j]-Fs[ish][i,j])/\
+            Delta[i,j] = -(Fs[jsh][i,j]-Fs[ish][i,j])/\
                          (Fs[jsh][i,i]-Fs[jsh][j,j]-Fs[ish][i,i]+Fs[ish][j,j]\
                           +Gamma[i,j])
     return Delta
@@ -221,12 +223,18 @@ def expm(M,tol=1e-6,maxit=30):
     """\
     Good time to cite 'Nineteen Dubious Ways to Compute the
     Exponential of a Matrix', Moler and Van Loan.
+    >>> expm(np.zeros((2,2),'d'))
+    array([[ 1.,  0.],
+           [ 0.,  1.]])
+    >>> expm(0.1*np.ones((2,2),'d'))
+    array([[ 1.11070138,  0.11070138],
+           [ 0.11070138,  1.11070138]])
     """
     n,m = M.shape
     assert n==m
     factor = 1.0
     X =  np.identity(n,'d')
-    eM = np.zeros((n,n),'d')
+    eM = np.identity(n,'d')
     for j in range(1,maxit):
         factor /= j
         X = np.dot(X,M)
