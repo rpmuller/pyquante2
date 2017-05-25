@@ -146,7 +146,7 @@ def mcscf(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
                 print(Delta)
             eD = expm(Delta)
             Uocc = np.dot(U[:,:nocc],eD)
-            U[:,:nocc] = Uocc
+            #U[:,:nocc] = Uocc
         
         # Perform the OCBSE step
         Unew = np.zeros(U.shape,'d')
@@ -189,8 +189,12 @@ def ROTION_Gamma(Js,Ks,a,b,nocc,shell):
         for j in range(nocc):
             jsh = shell[j]
             if ish == jsh: continue
-            Jij = Js[ish][j,j]
-            Kij = Ks[ish][j,j]
+            if ish: # Find the shell index that isn't 0:
+                Jij = Js[ish][j,j]
+                Kij = Ks[ish][j,j]
+            else:
+                Jij = Js[jsh][i,i]
+                Kij = Ks[jsh][i,i]
             Gamma[i,j] = 2*(a[ish,ish]+a[jsh,jsh]-2*a[ish,jsh])*Kij \
                          + (b[ish,ish]+b[jsh,jsh]-2*b[ish,jsh])*(Jij+Kij)
     return Gamma
@@ -208,14 +212,33 @@ def ROTION_Delta(Fs,Gamma,nocc,shell):
             jsh = shell[j]
             if ish == jsh: continue
             Delta[i,j] = (Fs[jsh][i,j]-Fs[ish][i,j])/\
-                         (Fs[jsh][i,i]-Fs[jsh][j,j]-Fs[ish][i,i]+Fs[ish][i,i]+Gamma[i,j])
+                         (Fs[jsh][i,i]-Fs[jsh][j,j]-Fs[ish][i,i]+Fs[ish][j,j]+Gamma[i,j])
     return Delta
-
-
     # Take the matrix exponent:
-    # Good time to cite "Nineteen Dubious Ways to Compute the Exponential of a Matrix",
-    # Moler and Van Loan.
-            
+
+def expm(M,tol=1e-6,maxit=30):
+    """\
+    Good time to cite 'Nineteen Dubious Ways to Compute the
+    Exponential of a Matrix', Moler and Van Loan.
+    """
+    n,m = M.shape
+    assert n==m
+    factor = 1.0
+    X =  np.identity(n,'d')
+    eM = np.zeros((n,n),'d')
+    for j in range(1,maxit):
+        factor /= j
+        X = np.dot(X,M)
+        if np.linalg.norm(X) < tol:
+            break
+        eM += factor*X
+    else:
+        print(tol)
+        print(X)
+        raise Exception("Maximum iterations reached in expm")
+    return eM
+
+    
 
 def orbital_to_shell_mapping(ncore,nopen,npair):
     """\
