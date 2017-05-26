@@ -114,7 +114,7 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
             print("Shell %d" % i)
             print("  occupation = %.2f" % f[i])
             print("  orbitals in shell %s" % orbs_per_shell[i])
-            print("  couplings to other shells %s,%s" % (a[i,:],b[i,:]))
+            print("  couplings to other shells %s" % zip(a[i,:],b[i,:]))
         print("Starting guess at orbitals:\n%s"%U)
         print("****")
 
@@ -132,7 +132,6 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
         # Compute the one-electron part of the energy
         hmo = ao2mo(h,U)
         Eone = sum(f[shell[i]]*hmo[i,i] for i in range(nocc))
-
 
         # Perform the ROTION step:
         if nsh > 1:
@@ -206,7 +205,6 @@ def ROTION_Delta(Fs,Gamma,nocc,shell):
     Minimize the orbital mixing between occupied orbitals.
     This is Bobrowicz/Goddard eq 115b (or 128, equivalently)
     """
-    # Make the orbital correction matrix Delta
     Delta = np.zeros((nocc,nocc),'d')
     for i in range(nocc):
         ish = shell[i]
@@ -245,8 +243,6 @@ def expm(M,tol=1e-6,maxit=30):
         print("expm remainder = \n%s" % X)
         raise Exception("Maximum iterations reached in expm")
     return eM
-
-    
 
 def orbital_to_shell_mapping(ncore,nopen,npair):
     """\
