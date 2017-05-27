@@ -140,7 +140,6 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
                 print("ROTION Gamma Matrix")
                 print(Gamma)
             # Zero Gamma temporarily
-            #Gamma[:,:] = 0
             Delta = ROTION_Delta(Fs,Gamma,nocc,shell)
             if verbose:
                 print("ROTION Delta Matrix")
@@ -150,13 +149,7 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
             U[:,:nocc] = Uocc
         
         # Perform the OCBSE step
-        Unew = np.zeros(U.shape,'d')
-        Etwo = 0
-        for i,orbs in enumerate(orbs_per_shell):
-            space = list(orbs) + list(virt)
-            Ei,Ui = OCBSE(Fs[i],U[:,space])
-            Etwo += sum(Ei[orbs])
-            Unew[:,space] = Ui
+        Unew, Etwo = OCBSE(Fs,U,orbs_per_shell,virt)
         U = Unew
         E = Enuke+Eone+Etwo
 
@@ -172,16 +165,22 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
         print("Maximum iterations (%d) reached without convergence" % (maxiter))
     return E
 
-def OCBSE(F,U):
+def OCBSE(Fs,U,orbs_per_shell,virt):
     """\
     Perform an Orthogonality Constrained Basis Set Expansion
     to mix the occupied orbitals with the virtual orbitals.
     See Bobrowicz/Goddard Sect 5.1.
     """
-    Fm = ao2mo(F,U)
-    Ei,Ci = np.linalg.eigh(Fm)
-    Ui = np.dot(U,Ci)
-    return Ei,Ui
+    Unew = np.zeros(U.shape,'d')
+    Etwo = 0
+    for i,orbs in enumerate(orbs_per_shell):
+        space = list(orbs) + list(virt)
+        Fi = ao2mo(Fs[i],U[:,space])
+        Ei,Ci = np.linalg.eigh(Fi)
+        Ui = np.dot(U,Ci)
+        Etwo += sum(Ei[orbs])
+        Unew[:,space] = Ui
+    return Unew,Etwo
 
 def ROTION_Gamma(Js,Ks,a,b,nocc,shell):
     Gamma = np.zeros((nocc,nocc),'d')
