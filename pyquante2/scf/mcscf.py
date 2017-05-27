@@ -135,15 +135,8 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
 
         # Perform the ROTION step:
         if nsh > 1:
-            Gamma = ROTION_Gamma(Js,Ks,a,b,nocc,shell)
-            if verbose:
-                print("ROTION Gamma Matrix")
-                print(Gamma)
-            # Zero Gamma temporarily
-            Delta = ROTION_Delta(Fs,Gamma,nocc,shell)
-            if verbose:
-                print("ROTION Delta Matrix")
-                print(Delta)
+            Gamma = ROTION_Gamma(Js,Ks,a,b,nocc,shell,verbose=verbose)
+            Delta = ROTION_Delta(Fs,Gamma,nocc,shell,verbose=verbose)
             eD = expm(Delta)
             Uocc = np.dot(U[:,:nocc],eD)
             U[:,:nocc] = Uocc
@@ -182,7 +175,7 @@ def OCBSE(Fs,U,orbs_per_shell,virt):
         Unew[:,space] = Ui
     return Unew,Etwo
 
-def ROTION_Gamma(Js,Ks,a,b,nocc,shell):
+def ROTION_Gamma(Js,Ks,a,b,nocc,shell,verbose):
     Gamma = np.zeros((nocc,nocc),'d')
     for i in range(nocc):
         ish = shell[i]
@@ -197,9 +190,12 @@ def ROTION_Gamma(Js,Ks,a,b,nocc,shell):
                 Kij = Ks[jsh][i,i]
             Gamma[i,j] = 2*(a[ish,ish]+a[jsh,jsh]-2*a[ish,jsh])*Kij \
                          + (b[ish,ish]+b[jsh,jsh]-2*b[ish,jsh])*(Jij+Kij)
+    if verbose:
+        print("ROTION Gamma Matrix")
+        print(Gamma)
     return Gamma
 
-def ROTION_Delta(Fs,Gamma,nocc,shell):
+def ROTION_Delta(Fs,Gamma,nocc,shell,verbose):
     """\
     Minimize the orbital mixing between occupied orbitals.
     This is Bobrowicz/Goddard eq 115b (or 128, equivalently)
@@ -213,8 +209,10 @@ def ROTION_Delta(Fs,Gamma,nocc,shell):
             Delta[i,j] = -(Fs[jsh][i,j]-Fs[ish][i,j])/\
                          (Fs[jsh][i,i]-Fs[jsh][j,j]-Fs[ish][i,i]+Fs[ish][j,j]\
                           +Gamma[i,j])
+    if verbose:
+        print("ROTION Delta Matrix")
+        print(Delta)
     return Delta
-    # Take the matrix exponent:
 
 def expm(M,tol=1e-6,maxit=30):
     """\
