@@ -175,7 +175,7 @@ def OCBSE(Fs,U,orbs_per_shell,virt):
         Unew[:,space] = Ui
     return Unew,Etwo
 
-def ROTION_Gamma(Js,Ks,a,b,nocc,shell,verbose):
+def ROTION_Gamma(Js,Ks,a,b,nocc,shell,verbose=False):
     Gamma = np.zeros((nocc,nocc),'d')
     for i in range(nocc):
         ish = shell[i]
@@ -195,7 +195,7 @@ def ROTION_Gamma(Js,Ks,a,b,nocc,shell,verbose):
         print(Gamma)
     return Gamma
 
-def ROTION_Delta(Fs,Gamma,nocc,shell,verbose):
+def ROTION_Delta(Fs,Gamma,nocc,shell,verbose=False):
     """\
     Minimize the orbital mixing between occupied orbitals.
     This is Bobrowicz/Goddard eq 115b (or 128, equivalently)
