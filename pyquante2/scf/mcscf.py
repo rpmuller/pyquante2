@@ -170,7 +170,7 @@ def OCBSE(Fs,U,orbs_per_shell,virt):
         space = list(orbs) + list(virt)
         Fi = ao2mo(Fs[i],U[:,space])
         Ei,Ci = np.linalg.eigh(Fi)
-        Ui = np.dot(U,Ci)
+        Ui = np.dot(U[:,space],Ci)
         Etwo += sum(Ei[orbs])
         Unew[:,space] = Ui
     return Unew,Etwo
