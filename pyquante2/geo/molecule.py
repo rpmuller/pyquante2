@@ -190,6 +190,18 @@ class molecule(object):
                     bonds.append((i,j))
         return bonds
 
+    def get_index(self,center,tol=1e-2):
+        """\
+        >>> he = molecule([(2,0,0,0)])
+        >>> he.get_index((0,0,0))
+        0
+        """
+        center = np.asarray(center,'d')
+        for i,atom in enumerate(self.atoms):
+            if np.linalg.norm(center-atom.r) < tol:
+                return i
+        return None
+
 def read_xyz(fname):
     f = open(fname)
     line = f.readline()
