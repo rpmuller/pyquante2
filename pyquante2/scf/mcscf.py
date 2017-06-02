@@ -79,7 +79,10 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
     -1.117099...
 
     >>> gvb(lih,maxiter=5)   # doctest: +ELLIPSIS
-    -7.8607355...
+    -7.86073...
+
+    >>> gvb(li,maxiter=5)   # doctest: +ELLIPSIS
+    -7.31552...
     """
     # Get the basis set and the integrals
     bfs = basisset(geo,basisname)
@@ -124,31 +127,22 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
     for it in range(maxiter):
         # Make all of the density matrices:
         Ds = [dmat_gen(U,orbs) for orbs in orbs_per_shell]
-        # Make the 2e matrices
+        # Compute the required Hamiltonian matrices:
         Js = [i2.get_j(D) for D in Ds]
         Ks = [i2.get_k(D) for D in Ds]
-        # Make the Fock matrices
-        Fs = [f[i]*h + sum(a[i,j]*Js[j] + b[i,j]*Ks[j] for j in range(nsh))
-              for i in range(nsh)]
 
-        # Compute the one-electron part of the energy
-        hmo = ao2mo(h,U)
-        Eone = sum(f[shell[i]]*hmo[i,i] for i in range(nocc))
-
-        # Perform the ROTION step:
+        # Perform the ROTION step and compute the energy
+        Eel,Eone,Uocc = ROTION(U[:,:nocc],h,Js,Ks,f,a,b,nocc,shell,
+                               verbose=verbose)
         if nsh > 1:
-            Uocc = U[:,:nocc]
-            Gamma = ROTION_Gamma(Js,Ks,Uocc,a,b,nocc,shell,verbose=verbose)
-            Delta = ROTION_Delta(Fs,Uocc,Gamma,nocc,shell,verbose=verbose)
-            eD = expm(Delta)
-            Uocc = np.dot(Uocc,eD)
             U[:,:nocc] = Uocc
-        
-        # Perform the OCBSE step
-        Unew, Etwo = OCBSE(Fs,U,orbs_per_shell,virt)
-        U = Unew
 
-        E = Enuke+Eone+Etwo
+        # Perform the OCBSE step
+        U = OCBSE(U,h,Js,Ks,f,a,b,orbs_per_shell,virt)
+
+        #E = Enuke+Eone+Etwo
+        E = Enuke+Eel
+        Etwo = Eel-2*Eone
 
         if verbose:
             print ("---- %d :  %10.4f %10.4f %10.4f %10.4f" % ((it+1),E,Enuke,Eone,Etwo))
@@ -162,27 +156,20 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
         print("Maximum iterations (%d) reached without convergence" % (maxiter))
     return E
 
-def OCBSE(Fs,U,orbs_per_shell,virt):
+def ROTION(Uocc,h,Js,Ks,f,a,b,nocc,shell,verbose=False):
     """\
-    Perform an Orthogonality Constrained Basis Set Expansion
-    to mix the occupied orbitals with the virtual orbitals.
-    See Bobrowicz/Goddard Sect 5.1.
+    Eel,Eone,Uocc = ROTION(Uocc,h,Js,Ks,f,a,b,nocc,shell,verbose)
     """
-    Unew = np.zeros(U.shape,'d')
-    Etwo = 0
-    for i,orbs in enumerate(orbs_per_shell):
-        space = list(orbs) + list(virt)
-        Fi = ao2mo(Fs[i],U[:,space])
-        Ei,Ci = np.linalg.eigh(Fi)
-        Ui = np.dot(U[:,space],Ci)
-        Etwo += sum(Ei[orbs])
-        Unew[:,space] = Ui
-    return Unew,Etwo
-
-def ROTION_Gamma(Js,Ks,U,a,b,nocc,shell,verbose=False):
-    Jmo = [ao2mo(J,U) for J in Js]
-    Kmo = [ao2mo(K,U) for K in Ks]
-    Gamma = np.zeros((nocc,nocc),'d')
+    nsh = len(f)
+    hmo = ao2mo(h,Uocc)
+    Jmo = [ao2mo(J,Uocc) for J in Js]
+    Kmo = [ao2mo(K,Uocc) for K in Ks]
+    Eone = sum(f[shell[i]]*hmo[i,i] for i in range(nocc))
+    Fmo = [f[i]*hmo + sum(a[i,j]*Jmo[j] + b[i,j]*Kmo[j] for j in range(nsh))
+           for i in range(nsh)]
+    Eel = Eone + sum(Fmo[shell[i]][i,i] for i in range(nocc))
+        
+    Delta = np.zeros((nocc,nocc),'d')
     for i in range(nocc):
         ish = shell[i]
         for j in range(i):
@@ -191,36 +178,41 @@ def ROTION_Gamma(Js,Ks,U,a,b,nocc,shell,verbose=False):
             # ish is now guaranteed to be larger than 0
             Jij = Jmo[ish][j,j]
             Kij = Kmo[ish][j,j]
-            Gamma[i,j] = 2*(a[ish,ish]+a[jsh,jsh]-2*a[ish,jsh])*Kij \
-                         + (b[ish,ish]+b[jsh,jsh]-2*b[ish,jsh])*(Jij+Kij)
-            Gamma[j,i] = Gamma[i,j]
-        # OK not to set Gamma[i,i], since it's zero
-    if verbose:
-        print("ROTION Gamma Matrix")
-        print(Gamma)
-    return Gamma
+            Gij = 2*(a[ish,ish]+a[jsh,jsh]-2*a[ish,jsh])*Kij \
+                  + (b[ish,ish]+b[jsh,jsh]-2*b[ish,jsh])*(Jij+Kij)
 
-def ROTION_Delta(Fs,U,Gamma,nocc,shell,verbose=False):
-    """\
-    Minimize the orbital mixing between occupied orbitals.
-    This is Bobrowicz/Goddard eq 115b (or 128, equivalently)
-    """
-    Fmo = [ao2mo(F,U) for F in Fs]
-    Delta = np.zeros((nocc,nocc),'d')
-    for i in range(nocc):
-        ish = shell[i]
-        for j in range(i):
-            jsh = shell[j]
-            if ish == jsh: continue
             D0 = -(Fmo[jsh][i,j]-Fmo[ish][i,j])/\
                  (Fmo[jsh][i,i]-Fmo[ish][i,i]-Fmo[jsh][j,j]+Fmo[ish][j,j]\
-                  +Gamma[i,j])
+                  +Gij)
             Delta[i,j] = D0
             Delta[j,i] = -D0
     if verbose:
         print("ROTION Delta Matrix")
         print(Delta)
-    return Delta
+    if nsh > 1:
+        eD = expm(Delta)
+        Uocc = np.dot(Uocc,eD)
+    return Eel,Eone,Uocc
+
+def OCBSE(U,h,Js,Ks,f,a,b,orbs_per_shell,virt):
+    """\
+    U = OCBSE(U,h,Js,Ks,f,a,b,orbs_per_shell,virt)
+
+    Perform an Orthogonality Constrained Basis Set Expansion
+    to mix the occupied orbitals with the virtual orbitals.
+    See Bobrowicz/Goddard Sect 5.1.
+    """
+    Unew = np.zeros(U.shape,'d')
+    nsh = len(f)
+    for i,orbs in enumerate(orbs_per_shell):
+        space = list(orbs) + list(virt)
+        Fi = f[i]*h + sum(a[i,j]*Js[j]+b[i,j]*Ks[j] for j in range(nsh))
+        Fi = ao2mo(Fi,U[:,space])
+        Ei,Ci = np.linalg.eigh(Fi)
+        Ui = np.dot(U[:,space],Ci)
+
+        Unew[:,space] = Ui
+    return Unew
 
 def expm(M,tol=1e-6,maxit=30):
     """\
@@ -399,4 +391,6 @@ def fab(ncore,nopen,npair,coeffs=None):
     
 if __name__ == '__main__':
     #import doctest; doctest.testmod()
+    #gvb(h,maxiter=5,verbose=True)   # -0.46658
+    #gvb(lih,maxiter=5,verbose=True)   # -7.86073
     gvb(li,maxiter=5,verbose=True)   # -7.3155
