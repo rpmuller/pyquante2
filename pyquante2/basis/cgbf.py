@@ -78,6 +78,20 @@ class cgbf(object):
         # Is this the right way to do this, or should I have a separate normalization constant?
         return
 
+    def symbol(self):
+        """\
+        Return the symbol of the basis function
+        >>> s = cgbf(exps=[1],coefs=[1])
+        >>> s.symbol()
+        's'
+        >>> dz2 = cgbf(exps=[1],coefs=[1],powers=(0,0,2))
+        >>> dz2.symbol()
+        'dz2'
+        """
+        from pyquante2.basis.tools import pow2fullsym
+        return pow2fullsym[self.powers]
+        
+
 def sto(zeta,N=1,L=0,M=0,origin=(0,0,0)):
     """
     Use Stewarts STO-6G fits to create a contracted Gaussian approximation to a
