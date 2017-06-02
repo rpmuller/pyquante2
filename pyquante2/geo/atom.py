@@ -60,7 +60,17 @@ class atom(object):
     def color(self): return floatcolor[self.atno]
     def radius(self): return radius[self.atno]
     def mass(self): return mass[self.atno]
-
+    def symbol(self): return symbol[self.atno]
+    def tag(self,index=1):
+        """\
+        >>> h = atom(1,0,0,0)
+        >>> h.tag()
+        'H1'
+        >>> li = atom(3,0,0,0)
+        >>> li.tag(4)
+        'Li4'
+        """
+        return "%s%d" % (self.symbol(),index)
 
 if __name__ == '__main__':
     import doctest
