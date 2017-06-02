@@ -202,6 +202,15 @@ class molecule(object):
                 return i
         return None
 
+    def get_tag(self,center,tol=1e-2):
+        """\
+        >>> he = molecule([(2,0,0,0)])
+        >>> he.get_tag((0,0,0))
+        'He0'
+        """
+        index = self.get_index(center,tol)
+        return self.atoms[index].tag(index)
+
 def read_xyz(fname):
     f = open(fname)
     line = f.readline()
