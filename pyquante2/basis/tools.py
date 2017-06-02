@@ -29,3 +29,15 @@ pow2sym = {}
 for sym in sym2pow:
     for p in sym2pow[sym]:
         pow2sym[p] = sym
+
+pow2fullsym = {(0,0,0): 's',
+               (1,0,0): 'px',
+               (0,1,0): 'py',
+               (0,0,1): 'pz',
+               (2,0,0): 'dx2',
+               (0,2,0): 'dy2',
+               (0,0,2): 'dz2',
+               (1,1,0): 'dxy',
+               (0,1,1): 'dyz',
+               (1,0,1): 'dxz',
+               }
