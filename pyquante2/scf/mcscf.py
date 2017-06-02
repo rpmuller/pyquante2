@@ -137,15 +137,17 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
 
         # Perform the ROTION step:
         if nsh > 1:
-            Gamma = ROTION_Gamma(Js,Ks,a,b,nocc,shell,verbose=verbose)
-            Delta = ROTION_Delta(Fs,Gamma,nocc,shell,verbose=verbose)
+            Uocc = U[:,:nocc]
+            Gamma = ROTION_Gamma(Js,Ks,Uocc,a,b,nocc,shell,verbose=verbose)
+            Delta = ROTION_Delta(Fs,Uocc,Gamma,nocc,shell,verbose=verbose)
             eD = expm(Delta)
-            Uocc = np.dot(U[:,:nocc],eD)
+            Uocc = np.dot(Uocc,eD)
             U[:,:nocc] = Uocc
         
         # Perform the OCBSE step
         Unew, Etwo = OCBSE(Fs,U,orbs_per_shell,virt)
         U = Unew
+
         E = Enuke+Eone+Etwo
 
         if verbose:
@@ -177,40 +179,44 @@ def OCBSE(Fs,U,orbs_per_shell,virt):
         Unew[:,space] = Ui
     return Unew,Etwo
 
-def ROTION_Gamma(Js,Ks,a,b,nocc,shell,verbose=False):
+def ROTION_Gamma(Js,Ks,U,a,b,nocc,shell,verbose=False):
+    Jmo = [ao2mo(J,U) for J in Js]
+    Kmo = [ao2mo(K,U) for K in Ks]
     Gamma = np.zeros((nocc,nocc),'d')
     for i in range(nocc):
         ish = shell[i]
-        for j in range(nocc):
+        for j in range(i):
             jsh = shell[j]
             if ish == jsh: continue
-            if ish: # Find the shell index that isn't 0:
-                Jij = Js[ish][j,j]
-                Kij = Ks[ish][j,j]
-            else:
-                Jij = Js[jsh][i,i]
-                Kij = Ks[jsh][i,i]
+            # ish is now guaranteed to be larger than 0
+            Jij = Jmo[ish][j,j]
+            Kij = Kmo[ish][j,j]
             Gamma[i,j] = 2*(a[ish,ish]+a[jsh,jsh]-2*a[ish,jsh])*Kij \
                          + (b[ish,ish]+b[jsh,jsh]-2*b[ish,jsh])*(Jij+Kij)
+            Gamma[j,i] = Gamma[i,j]
+        # OK not to set Gamma[i,i], since it's zero
     if verbose:
         print("ROTION Gamma Matrix")
         print(Gamma)
     return Gamma
 
-def ROTION_Delta(Fs,Gamma,nocc,shell,verbose=False):
+def ROTION_Delta(Fs,U,Gamma,nocc,shell,verbose=False):
     """\
     Minimize the orbital mixing between occupied orbitals.
     This is Bobrowicz/Goddard eq 115b (or 128, equivalently)
     """
+    Fmo = [ao2mo(F,U) for F in Fs]
     Delta = np.zeros((nocc,nocc),'d')
     for i in range(nocc):
         ish = shell[i]
-        for j in range(nocc):
+        for j in range(i):
             jsh = shell[j]
             if ish == jsh: continue
-            Delta[i,j] = -(Fs[jsh][i,j]-Fs[ish][i,j])/\
-                         (Fs[jsh][i,i]-Fs[ish][i,i]-Fs[jsh][j,j]+Fs[ish][j,j]\
-                          +Gamma[i,j])
+            D0 = -(Fmo[jsh][i,j]-Fmo[ish][i,j])/\
+                 (Fmo[jsh][i,i]-Fmo[ish][i,i]-Fmo[jsh][j,j]+Fmo[ish][j,j]\
+                  +Gamma[i,j])
+            Delta[i,j] = D0
+            Delta[j,i] = -D0
     if verbose:
         print("ROTION Delta Matrix")
         print(Delta)
@@ -242,19 +248,6 @@ def expm(M,tol=1e-6,maxit=30):
         print("expm remainder = \n%s" % X)
         raise Exception("Maximum iterations reached in expm")
     return eM
-
-def expm_eig(M):
-    """\
-    >>> expm_eig(np.zeros((2,2),'d'))
-    array([[ 1.,  0.],
-           [ 0.,  1.]])
-    >>> expm_eig(0.1*np.ones((2,2),'d'))
-    array([[ 1.11070138,  0.11070138],
-           [ 0.11070138,  1.11070138]])
-    """
-    E,U = np.linalg.eigh(M)
-    eE = np.exp(E)
-    return np.dot(U.T,np.dot(np.diag(eE),U))
 
 def orbital_to_shell_mapping(ncore,nopen,npair):
     """\
