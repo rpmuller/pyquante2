@@ -102,6 +102,7 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
     Enuke = geo.nuclear_repulsion()
 
     f,a,b = fab(ncore,nopen,npair)
+
     if verbose:
         np.set_printoptions(precision=4)
         print("**** PyQuante GVB ****")
@@ -116,6 +117,7 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
             print("  orbitals in shell %s" % orbs_per_shell[i])
             print("  couplings to other shells %s" % zip(a[i,:],b[i,:]))
         print("Starting guess at orbitals:\n%s"%U)
+        print("Shell array: %s" % shell)
         print("****")
 
     Eold = 0
@@ -207,7 +209,7 @@ def ROTION_Delta(Fs,Gamma,nocc,shell,verbose=False):
             jsh = shell[j]
             if ish == jsh: continue
             Delta[i,j] = -(Fs[jsh][i,j]-Fs[ish][i,j])/\
-                         (Fs[jsh][i,i]-Fs[jsh][j,j]-Fs[ish][i,i]+Fs[ish][j,j]\
+                         (Fs[jsh][i,i]-Fs[ish][i,i]-Fs[jsh][j,j]+Fs[ish][j,j]\
                           +Gamma[i,j])
     if verbose:
         print("ROTION Delta Matrix")
@@ -240,6 +242,19 @@ def expm(M,tol=1e-6,maxit=30):
         print("expm remainder = \n%s" % X)
         raise Exception("Maximum iterations reached in expm")
     return eM
+
+def expm_eig(M):
+    """\
+    >>> expm_eig(np.zeros((2,2),'d'))
+    array([[ 1.,  0.],
+           [ 0.,  1.]])
+    >>> expm_eig(0.1*np.ones((2,2),'d'))
+    array([[ 1.11070138,  0.11070138],
+           [ 0.11070138,  1.11070138]])
+    """
+    E,U = np.linalg.eigh(M)
+    eE = np.exp(E)
+    return np.dot(U.T,np.dot(np.diag(eE),U))
 
 def orbital_to_shell_mapping(ncore,nopen,npair):
     """\
@@ -314,9 +329,9 @@ def fab(ncore,nopen,npair,coeffs=None):
     >>> f
     array([ 0.5])
     >>> a
-    array([[ 0.5]])
+    array([[ 0.]])
     >>> b
-    array([[-0.5]])
+    array([[ 0.]])
     >>> f,a,b = fab(0,0,1)
     >>> f
     array([ 1.,  0.])
@@ -326,6 +341,18 @@ def fab(ncore,nopen,npair,coeffs=None):
     >>> b
     array([[ 0., -0.],
            [-0.,  0.]])
+
+    This tests a special case for a single open shell, where a[i,i] = 
+    b[i,i] = 0 for the open shell
+    >>> f,a,b = fab(1,1,0)
+    >>> f
+    array([ 1. ,  0.5])
+    >>> a
+    array([[ 2.,  1.],
+           [ 1.,  0.]])
+    >>> b
+    array([[-1. , -0.5],
+           [-0.5,  0. ]])
     """
     ncoresh = 1 if ncore else 0
     nsh = ncoresh+nopen+2*npair
@@ -362,6 +389,11 @@ def fab(ncore,nopen,npair,coeffs=None):
     for i in range(ncoresh,ncoresh+nopen):
         for j in range(ncoresh,ncoresh+nopen):
             b[i,j] = -0.5
+
+    # If there is only one open shell i, a[i,i]=b[i,i] = 0
+    if nopen == 1:
+        iop = ncoresh+nopen-1
+        a[iop,iop] = b[iop,iop] = 0
     # a_ii = f_i, b_ii = 0      If i is a pair orbital
     for i in range(ncoresh+nopen,ncoresh+nopen+2*npair):
         a[i,i] = f[i]
