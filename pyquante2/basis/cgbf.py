@@ -90,7 +90,17 @@ class cgbf(object):
         """
         from pyquante2.basis.tools import pow2fullsym
         return pow2fullsym[self.powers]
-        
+
+    def atom_symbol(self,geo):
+        """\
+        >>> from pyquante2 import molecule
+        >>> he = molecule([(2,0,0,0)])
+        >>> s = cgbf(exps=[1],coefs=[1])
+        >>> s.atom_symbol(he)
+        'He0 s'
+        """
+        atomtag = geo.get_tag(self.origin)
+        return "%s %s" % (atomtag,self.symbol())
 
 def sto(zeta,N=1,L=0,M=0,origin=(0,0,0)):
     """
