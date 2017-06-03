@@ -30,7 +30,7 @@ class orbman(object):
         assert 0 <= i < self.norb
         for c,l in zip(self.orbs[:,i],self.tags):
             if abs(c) > self.cutoff:
-                print "%10.4f %5s" % (c,l)
+                print("%10.4f %5s" % (c,l))
         return
 
 
