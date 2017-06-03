@@ -56,6 +56,15 @@ class basisset(object):
         for i,bf in enumerate(self.bfs):
             self.bfmesh[:,i] = bf.mesh(points)
         return self.bfmesh
+
+    def atom_symbols(self,geo):
+        """\
+        >>> from pyquante2.geo.samples import h
+        >>> bfs = basisset(h,'sto3g')
+        >>> bfs.atom_symbols(h)
+        ['H0 s']
+        """
+        return [bf.atom_symbol(geo) for bf in self.bfs]
             
 if __name__ == '__main__':
     import doctest
