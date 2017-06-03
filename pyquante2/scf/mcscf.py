@@ -64,7 +64,8 @@ from pyquante2.basis.basisset import basisset
 from pyquante2.utils import geigh,ao2mo
 from pyquante2.ints.integrals import onee_integrals, twoe_integrals
 
-def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
+def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False,
+        return_orbs=False):
     """\
     This is a trivial test for the gvb module, because other
     pyquante modules are simpler if you're doing closed shell rhf,
@@ -154,6 +155,8 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False):
         Eold = E
     else:
         print("Maximum iterations (%d) reached without convergence" % (maxiter))
+    if return_orbs:
+        return E,U
     return E
 
 def ROTION(Uocc,h,Js,Ks,f,a,b,nocc,shell,verbose=False):
