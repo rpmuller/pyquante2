@@ -148,6 +148,10 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False,
         if verbose:
             print ("---- %d :  %10.4f %10.4f %10.4f %10.4f" % ((it+1),E,Enuke,Eone,Etwo))
         # Update CI coefs
+        #coeffs = update_gvb_coeffs(h,Js,Ks,f,a,b)
+        coeffs = [1,0]
+        f,a,b = fab(ncore,nopen,npair,coeffs)
+
         if np.isclose(E,Eold):
             if verbose:
                 print("Energy converged")
@@ -306,7 +310,8 @@ def fab(ncore,nopen,npair,coeffs=None):
     Shells in GVB are a little confusing. All core orbitals are
     in a single shell, and then each occupied orbital has its own
     shell.
-    
+
+    Closed-shell, e.g. H2
     >>> f,a,b = fab(1,0,0)
     >>> f
     array([ 1.])
@@ -314,6 +319,8 @@ def fab(ncore,nopen,npair,coeffs=None):
     array([[ 2.]])
     >>> b
     array([[-1.]])
+
+    Single open-shell orbital, e.g. H
     >>> f,a,b = fab(0,1,0)
     >>> f
     array([ 0.5])
@@ -321,6 +328,8 @@ def fab(ncore,nopen,npair,coeffs=None):
     array([[ 0.]])
     >>> b
     array([[ 0.]])
+
+    Single gvb pair, e.g. H2
     >>> f,a,b = fab(0,0,1)
     >>> f
     array([ 1.,  0.])
@@ -330,6 +339,18 @@ def fab(ncore,nopen,npair,coeffs=None):
     >>> b
     array([[ 0., -0.],
            [-0.,  0.]])
+
+    Single gvb pair, e.g. H2, explicitly specifying gvb coefficients
+    >>> rt12 = np.sqrt(0.5)
+    >>> f,a,b = fab(0,0,1,[rt12,rt12])
+    >>> f
+    array([ 0.5,  0.5])
+    >>> a
+    array([[ 0.5,  0. ],
+           [ 0. ,  0.5]])
+    >>> b
+    array([[ 0. , -0.5],
+           [-0.5,  0. ]])
 
     This tests a special case for a single open shell, where a[i,i] = 
     b[i,i] = 0 for the open shell
@@ -364,8 +385,8 @@ def fab(ncore,nopen,npair,coeffs=None):
     # I may rethink this -- seems unnaturally complex
     for p in range(npair):
         i = ncoresh+nopen+p
-        f[i] = coeffs[2*p]
-        f[i+npair] = coeffs[2*p+1]
+        f[i] = coeffs[2*p]**2
+        f[i+npair] = coeffs[2*p+1]**2
 
     # Basic a,b assumptions:
     for i in range(nsh):
@@ -397,4 +418,5 @@ if __name__ == '__main__':
     #import doctest; doctest.testmod()
     #gvb(h,maxiter=5,verbose=True)   # -0.46658
     #gvb(lih,maxiter=5,verbose=True)   # -7.86073
-    gvb(li,maxiter=5,verbose=True)   # -7.3155
+    #gvb(li,maxiter=5,verbose=True)   # -7.3155
+    gvb(h2,npair=1,verbose=True) # RHF = -1.1171
