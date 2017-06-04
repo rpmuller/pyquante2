@@ -145,13 +145,13 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False,
         E = Enuke+Eel
         Etwo = Eel-2*Eone
 
-        if verbose:
-            print ("---- %d :  %10.4f %10.4f %10.4f %10.4f" % ((it+1),E,Enuke,Eone,Etwo))
         # Update CI coefs
-        #coeffs = update_gvb_coeffs(h,Js,Ks,f,a,b)
-        coeffs = [1,0]
+        coeffs = update_gvb_ci_coeffs(Uocc,h,Js,Ks,f,a,b,ncore,nopen,npair,
+                                      orbs_per_shell,verbose)
         f,a,b = fab(ncore,nopen,npair,coeffs)
 
+        if verbose:
+            print ("---- %d :  %10.4f %10.4f %10.4f %10.4f" % ((it+1),E,Enuke,Eone,Etwo))
         if np.isclose(E,Eold):
             if verbose:
                 print("Energy converged")
@@ -277,17 +277,54 @@ def get_orbs_per_shell(ncore,nopen,npair):
         orbs_per_shell.append([i])
     return orbs_per_shell
 
-def update_gvb_coeffs(h,Js,Ks,f,a,b,npair):
+def update_gvb_ci_coeffs(Uocc,h,Js,Ks,f,a,b,ncore,nopen,npair,orbs_per_shell,
+                         verbose=False):
     """\
-    coeffs = update_gvb_coeffs(h,Js,Ks,f,a,b,npair)
+    coeffs = update_gvb_ci_coeffs(Uocc,h,Js,Ks,f,a,b,ncore,nopen,npair,
+                                  orbs_per_shell,verbose=False)
     """
+    # consider reusing the transformed MO integral elements from ROTION
+    #  (or moving the module there)
+    coeffs = np.zeros((2*npair,),'d')
+    nsh = len(f)
+    ncoresh = 1 if ncore else 0
+    hmo = ao2mo(h,Uocc)
+    Jmo = [ao2mo(J,Uocc) for J in Js]
+    Kmo = [ao2mo(K,Uocc) for K in Ks]
+    Fmo = [f[i]*hmo + sum(a[i,j]*Jmo[j] + b[i,j]*Kmo[j] for j in range(nsh))
+           for i in range(nsh)]
     for i in range(npair):
+        ish = ncoresh+nopen+i
+        jsh = ish+1
+        iorb = orbs_per_shell[ish][0]
+        jorb = orbs_per_shell[jsh][0]
+        H11 = h[iorb,iorb] + 0.5*Jmo[ish][iorb,iorb]
+        H22 = h[jorb,jorb] + 0.5*Jmo[jsh][jorb,jorb]
+        K12 = Kmo[ish][jorb,jorb] # == Kmo[jsh][iorb,iorb]
+        for k in range(nsh):
+            if k == ish or k == jsh: continue
+            H11 += f[k]*(2*Jmo[ksh][iorb,iorb]-Kmo[ksh][iorb,iorb])
+            H22 += f[k]*(2*Jmo[ksh][jorb,jorb]-Kmo[ksh][jorb,jorb])
+
+        # I feel like these should also be equal to:
+        #H11 = Fmo[ish][iorb,iorb]/f[ish]
+        #H22 = Fmo[jsh][jorb,jorb]/f[jsh]
+        print(H11,Fmo[ish][iorb,iorb]/f[ish])
+        print(H22,Fmo[jsh][jorb,jorb]/f[jsh])
+        # ...but they're not
         H = np.zeros((2,2),'d')
-        H[0,1] = H[1,0] = K12
+        H[0,1] = H[1,0] = K12/2
         H[0,0] = H11
         H[1,1] = H22
+        if verbose:
+            print("GVB CI Matrix for pair %d\n%s" % (i,H))
         E,C = np.linalg.eigh(H)
-        coeffs[2*i:(2*i+2)] = C
+        if verbose:
+            print("GVB CI Eigenvector for pair %d\n%s" % (i,C))
+            print("GVB CI Eigenvalues for pair %d\n%s" % (i,E))
+        coeffs[2*i:(2*i+2)] = C[:,0]
+    # Overwrite this routine for debugging
+    #coeffs = guess_gvb_ci_coeffs(npair)
     return coeffs
 
 def guess_gvb_ci_coeffs(npair):
