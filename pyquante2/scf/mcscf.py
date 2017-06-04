@@ -277,6 +277,20 @@ def get_orbs_per_shell(ncore,nopen,npair):
         orbs_per_shell.append([i])
     return orbs_per_shell
 
+def update_gvb_coeffs(h,Js,Ks,f,a,b,npair):
+    """\
+    coeffs = update_gvb_coeffs(h,Js,Ks,f,a,b,npair)
+    """
+    for i in range(npair):
+        H = np.zeros((2,2),'d')
+        H[0,1] = H[1,0] = K12
+        H[0,0] = H11
+        H[1,1] = H22
+        E,C = np.linalg.eigh(H)
+        coeffs[2*i:(2*i+2)] = C
+    return coeffs
+
+
 def guess_gvb_ci_coeffs(npair):
     """
     Make a guess at the CI coefficients for the GVB pairs.
