@@ -290,16 +290,18 @@ def update_gvb_coeffs(h,Js,Ks,f,a,b,npair):
         coeffs[2*i:(2*i+2)] = C
     return coeffs
 
-
 def guess_gvb_ci_coeffs(npair):
     """
     Make a guess at the CI coefficients for the GVB pairs.
     The orbitals are ordered:
       (pair 1, natural orbital 1),
-      (pair 1, natural orbital 2),
       (pair 2, natural orbital 1),
+      ...
+      (pair 1, natural orbital 2),
       (pair 2, natural orbital 2),
       ...
+    whereas the gvb ci coefficients are ordered:
+      p1n1,p1n2,p2n1,p2n2,...
     >>> guess_gvb_ci_coeffs(1)
     array([ 1.,  0.])
     >>> guess_gvb_ci_coeffs(2)
