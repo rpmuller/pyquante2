@@ -322,12 +322,14 @@ def update_gvb_ci_coeffs(Uocc,h,Js,Ks,f,a,b,ncore,nopen,npair,orbs_per_shell,
         if verbose:
             print("GVB CI Eigenvector for pair %d\n%s" % (i,C))
             print("GVB CI Eigenvalues for pair %d\n%s" % (i,E))
-        coeffs[2*i:(2*i+2)] = C[:,0]
+        coeffs[2*i] = C[0,0]
+        coeffs[2*i+1] = -C[1,0]
+        #coeffs[2*i:(2*i+2)] = C[:,0]
     # Overwrite this routine for debugging
     #coeffs = guess_gvb_ci_coeffs(npair)
     return coeffs
 
-def guess_gvb_ci_coeffs(npair):
+def guess_gvb_ci_coeffs(npair,state='0'):
     """
     Make a guess at the CI coefficients for the GVB pairs.
     The orbitals are ordered:
@@ -344,10 +346,21 @@ def guess_gvb_ci_coeffs(npair):
     >>> guess_gvb_ci_coeffs(2)
     array([ 1.,  0.,  1.,  0.])
     """
+    inv_rt2 = 1/np.sqrt(2)
     coeffs = []
     for i in range(npair):
-        coeffs.append(1)
-        coeffs.append(0)
+        if state == '1':
+            coeffs.append(0)
+            coeffs.append(1)
+        elif state == '+':
+            coeffs.append(inv_rt2)
+            coeffs.append(inv_rt2)
+        elif state == '-':
+            coeffs.append(inv_rt2)
+            coeffs.append(-inv_rt2)            
+        else: # Default state=0
+            coeffs.append(1)
+            coeffs.append(0)
     return np.array(coeffs,'d')
 
 def fab(ncore,nopen,npair,coeffs=None):
@@ -424,7 +437,7 @@ def fab(ncore,nopen,npair,coeffs=None):
     b = np.zeros((nsh,nsh),'d')
 
     if npair > 0 and coeffs is None:
-        coeffs = guess_gvb_ci_coeffs(npair)
+        coeffs = guess_gvb_ci_coeffs(npair,'0')
 
     # f array
     if ncore:
