@@ -59,6 +59,7 @@ function by implementing a more complicated routine to update
 the CI coefficients. 
 """
 import numpy as np
+from pyquante2 import molecule
 from pyquante2.geo.samples import h,h2,lih,li
 from pyquante2.basis.basisset import basisset
 from pyquante2.utils import geigh,ao2mo
@@ -479,10 +480,14 @@ def fab(ncore,nopen,npair,coeffs=None):
         a[i,i+npair] = a[i+npair,i] = 0
         b[i,i+npair] = b[i+npair,i] = -coeffs[i]*coeffs[i+npair]
     return f,a,b
-    
+
 if __name__ == '__main__':
     #import doctest; doctest.testmod()
     #gvb(h,maxiter=5,verbose=True)   # -0.46658
     #gvb(lih,maxiter=5,verbose=True)   # -7.86073
     #gvb(li,maxiter=5,verbose=True)   # -7.3155
     gvb(h2,npair=1,verbose=True) # RHF = -1.1171
+    #
+    # h- example for Rajib
+    h_m = molecule(atomlist = [(1,0,0,0)],charge=-1,name="H-")
+    #gvb(h_m,maxiter=5,verbose=True)
