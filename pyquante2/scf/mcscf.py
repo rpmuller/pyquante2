@@ -83,8 +83,11 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False,
     >>> gvb(lih,maxiter=5)   # doctest: +ELLIPSIS
     -7.86073...
 
-    >>> gvb(li,maxiter=5)   # doctest: +ELLIPSIS
+    >>> gvb(li,maxiter=5)    # doctest: +ELLIPSIS
     -7.31552...
+
+    >>> gvb(h2,npair=1)      # doctest: +ELLIPSIS
+    -1.13730...
     """
     # Get the basis set and the integrals
     bfs = basisset(geo,basisname)
@@ -163,6 +166,23 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False,
     if return_orbs:
         return E,U
     return E
+
+def recompute_energy(Uocc,h,Js,Ks,f,a,b,nocc,shell):
+    """\
+    This is a helper routine to compute the GVB/ROHF energy expression.
+    This routine should not be used in production code, since these
+    terms are computed in ROTION.
+    Eel,Eone = recompute_energy(Uocc,h,Js,Ks,f,a,b,nocc,shell)
+    """
+    nsh = len(f)
+    hmo = ao2mo(h,Uocc)
+    Jmo = [ao2mo(J,Uocc) for J in Js]
+    Kmo = [ao2mo(K,Uocc) for K in Ks]
+    Eone = sum(f[shell[i]]*hmo[i,i] for i in range(nocc))
+    Fmo = [f[i]*hmo + sum(a[i,j]*Jmo[j] + b[i,j]*Kmo[j] for j in range(nsh))
+           for i in range(nsh)]
+    Eel = Eone + sum(Fmo[shell[i]][i,i] for i in range(nocc))
+    return Eel,Eone
 
 def ROTION(Uocc,h,Js,Ks,f,a,b,nocc,shell,verbose=False):
     """\
@@ -292,29 +312,22 @@ def update_gvb_ci_coeffs(Uocc,h,Js,Ks,f,a,b,ncore,nopen,npair,orbs_per_shell,
     hmo = ao2mo(h,Uocc)
     Jmo = [ao2mo(J,Uocc) for J in Js]
     Kmo = [ao2mo(K,Uocc) for K in Ks]
-    Fmo = [f[i]*hmo + sum(a[i,j]*Jmo[j] + b[i,j]*Kmo[j] for j in range(nsh))
-           for i in range(nsh)]
+
     for i in range(npair):
         ish = ncoresh+nopen+i
         jsh = ish+1
         iorb = orbs_per_shell[ish][0]
         jorb = orbs_per_shell[jsh][0]
-        H11 = h[iorb,iorb] + 0.5*Jmo[ish][iorb,iorb]
-        H22 = h[jorb,jorb] + 0.5*Jmo[jsh][jorb,jorb]
-        K12 = Kmo[ish][jorb,jorb] # == Kmo[jsh][iorb,iorb]
+        H11 = 2*hmo[iorb,iorb] + Jmo[ish][iorb,iorb]
+        H22 = 2*hmo[jorb,jorb] + Jmo[jsh][jorb,jorb]
+        K12 = Kmo[ish][jorb,jorb] # == Kmo[jsh][iorb,iorb] (checked)
         for k in range(nsh):
             if k == ish or k == jsh: continue
             H11 += f[k]*(2*Jmo[ksh][iorb,iorb]-Kmo[ksh][iorb,iorb])
             H22 += f[k]*(2*Jmo[ksh][jorb,jorb]-Kmo[ksh][jorb,jorb])
 
-        # I feel like these should also be equal to:
-        #H11 = Fmo[ish][iorb,iorb]/f[ish]
-        #H22 = Fmo[jsh][jorb,jorb]/f[jsh]
-        print(H11,Fmo[ish][iorb,iorb]/f[ish])
-        print(H22,Fmo[jsh][jorb,jorb]/f[jsh])
-        # ...but they're not
         H = np.zeros((2,2),'d')
-        H[0,1] = H[1,0] = K12/2
+        H[0,1] = H[1,0] = K12
         H[0,0] = H11
         H[1,1] = H22
         if verbose:
@@ -323,11 +336,7 @@ def update_gvb_ci_coeffs(Uocc,h,Js,Ks,f,a,b,ncore,nopen,npair,orbs_per_shell,
         if verbose:
             print("GVB CI Eigenvector for pair %d\n%s" % (i,C))
             print("GVB CI Eigenvalues for pair %d\n%s" % (i,E))
-        coeffs[2*i] = C[0,0]
-        coeffs[2*i+1] = -C[1,0]
-        #coeffs[2*i:(2*i+2)] = C[:,0]
-    # Overwrite this routine for debugging
-    #coeffs = guess_gvb_ci_coeffs(npair)
+        coeffs[2*i:(2*i+2)] = C[0]
     return coeffs
 
 def guess_gvb_ci_coeffs(npair,state='0'):
@@ -486,8 +495,9 @@ if __name__ == '__main__':
     #gvb(h,maxiter=5,verbose=True)   # -0.46658
     #gvb(lih,maxiter=5,verbose=True)   # -7.86073
     #gvb(li,maxiter=5,verbose=True)   # -7.3155
-    gvb(h2,npair=1,verbose=True) # RHF = -1.1171
+    #gvb(h2,npair=1,verbose=True) # RHF = -1.1171, GVB ?= -1.1373
     #
-    # h- example for Rajib
+    # h- example for Rajib: Does not currently work with GVB.
+    # RHF energy is -0.4224, GVB energy is -0.3964
     h_m = molecule(atomlist = [(1,0,0,0)],charge=-1,name="H-")
-    #gvb(h_m,maxiter=5,verbose=True)
+    gvb(h_m,maxiter=10,basisname='6-31g',npair=1,verbose=True)
