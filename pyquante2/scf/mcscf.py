@@ -66,7 +66,7 @@ from pyquante2.utils import geigh,ao2mo
 from pyquante2.ints.integrals import onee_integrals, twoe_integrals
 
 def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False,
-        return_orbs=False):
+        return_orbs=False, input_orbs=None):
     """\
     This is a trivial test for the gvb module, because other
     pyquante modules are simpler if you're doing closed shell rhf,
@@ -96,7 +96,10 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False,
     h = i1.T + i1.V
 
     # Get a guess for the orbitals
-    E,U = geigh(h,i1.S)
+    if input_orbs is not None:
+        U = input_orbs
+    else:
+        E,U = geigh(h,i1.S)
 
     # Set the parameters based on the molecule
     nopen = geo.nopen()
@@ -500,4 +503,17 @@ if __name__ == '__main__':
     # h- example for Rajib: Does not currently work with GVB.
     # RHF energy is -0.4224, GVB energy is -0.3964
     h_m = molecule(atomlist = [(1,0,0,0)],charge=-1,name="H-")
-    gvb(h_m,maxiter=10,basisname='6-31g',npair=1,verbose=True)
+    from pyquante2.orbman import orbman
+    E,orbs = gvb(h_m,maxiter=10,basisname='6-31g',npair=0,verbose=True,
+               return_orbs=True)
+    o_hf = orbman(orbs,basisset(h_m,'6-31g'),h_m)
+    E,orbs = gvb(h_m,maxiter=10,basisname='6-31g',npair=1,verbose=True,
+               return_orbs=True,input_orbs=orbs)
+    o_gvb = orbman(orbs,basisset(h_m,'6-31g'),h_m)
+
+    for i in [0,1]:
+        print "Orbital %d after HF" % i
+        o_hf[i]
+        print "  GVB"
+        o_gvb[i]
+    
