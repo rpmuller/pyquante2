@@ -512,8 +512,8 @@ if __name__ == '__main__':
     o_gvb = orbman(orbs,basisset(h_m,'6-31g'),h_m)
 
     for i in [0,1]:
-        print "Orbital %d after HF" % i
+        print("Orbital %d after HF" % i)
         o_hf[i]
-        print "  GVB"
+        print("  GVB")
         o_gvb[i]
     
