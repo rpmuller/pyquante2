@@ -6,53 +6,28 @@ Experimenting with writing quantum chemistry in Julia
 ## Utility functions
 """
 
-factorial2(n) = prod(n:-2:1) # double factorial !!
+module pyquante
+
+factorial2(n::Int64) = prod(n:-2:1) # double factorial !!
 dist2(dx,dy,dz) = dx*dx+dy*dy+dz*dz # Is there something in the standard library that does this?
 
-function pairs(n::Int64,which="diag")
-    function _it()
-        for j in 1:n
-            start = j+1
-            if which=="diag"
-                start = j
-            elseif which=="rect"
-                start = 1
-            end
-            for i in start:n
-                produce((j,i))
-            end
-        end
-    end
-    Task(_it)
-end
-
+pairs(n::Int64) = ((i, j) for i = 1:n for j = 1:i)
+rpairs(n::Int64) = ((i,j) for i in 1:n for j in 1:n) # rectangular option to old pairs
+spairs(n::Int64) = ((i, j) for i = 1:n for j = 1:(i-1)) # subdiagonal option to old pairs
+ 
 triangle(i::Int64) = div(i*(i+1),2)
 triangle(i::Int64,j::Int64) = i<j ? triangle(j-1)+i : triangle(i-1)+j
+                        
+iiterator(n::Int64) = ((i,j,k,l) for (i,j) in pairs(n) for (k,l) in pairs(n) if triangle(i,j) <= triangle(k,l))
 
-function iiterator(n::Int64)
-    function _it()
-        for (i,j) in pairs(n)
-            ij = triangle(i-1,j)
-            for (k,l) in pairs(n)
-                kl = triangle(k-1,l)
-                if ij <= kl
-                    produce((i,j,k,l))
-                end
-            end
-        end
-    end
-    Task(_it)
-end
-
-iindex(i::Int64,j::Int64,k::Int64,l::Int64) = triangle(triangle(i,j),triangle(k,l)) 
-
+iindex(i::Int64,j::Int64,k::Int64,l::Int64) = triangle(triangle(i,j),triangle(k,l))
 trace2(A,B) = sum(A.*B)
 
 function test_utils()
     @assert factorial2(6)==48
-    @assert collect(pairs(3)) == {(1,1),(1,2),(1,3),(2,2),(2,3),(3,3)}
-    @assert collect(pairs(3,"subdiag")) == {(1,2),(1,3),(2,3)}
-    @assert collect(pairs(2,"rect")) == {(1,1),(1,2),(2,1),(2,2)}
+    @assert collect(pairs(3)) == [(1,1),(2,1),(2,2),(3,1),(3,2),(3,3)]
+    @assert collect(spairs(3))== [(2,1),(3,1),(3,2)]
+    @assert collect(rpairs(2)) == [(1,1),(1,2),(2,1),(2,2)]
     @assert iindex(1,1,1,1) == 1
     @assert iindex(1,1,1,2) == iindex(1,1,2,1) == iindex(1,2,1,1) == iindex(2,1,1,1) == 2
     @assert iindex(1,1,2,2) == iindex(2,2,1,1) == 4
@@ -323,7 +298,6 @@ function nuclear_attraction(aexpn::Float64,ax::Float64,ay::Float64,az::Float64,
                             bexpn::Float64,bx::Float64,by::Float64,bz::Float64,
                             bI::Int64,bJ::Int64,bK::Int64,
                             cx::Float64,cy::Float64,cz::Float64)
-    #print("na($aexpn,$ax,$ay,$az,$aI,$aJ,$aK,$bexpn,$bx,$by,$bz,$bI,$bJ,$bK,$cx,$cy,$cz)=")
     px,py,pz = gaussian_product_center(aexpn,ax,ay,az,bexpn,bx,by,bz)
     gamma = aexpn+bexpn
     rab2 = dist2(ax-bx,ay-by,az-bz)
@@ -458,17 +432,17 @@ function test_gamma()
     # gammainc test functions. Test values taken from Mathematica
     # println("a=0.5 test")
     @assert maximum([gammainc(0.5,float(x)) for x in 0:10]
-            -{0, 1.49365, 1.69181, 1.7471, 1.76416, 1.76968, 
-                1.77151, 1.77213, 1.77234, 1.77241, 1.77244}) < 1e-5
+            -[0, 1.49365, 1.69181, 1.7471, 1.76416, 1.76968, 
+                1.77151, 1.77213, 1.77234, 1.77241, 1.77244]) < 1e-5
 
     # println("a=1.5 test")
     @assert maximum([gammainc(1.5,float(x)) for x in 0:10]
-            -{0, 1.49365, 1.69181, 1.7471, 1.76416, 1.76968, 
-                1.77151, 1.77213, 1.77234, 1.77241, 1.77244}) < 1e-5
+            -[0, 1.49365, 1.69181, 1.7471, 1.76416, 1.76968, 
+                1.77151, 1.77213, 1.77234, 1.77241, 1.77244]) < 1e-5
     # println("a=2.5 test")
     @assert maximum([gammainc(2.5,float(x)) for x in 0:10]
-            -{0, 0.200538, 0.59898, 0.922271, 1.12165, 1.22933, 
-                1.2831, 1.30859, 1.32024, 1.32542, 1.32768}) < 1e-5
+            -[0, 0.200538, 0.59898, 0.922271, 1.12165, 1.22933, 
+                1.2831, 1.30859, 1.32024, 1.32542, 1.32768]) < 1e-5
 end
 
 function test_na()
@@ -477,16 +451,16 @@ function test_na()
     push!(c,1,1)
     @assert isapprox(amplitude(c,0,0,0),0.71270547)
     @assert isapprox(nuclear_attraction(s,s,0.,0.,0.),-1.59576912)
-    @assert isapprox(nuclear_attraction(c,c,0.,0.,0.),-1.595769)
+    @assert isapprox(nuclear_attraction(c,c,0.,0.,0.),-1.59576912)
 end
 
 function test_fgamma()
-    for (x,res) in {(0.,1),
-                    (30.,0.161802),
-                    (60.,0.1144114),
-                    (90.,0.0934165),
+    for (x,res) in [(0.,1),
+                    (30.,0.161802159),
+                    (60.,0.114411404),
+                    (90.,0.0934165203),
                     (120.,0.08090108),
-                    (300.,0.051166336)}
+                    (300.,0.051166336)]
         @assert isapprox(res,Fgamma(0,x))
     end
 end
@@ -563,7 +537,7 @@ end
 
 fB(i::Int64,l1::Int64,l2::Int64,p::Float64,a::Float64,b::Float64,r::Int64,g::Float64) = binomial_prefactor(i,l1,l2,p-a,p-b)*B0(i,r,g)
 B0(i::Int64,r::Int64,g::Float64) = fact_ratio2(i,r)*(4g)^(r-i)
-fact_ratio2(a::Int64,b::Int64) = factorial(a,b)/factorial(a-2b)
+fact_ratio2(a::Int64,b::Int64) = factorial(a)factorial(b)/factorial(a-2b)
 
 function Bterm(i1::Int64,i2::Int64,r1::Int64,r2::Int64,u::Int64,
                l1::Int64,l2::Int64,l3::Int64,l4::Int64,
@@ -957,7 +931,6 @@ function vrr_iter(aexpn::Float64,ax::Float64,ay::Float64,az::Float64,aI::Int64,a
     end
     println("before return")
     =#
-    @show vrr_terms[aI+1,aJ+1,aK+1,cI+1,cJ+1,cK+1,M+1]
     vrr_terms[aI+1,aJ+1,aK+1,cI+1,cJ+1,cK+1,M+1]
 end
 
@@ -968,7 +941,7 @@ function test_vrr()
     cI=cJ=cK=0
     M=0
 
-    for (ax,ay,az, aI,aJ,aK, cI,cJ,cK, result) in {
+    for (ax,ay,az, aI,aJ,aK, cI,cJ,cK, result) in [
             (0.,0.,0., 0,0,0, 0,0,0, 4.37335456733),
             (0.,0.,0., 1,0,0, 1,0,0, 0.182223107579),
             (0.,0.,0., 0,1,0, 0,1,0, 0.182223107579),
@@ -982,18 +955,18 @@ function test_vrr()
             (1.,2.,3., 0,1,0, 0,1,0, -0.000116463120359),
             (1.,2.,3., 0,0,1, 0,0,1, -0.000301178525749),
 
-            (1.,2.,3., 2,0,0, 2,0,0, 0.000225033081978),
-            (1.,2.,3., 0,2,0, 0,2,0, 0.000610247078796),
-            (1.,2.,3., 0,0,2, 0,0,2, 0.00134278307956),
+            (1.,2.,3., 2,0,0, 2,0,0, 0.00022503308545040895),
+            (1.,2.,3., 0,2,0, 0,2,0, 0.0006102470883881907),
+            (1.,2.,3., 0,0,2, 0,0,2, 0.0013427831014563411),
 
             (0.,0.,0., 1,1,0, 1,1,0, 0.0136667330685),
             (0.,0.,0., 0,1,1, 0,1,1, 0.0136667330685),
             (0.,0.,0., 1,0,1, 1,0,1, 0.0136667330685),
 
-            (3.,2.,1., 1,1,0, 1,1,0, 5.97677147819e-05),
-            (3.,2.,1., 0,1,1, 0,1,1, 1.57429039496e-06),
-            (3.,2.,1., 1,0,1, 1,0,1, 4.00292836291e-06)
-        }
+            (3.,2.,1., 1,1,0, 1,1,0, 5.976771621486971e-5),
+            (3.,2.,1., 0,1,1, 0,1,1, 1.5742904443905067e-6),
+            (3.,2.,1., 1,0,1, 1,0,1, 4.00292848649699e-6)
+        ]
 
         val1 = vrr(aexpn,ax,ay,az,aI,aJ,aK,bexpn,bx,by,bz,
             cexpn,cx,cy,cz,cI,cJ,cK,dexpn,dx,dy,dz,M)
@@ -1005,7 +978,6 @@ function test_vrr()
             cexpn,cx,cy,cz,cI,cJ,cK,dexpn,dx,dy,dz,M)
         val4 = vrr_iter(cexpn,cx,cy,cz,cI,cJ,cK,dexpn,dx,dy,dz,
             aexpn,ax,ay,az,aI,aJ,aK,bexpn,bx,by,bz,M)
-        @show (val1,val2,val3,val4)
     end
 end
 
@@ -1018,7 +990,7 @@ function test_hrr()
     dI,dJ,dK = 1,0,1
 
 
-    for (ax,ay,az, aI,aJ,aK, cI,cJ,cK, result) in {
+    for (ax,ay,az, aI,aJ,aK, cI,cJ,cK, result) in [
             (0.,0.,0., 0,0,0, 0,0,0, 0.0136667330685),
             (0.,0.,0., 1,0,0, 1,0,0, 0.00821630976139),
             (0.,0.,0., 0,1,0, 0,1,0, 0.00122024402397),
@@ -1028,29 +1000,28 @@ function test_hrr()
             (0.,0.,0., 0,2,0, 0,2,0,   0.000599953311785),
             (0.,0.,0., 0,0,2, 0,0,2,  0.0039759617781),
 
-            (1.,2.,3., 1,0,0, 1,0,0, -1.18513079462e-06),
-            (1.,2.,3., 0,1,0, 0,1,0,  -4.66999128258e-06),
-            (1.,2.,3., 0,0,1, 0,0,1, -3.47437366868e-05),
+            (1.,2.,3., 1,0,0, 1,0,0, -1.1851316496333975e-6),
+            (1.,2.,3., 0,1,0, 0,1,0,  -4.669991667384835e-6),
+            (1.,2.,3., 0,0,1, 0,0,1, -3.474373852654044e-5),
 
-            (1.,2.,3., 2,0,0, 2,0,0, 2.81002247462e-06),
-            (1.,2.,3., 0,2,0, 0,2,0, 7.09856891538e-06),
-            (1.,2.,3., 0,0,2, 0,0,2, 3.62153023224e-05),
+            (1.,2.,3., 2,0,0, 2,0,0, 2.81002247462e-6),
+            (1.,2.,3., 0,2,0, 0,2,0, 7.09856891538e-6),
+            (1.,2.,3., 0,0,2, 0,0,2, 3.62153023224e-5),
 
             (0.,0.,0., 1,1,0, 1,1,0, 0.000599953311785),
             (0.,0.,0., 0,1,1, 0,1,1, 0.000599953311785),
             (0.,0.,0., 1,0,1, 1,0,1, 0.0116431617287),
 
-            (3.,2.,1., 1,1,0, 1,1,0, 7.37307761485e-06),
-            (3.,2.,1., 0,1,1, 0,1,1, 2.53332441858e-07),
-            (3.,2.,1., 1,0,1, 1,0,1, 2.4521155336e-06)
-        }
+            (3.,2.,1., 1,1,0, 1,1,0, 7.37307761485e-6),
+            (3.,2.,1., 0,1,1, 0,1,1, 2.5333243119843164e-7),
+            (3.,2.,1., 1,0,1, 1,0,1, 2.452115184675799e-6)
+        ]
         #println("hrr($aexpn,$ax,$ay,$az,$aI,$aJ,$aK,$bexpn,$bx,$by,$bz,$bI,$bJ,$bK,")
         #println("    $cexpn,$cx,$cy,$cz,$cI,$cJ,$cK,$dexpn,$dx,$dy,$dz,$dI,$dJ,$dK)")
         val1 = hrr(aexpn,ax,ay,az,aI,aJ,aK,bexpn,bx,by,bz,bI,bJ,bK,
             cexpn,cx,cy,cz,cI,cJ,cK,dexpn,dx,dy,dz,dI,dJ,dK)
         val2 = hrr(cexpn,cx,cy,cz,cI,cJ,cK,dexpn,dx,dy,dz,dI,dJ,dK,
             aexpn,ax,ay,az,aI,aJ,aK,bexpn,bx,by,bz,bI,bJ,bK)
-        #@show val1,val2,result
         @assert isapprox(val1,val2)
         @assert isapprox(val1,result)
     end
@@ -1062,7 +1033,7 @@ end
 # things flattened as much as possible (to be as fast as possible, I guess). Curlys 
 # preserve the list structure the way I would expect from Python
 
-sto3g = {
+sto3g = [
     # H
     [('S',
       [(3.4252509099999999, 0.15432897000000001),
@@ -1177,8 +1148,8 @@ sto3g = {
        [(8.2463151000000003, 0.15591627),
         (1.9162661999999999, 0.60768372000000004),
             (0.62322929999999999, 0.39195739000000002)])]
-}
-basis_set_data = {"sto3g" => sto3g};
+]
+basis_set_data = Dict("sto3g" => sto3g)
 
 
 # ## Atoms and Molecules
@@ -1186,7 +1157,7 @@ basis_set_data = {"sto3g" => sto3g};
 nuclear_repulsion(a::Atom,b::Atom)= a.atno*b.atno/sqrt(dist2(a.x-b.x,a.y-b.y,a.z-b.z))
 function nuclear_repulsion(mol::Molecule)
     nr = 0
-    for (i,j) in pairs(nat(mol),"subdiag")
+    for (i,j) in spairs(nat(mol))
         nr += nuclear_repulsion(mol.atomlist[i],mol.atomlist[j])
     end
     return nr
@@ -1267,11 +1238,11 @@ function build_basis(mol::Molecule,name="sto3g")
     return basis_set
 end
 
-sym2power = {
+sym2power = Dict(
     'S' => [(0,0,0)],
     'P' => [(1,0,0),(0,1,0),(0,0,1)],
     'D' => [(2,0,0),(0,2,0),(0,0,2),(1,1,0),(1,0,1),(0,1,1)]
-    } 
+    )
 
 
 function test_geo_basis()
@@ -1284,7 +1255,7 @@ function test_geo_basis()
     l,r = bfs.bfs
     @assert isapprox(overlap(l,l),1)
     @assert isapprox(overlap(r,r),1)
-    @assert isapprox(overlap(l,r),0.66473625)
+    @assert isapprox(overlap(l,r),0.6647387449282997)
     @assert isapprox(kinetic(l,l),0.76003188)
     @assert isapprox(kinetic(r,r),0.76003188)
     @assert isapprox(kinetic(l,r),0.24141861181119084)
@@ -1305,9 +1276,9 @@ end
 
 function all_1e_ints(bfs::BasisSet,mol::Molecule)
     n = length(bfs.bfs)
-    S = Array(Float64,(n,n))
-    T = Array(Float64,(n,n))
-    V = Array(Float64,(n,n))
+    S = Array{Float64}(n,n)
+    T = Array{Float64}(n,n)
+    V = Array{Float64}(n,n)
     for (i,j) in pairs(n)
         a,b = bfs.bfs[i],bfs.bfs[j]
         S[i,j] = S[j,i] = overlap(a,b)
@@ -1320,7 +1291,7 @@ end
 function all_twoe_ints(bflist,ERI=coulomb)
     n = length(bflist.bfs)
     totlen = div(n*(n+1)*(n*n+n+2),8)
-    ints2e = Array(Float64,totlen)
+    ints2e = Array{Float64}(totlen)
     for (i,j,k,l) in iiterator(n)
         ints2e[iindex(i,j,k,l)] = ERI(bflist.bfs[i],bflist.bfs[j],bflist.bfs[k],bflist.bfs[l])
     end
@@ -1329,12 +1300,12 @@ end
 
 function make2JmK(D::Array{Float64,2},Ints::Array{Float64,1})
     n = size(D,1)
-    G = Array(Float64,(n,n))
+    G = Array{Float64}(n,n)
     D1 = reshape(D,n*n)
-    temp = Array(Float64,n*n)
+    temp = Array{Float64}(n*n)
     for (i,j) in pairs(n)
         kl = 1
-        for (k,l) in pairs(n,"rect")
+        for (k,l) in rpairs(n)
             temp[kl] = 2*Ints[iindex(i,j,k,l)]-Ints[iindex(i,k,j,l)]
             kl += 1
         end
@@ -1425,5 +1396,4 @@ end
 
 test()
 
-
-
+end
