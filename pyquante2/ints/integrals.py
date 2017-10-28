@@ -30,7 +30,7 @@ class twoe_integrals_compressed(object):
     """
     def __init__(self,bfs):
         nbf = self.nbf = len(bfs)
-        self.totlen = nbf*(nbf+1)*(nbf*nbf+nbf+2)/8
+        self.totlen = nbf*(nbf+1)*(nbf*nbf+nbf+2)//8
         self._2e_ints = np.empty(self.totlen,'d')
         
         for i,j,k,l in iiterator(nbf):
