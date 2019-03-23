@@ -65,6 +65,11 @@ from pyquante2.basis.basisset import basisset
 from pyquante2.utils import geigh,ao2mo
 from pyquante2.ints.integrals import onee_integrals, twoe_integrals
 
+try:
+    np.set_printoptions(legacy='1.13')
+except:
+    pass
+
 def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False,
         return_orbs=False, input_orbs=None):
     """\
