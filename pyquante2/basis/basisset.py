@@ -33,8 +33,8 @@ class basisset(object):
     def __init__(self,atoms,name='sto3g',**kwargs):
         self.bfs = []
         self.shells = []
-        self.name = name
-        basis_data = data.basis[name]
+        self.name = name.lower()
+        basis_data = data.basis[self.name]
         omit_f = kwargs.get('omit_f',settings.omit_f)
         for atom in atoms:
             for sym,prims in basis_data[atom.atno]:
