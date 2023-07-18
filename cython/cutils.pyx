@@ -1,3 +1,5 @@
+from functools import reduce
+
 def hello():
     return "Hello, World!"
 
