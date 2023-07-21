@@ -17,7 +17,7 @@ ext_modules = []
 
 if use_cython:
     ext_modules += [
-        Extension("pyquante2.cints.one",["cython/cone.pyx","cython/cints.c"]),
+        Extension("pyquante2.cints.one",["cython/cone_wrap.pyx","cython/cints.c"]),
         Extension("pyquante2.cints.two",["cython/ctwo_wrap.pyx","cython/cints.c"]),
         Extension("pyquante2.cints.hgp",["cython/chgp_wrap.pyx","cython/chgp.c"]),
         Extension("pyquante2.cbecke",["cython/cbecke.pyx"],
@@ -26,7 +26,7 @@ if use_cython:
     cmdclass.update({'build_ext': build_ext})
 else:
     ext_modules += [
-        Extension("pyquante2.cints.one",["cython/cone.c","cython/cints.c"]),
+        Extension("pyquante2.cints.one",["cython/cone_wrap.c","cython/cints.c"]),
         Extension("pyquante2.cints.two",["cython/ctwo_wrap.c","cython/cints.c"]),
         Extension("pyquante2.cints.hgp",["cython/chgp_wrap.c","cython/chgp.c"]),
         ]
