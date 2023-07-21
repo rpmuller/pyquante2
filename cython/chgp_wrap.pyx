@@ -8,10 +8,10 @@ def ERI(a,b,c,d):
     cdef array.array ccoefs,cnorms,cexps
     cdef array.array dcoefs,dnorms,dexps
     if a.contracted and b.contracted and c.contracted and d.contracted:
-        acoefs,anorms,aexps = a.cne_list()	    
-        bcoefs,bnorms,bexps = b.cne_list()	    
-        ccoefs,cnorms,cexps = c.cne_list()	    
-        dcoefs,dnorms,dexps = d.cne_list()	    
+        acoefs,anorms,aexps = a.cne_list()
+        bcoefs,bnorms,bexps = b.cne_list()
+        ccoefs,cnorms,cexps = c.cne_list()
+        dcoefs,dnorms,dexps = d.cne_list()
         return chgp.contr_hrr(len(acoefs),a.origin[0],a.origin[1],a.origin[2],anorms.data.as_doubles,
                     a.powers[0],a.powers[1],a.powers[2],aexps.data.as_doubles,acoefs.data.as_doubles,
                     len(bcoefs),b.origin[0],b.origin[1],b.origin[2],bnorms.data.as_doubles,
