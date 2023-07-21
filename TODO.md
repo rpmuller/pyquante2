@@ -1,5 +1,10 @@
 # PyQuante 2 Todo List
 
+## Move over from pyquante1:
+Test routine for all python and c integral routines.
+rys/crys
+libint
+
 ## Easy stuff to add:
 * Get cvwn working
 * Get clyp working
