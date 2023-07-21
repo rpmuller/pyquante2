@@ -15,7 +15,7 @@ from numpy import sqrt,exp,pi,isclose
 from pyquante2.utils import Fgamma
 from pyquante2.ints.one import gaussian_product_center
 
-def ERI_hgp(a,b,c,d):
+def ERI(a,b,c,d):
     """
     >>> from pyquante2.basis.pgbf import pgbf
     >>> s = pgbf(1)

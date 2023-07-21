@@ -5,10 +5,10 @@ try:
     from pyquante2.ctwo import ERI_hgp as ERI
 except:
     print("Couldn't find cython int routine")
-    from pyquante2.ints.hgp import ERI_hgp as ERI
+    from pyquante2.ints.hgp import ERI
 
 try:
-    from pyquante2.cone import S,T,V
+    from pyquante2.cints.one import S,T,V
 except:
     print("Couldn't find cython int routine")
     from pyquante2.ints.one import S,T,V
