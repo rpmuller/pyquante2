@@ -81,7 +81,7 @@ def coulomb_repulsion(xyza,norma,lmna,alphaa,
     lc,mc,nc = lmnc
     ld,md,nd = lmnd
     
-    norder = (la+ma+na+lb+nb+mb+lc+mc+nc+ld+md+nd)/2 + 1  
+    norder = (la+ma+na+lb+nb+mb+lc+mc+nc+ld+md+nd)//2 + 1  
     A = alphaa+alphab 
     B = alphac+alphad
     rho = A*B/(A+B)
@@ -116,7 +116,7 @@ def Roots(n,X):
         return Root5(X)
     else:
         return Root6(n,X)
-    raise Exception("rys: Roots called with incorrect parameters")
+    raise Exception("rys: Roots called with incorrect parameters %d" % n)
 
 def Root123(n,X):
     R12,PIE4 = 2.75255128608411E-01, 7.85398163397448E-01
@@ -127,7 +127,7 @@ def Root123(n,X):
     
     if X < 3.e-7:
         if n == 1:
-            return [0.5E+00 -X/5.0E+00], [1.0E+00 -X/3.0E+00]
+            return ([0.5E+00 -X/5.0E+00], [1.0E+00 -X/3.0E+00])
         elif n == 2:
             return ([1.30693606237085E-01 -2.90430236082028E-02 *X,
                      2.86930639376291E+00 -6.37623643058102E-01 *X],
@@ -140,7 +140,8 @@ def Root123(n,X):
                     [4.67913934572691E-01 -5.64876917232519E-02 *X,
                      3.60761573048137E-01 -1.49077186455208E-01 *X,
                      1.71324492379169E-01 -1.27768455150979E-01 *X])
-        else: raise Exception("Incorrect number of roots %d in Roots" % n)
+        else:
+            raise Exception("Incorrect number of roots %s in Roots" % n)
     elif X < 1.:
         if n == 1:
             F1 = ((((((((-8.36313918003957E-08*X+1.21222603512827E-06 )*X-
