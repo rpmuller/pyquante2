@@ -955,11 +955,7 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-<<<<<<< HEAD:cython/cone_wrap.c
   "cython/cone_wrap.pyx",
-=======
-  "cython/cone.pyx",
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
 };
 
 /*--- Type declarations ---*/
@@ -973,11 +969,7 @@ struct __pyx_obj_9pyquante2_5cints_3one___pyx_scope_struct_6_V;
 struct __pyx_obj_9pyquante2_5cints_3one___pyx_scope_struct_7_genexpr;
 struct __pyx_obj_9pyquante2_5cints_3one___pyx_scope_struct_8_genexpr;
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":3
-=======
-/* "cython/cone.pyx":3
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * cimport cints
  * 
  * def S(a,b):             # <<<<<<<<<<<<<<
@@ -991,11 +983,7 @@ struct __pyx_obj_9pyquante2_5cints_3one___pyx_scope_struct__S {
 };
 
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":5
-=======
-/* "cython/cone.pyx":5
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * def S(a,b):
  *     if b.contracted:
  *         return sum(cb*S(pb,a) for (cb,pb) in b)             # <<<<<<<<<<<<<<
@@ -1013,11 +1001,7 @@ struct __pyx_obj_9pyquante2_5cints_3one___pyx_scope_struct_1_genexpr {
 };
 
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":7
-=======
-/* "cython/cone.pyx":7
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *         return sum(cb*S(pb,a) for (cb,pb) in b)
  *     elif a.contracted:
  *         return sum(ca*S(b,pa) for (ca,pa) in a)             # <<<<<<<<<<<<<<
@@ -1035,11 +1019,7 @@ struct __pyx_obj_9pyquante2_5cints_3one___pyx_scope_struct_2_genexpr {
 };
 
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":13
-=======
-/* "cython/cone.pyx":13
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *                                        b.origin[0],b.origin[1],b.origin[2])
  * 
  * def T(a,b):             # <<<<<<<<<<<<<<
@@ -1053,11 +1033,7 @@ struct __pyx_obj_9pyquante2_5cints_3one___pyx_scope_struct_3_T {
 };
 
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":15
-=======
-/* "cython/cone.pyx":15
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * def T(a,b):
  *     if b.contracted:
  *         return sum(cb*T(pb,a) for (cb,pb) in b)             # <<<<<<<<<<<<<<
@@ -1075,11 +1051,7 @@ struct __pyx_obj_9pyquante2_5cints_3one___pyx_scope_struct_4_genexpr {
 };
 
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":17
-=======
-/* "cython/cone.pyx":17
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *         return sum(cb*T(pb,a) for (cb,pb) in b)
  *     elif a.contracted:
  *         return sum(ca*T(b,pa) for (ca,pa) in a)             # <<<<<<<<<<<<<<
@@ -1097,11 +1069,7 @@ struct __pyx_obj_9pyquante2_5cints_3one___pyx_scope_struct_5_genexpr {
 };
 
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":23
-=======
-/* "cython/cone.pyx":23
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *                                        b.origin[0],b.origin[1],b.origin[2])
  * 
  * def V(a,b,C):             # <<<<<<<<<<<<<<
@@ -1116,11 +1084,7 @@ struct __pyx_obj_9pyquante2_5cints_3one___pyx_scope_struct_6_V {
 };
 
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":25
-=======
-/* "cython/cone.pyx":25
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * def V(a,b,C):
  *     if b.contracted:
  *         return sum(cb*V(pb,a,C) for (cb,pb) in b)             # <<<<<<<<<<<<<<
@@ -1138,11 +1102,7 @@ struct __pyx_obj_9pyquante2_5cints_3one___pyx_scope_struct_7_genexpr {
 };
 
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":27
-=======
-/* "cython/cone.pyx":27
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *         return sum(cb*V(pb,a,C) for (cb,pb) in b)
  *     elif a.contracted:
  *         return sum(ca*V(b,pa,C) for (ca,pa) in a)             # <<<<<<<<<<<<<<
@@ -1642,16 +1602,12 @@ static const char __pyx_k_powers[] = "powers";
 static const char __pyx_k_genexpr[] = "genexpr";
 static const char __pyx_k_exponent[] = "exponent";
 static const char __pyx_k_contracted[] = "contracted";
-static const char __pyx_k_cython_cone_pyx[] = "cython/cone.pyx";
 static const char __pyx_k_S_locals_genexpr[] = "S.<locals>.genexpr";
 static const char __pyx_k_T_locals_genexpr[] = "T.<locals>.genexpr";
 static const char __pyx_k_V_locals_genexpr[] = "V.<locals>.genexpr";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_pyquante2_cints_one[] = "pyquante2.cints.one";
-<<<<<<< HEAD:cython/cone_wrap.c
 static const char __pyx_k_cython_cone_wrap_pyx[] = "cython/cone_wrap.pyx";
-=======
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
 static PyObject *__pyx_n_s_C;
 static PyObject *__pyx_n_s_S;
 static PyObject *__pyx_n_s_S_locals_genexpr;
@@ -1665,11 +1621,7 @@ static PyObject *__pyx_n_s_b;
 static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_n_s_close;
 static PyObject *__pyx_n_s_contracted;
-<<<<<<< HEAD:cython/cone_wrap.c
 static PyObject *__pyx_kp_s_cython_cone_wrap_pyx;
-=======
-static PyObject *__pyx_kp_s_cython_cone_pyx;
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
 static PyObject *__pyx_n_s_exponent;
 static PyObject *__pyx_n_s_genexpr;
 static PyObject *__pyx_n_s_main;
@@ -1708,11 +1660,7 @@ static PyObject *__pyx_codeobj__4;
 static PyObject *__pyx_codeobj__6;
 /* Late includes */
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":3
-=======
-/* "cython/cone.pyx":3
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * cimport cints
  * 
  * def S(a,b):             # <<<<<<<<<<<<<<
@@ -1786,11 +1734,7 @@ static PyObject *__pyx_pw_9pyquante2_5cints_3one_1S(PyObject *__pyx_self, PyObje
 }
 static PyObject *__pyx_gb_9pyquante2_5cints_3one_1S_2generator(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":5
-=======
-/* "cython/cone.pyx":5
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * def S(a,b):
  *     if b.contracted:
  *         return sum(cb*S(pb,a) for (cb,pb) in b)             # <<<<<<<<<<<<<<
@@ -2051,11 +1995,7 @@ static PyObject *__pyx_gb_9pyquante2_5cints_3one_1S_2generator(__pyx_CoroutineOb
 }
 static PyObject *__pyx_gb_9pyquante2_5cints_3one_1S_5generator1(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":7
-=======
-/* "cython/cone.pyx":7
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *         return sum(cb*S(pb,a) for (cb,pb) in b)
  *     elif a.contracted:
  *         return sum(ca*S(b,pa) for (ca,pa) in a)             # <<<<<<<<<<<<<<
@@ -2315,11 +2255,7 @@ static PyObject *__pyx_gb_9pyquante2_5cints_3one_1S_5generator1(__pyx_CoroutineO
   return __pyx_r;
 }
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":3
-=======
-/* "cython/cone.pyx":3
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * cimport cints
  * 
  * def S(a,b):             # <<<<<<<<<<<<<<
@@ -2370,11 +2306,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_S(CYTHON_UNUSED PyObject *__pyx
   __Pyx_INCREF(__pyx_cur_scope->__pyx_v_b);
   __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_b);
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":4
-=======
-  /* "cython/cone.pyx":4
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * 
  * def S(a,b):
  *     if b.contracted:             # <<<<<<<<<<<<<<
@@ -2387,11 +2319,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_S(CYTHON_UNUSED PyObject *__pyx
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-<<<<<<< HEAD:cython/cone_wrap.c
     /* "cython/cone_wrap.pyx":5
-=======
-    /* "cython/cone.pyx":5
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * def S(a,b):
  *     if b.contracted:
  *         return sum(cb*S(pb,a) for (cb,pb) in b)             # <<<<<<<<<<<<<<
@@ -2408,11 +2336,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_S(CYTHON_UNUSED PyObject *__pyx
     __pyx_t_3 = 0;
     goto __pyx_L0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
     /* "cython/cone_wrap.pyx":4
-=======
-    /* "cython/cone.pyx":4
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * 
  * def S(a,b):
  *     if b.contracted:             # <<<<<<<<<<<<<<
@@ -2421,11 +2345,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_S(CYTHON_UNUSED PyObject *__pyx
  */
   }
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":6
-=======
-  /* "cython/cone.pyx":6
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *     if b.contracted:
  *         return sum(cb*S(pb,a) for (cb,pb) in b)
  *     elif a.contracted:             # <<<<<<<<<<<<<<
@@ -2438,11 +2358,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_S(CYTHON_UNUSED PyObject *__pyx
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   if (__pyx_t_2) {
 
-<<<<<<< HEAD:cython/cone_wrap.c
     /* "cython/cone_wrap.pyx":7
-=======
-    /* "cython/cone.pyx":7
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *         return sum(cb*S(pb,a) for (cb,pb) in b)
  *     elif a.contracted:
  *         return sum(ca*S(b,pa) for (ca,pa) in a)             # <<<<<<<<<<<<<<
@@ -2459,11 +2375,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_S(CYTHON_UNUSED PyObject *__pyx
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
     /* "cython/cone_wrap.pyx":6
-=======
-    /* "cython/cone.pyx":6
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *     if b.contracted:
  *         return sum(cb*S(pb,a) for (cb,pb) in b)
  *     elif a.contracted:             # <<<<<<<<<<<<<<
@@ -2472,11 +2384,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_S(CYTHON_UNUSED PyObject *__pyx
  */
   }
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":8
-=======
-  /* "cython/cone.pyx":8
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *     elif a.contracted:
  *         return sum(ca*S(b,pa) for (ca,pa) in a)
  *     return a.norm*b.norm*cints.overlap(a.exponent,a.powers[0],a.powers[1],a.powers[2],             # <<<<<<<<<<<<<<
@@ -2518,11 +2426,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_S(CYTHON_UNUSED PyObject *__pyx
   __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 8, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":9
-=======
-  /* "cython/cone.pyx":9
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *         return sum(ca*S(b,pa) for (ca,pa) in a)
  *     return a.norm*b.norm*cints.overlap(a.exponent,a.powers[0],a.powers[1],a.powers[2],
  *                                        a.origin[0],a.origin[1],a.origin[2],             # <<<<<<<<<<<<<<
@@ -2551,11 +2455,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_S(CYTHON_UNUSED PyObject *__pyx
   __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 9, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":10
-=======
-  /* "cython/cone.pyx":10
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *     return a.norm*b.norm*cints.overlap(a.exponent,a.powers[0],a.powers[1],a.powers[2],
  *                                        a.origin[0],a.origin[1],a.origin[2],
  *                                        b.exponent,b.powers[0],b.powers[1],b.powers[2],             # <<<<<<<<<<<<<<
@@ -2588,11 +2488,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_S(CYTHON_UNUSED PyObject *__pyx
   __pyx_t_15 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_15 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":11
-=======
-  /* "cython/cone.pyx":11
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *                                        a.origin[0],a.origin[1],a.origin[2],
  *                                        b.exponent,b.powers[0],b.powers[1],b.powers[2],
  *                                        b.origin[0],b.origin[1],b.origin[2])             # <<<<<<<<<<<<<<
@@ -2621,11 +2517,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_S(CYTHON_UNUSED PyObject *__pyx
   __pyx_t_18 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_18 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 11, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":8
-=======
-  /* "cython/cone.pyx":8
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *     elif a.contracted:
  *         return sum(ca*S(b,pa) for (ca,pa) in a)
  *     return a.norm*b.norm*cints.overlap(a.exponent,a.powers[0],a.powers[1],a.powers[2],             # <<<<<<<<<<<<<<
@@ -2642,11 +2534,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_S(CYTHON_UNUSED PyObject *__pyx
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":3
-=======
-  /* "cython/cone.pyx":3
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * cimport cints
  * 
  * def S(a,b):             # <<<<<<<<<<<<<<
@@ -2670,11 +2558,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_S(CYTHON_UNUSED PyObject *__pyx
   return __pyx_r;
 }
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":13
-=======
-/* "cython/cone.pyx":13
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *                                        b.origin[0],b.origin[1],b.origin[2])
  * 
  * def T(a,b):             # <<<<<<<<<<<<<<
@@ -2748,11 +2632,7 @@ static PyObject *__pyx_pw_9pyquante2_5cints_3one_3T(PyObject *__pyx_self, PyObje
 }
 static PyObject *__pyx_gb_9pyquante2_5cints_3one_1T_2generator2(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":15
-=======
-/* "cython/cone.pyx":15
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * def T(a,b):
  *     if b.contracted:
  *         return sum(cb*T(pb,a) for (cb,pb) in b)             # <<<<<<<<<<<<<<
@@ -3013,11 +2893,7 @@ static PyObject *__pyx_gb_9pyquante2_5cints_3one_1T_2generator2(__pyx_CoroutineO
 }
 static PyObject *__pyx_gb_9pyquante2_5cints_3one_1T_5generator3(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":17
-=======
-/* "cython/cone.pyx":17
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *         return sum(cb*T(pb,a) for (cb,pb) in b)
  *     elif a.contracted:
  *         return sum(ca*T(b,pa) for (ca,pa) in a)             # <<<<<<<<<<<<<<
@@ -3277,11 +3153,7 @@ static PyObject *__pyx_gb_9pyquante2_5cints_3one_1T_5generator3(__pyx_CoroutineO
   return __pyx_r;
 }
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":13
-=======
-/* "cython/cone.pyx":13
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *                                        b.origin[0],b.origin[1],b.origin[2])
  * 
  * def T(a,b):             # <<<<<<<<<<<<<<
@@ -3332,11 +3204,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_2T(CYTHON_UNUSED PyObject *__py
   __Pyx_INCREF(__pyx_cur_scope->__pyx_v_b);
   __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_b);
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":14
-=======
-  /* "cython/cone.pyx":14
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * 
  * def T(a,b):
  *     if b.contracted:             # <<<<<<<<<<<<<<
@@ -3349,11 +3217,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_2T(CYTHON_UNUSED PyObject *__py
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-<<<<<<< HEAD:cython/cone_wrap.c
     /* "cython/cone_wrap.pyx":15
-=======
-    /* "cython/cone.pyx":15
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * def T(a,b):
  *     if b.contracted:
  *         return sum(cb*T(pb,a) for (cb,pb) in b)             # <<<<<<<<<<<<<<
@@ -3370,11 +3234,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_2T(CYTHON_UNUSED PyObject *__py
     __pyx_t_3 = 0;
     goto __pyx_L0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
     /* "cython/cone_wrap.pyx":14
-=======
-    /* "cython/cone.pyx":14
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * 
  * def T(a,b):
  *     if b.contracted:             # <<<<<<<<<<<<<<
@@ -3383,11 +3243,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_2T(CYTHON_UNUSED PyObject *__py
  */
   }
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":16
-=======
-  /* "cython/cone.pyx":16
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *     if b.contracted:
  *         return sum(cb*T(pb,a) for (cb,pb) in b)
  *     elif a.contracted:             # <<<<<<<<<<<<<<
@@ -3400,11 +3256,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_2T(CYTHON_UNUSED PyObject *__py
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   if (__pyx_t_2) {
 
-<<<<<<< HEAD:cython/cone_wrap.c
     /* "cython/cone_wrap.pyx":17
-=======
-    /* "cython/cone.pyx":17
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *         return sum(cb*T(pb,a) for (cb,pb) in b)
  *     elif a.contracted:
  *         return sum(ca*T(b,pa) for (ca,pa) in a)             # <<<<<<<<<<<<<<
@@ -3421,11 +3273,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_2T(CYTHON_UNUSED PyObject *__py
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
     /* "cython/cone_wrap.pyx":16
-=======
-    /* "cython/cone.pyx":16
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *     if b.contracted:
  *         return sum(cb*T(pb,a) for (cb,pb) in b)
  *     elif a.contracted:             # <<<<<<<<<<<<<<
@@ -3434,11 +3282,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_2T(CYTHON_UNUSED PyObject *__py
  */
   }
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":18
-=======
-  /* "cython/cone.pyx":18
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *     elif a.contracted:
  *         return sum(ca*T(b,pa) for (ca,pa) in a)
  *     return a.norm*b.norm*cints.kinetic(a.exponent,a.powers[0],a.powers[1],a.powers[2],             # <<<<<<<<<<<<<<
@@ -3480,11 +3324,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_2T(CYTHON_UNUSED PyObject *__py
   __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 18, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":19
-=======
-  /* "cython/cone.pyx":19
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *         return sum(ca*T(b,pa) for (ca,pa) in a)
  *     return a.norm*b.norm*cints.kinetic(a.exponent,a.powers[0],a.powers[1],a.powers[2],
  *                                        a.origin[0],a.origin[1],a.origin[2],             # <<<<<<<<<<<<<<
@@ -3513,11 +3353,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_2T(CYTHON_UNUSED PyObject *__py
   __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 19, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":20
-=======
-  /* "cython/cone.pyx":20
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *     return a.norm*b.norm*cints.kinetic(a.exponent,a.powers[0],a.powers[1],a.powers[2],
  *                                        a.origin[0],a.origin[1],a.origin[2],
  *                                        b.exponent,b.powers[0],b.powers[1],b.powers[2],             # <<<<<<<<<<<<<<
@@ -3550,11 +3386,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_2T(CYTHON_UNUSED PyObject *__py
   __pyx_t_15 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_15 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 20, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":21
-=======
-  /* "cython/cone.pyx":21
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *                                        a.origin[0],a.origin[1],a.origin[2],
  *                                        b.exponent,b.powers[0],b.powers[1],b.powers[2],
  *                                        b.origin[0],b.origin[1],b.origin[2])             # <<<<<<<<<<<<<<
@@ -3583,11 +3415,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_2T(CYTHON_UNUSED PyObject *__py
   __pyx_t_18 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_18 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 21, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":18
-=======
-  /* "cython/cone.pyx":18
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *     elif a.contracted:
  *         return sum(ca*T(b,pa) for (ca,pa) in a)
  *     return a.norm*b.norm*cints.kinetic(a.exponent,a.powers[0],a.powers[1],a.powers[2],             # <<<<<<<<<<<<<<
@@ -3604,11 +3432,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_2T(CYTHON_UNUSED PyObject *__py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":13
-=======
-  /* "cython/cone.pyx":13
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *                                        b.origin[0],b.origin[1],b.origin[2])
  * 
  * def T(a,b):             # <<<<<<<<<<<<<<
@@ -3632,11 +3456,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_2T(CYTHON_UNUSED PyObject *__py
   return __pyx_r;
 }
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":23
-=======
-/* "cython/cone.pyx":23
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *                                        b.origin[0],b.origin[1],b.origin[2])
  * 
  * def V(a,b,C):             # <<<<<<<<<<<<<<
@@ -3721,11 +3541,7 @@ static PyObject *__pyx_pw_9pyquante2_5cints_3one_5V(PyObject *__pyx_self, PyObje
 }
 static PyObject *__pyx_gb_9pyquante2_5cints_3one_1V_2generator4(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":25
-=======
-/* "cython/cone.pyx":25
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * def V(a,b,C):
  *     if b.contracted:
  *         return sum(cb*V(pb,a,C) for (cb,pb) in b)             # <<<<<<<<<<<<<<
@@ -3990,11 +3806,7 @@ static PyObject *__pyx_gb_9pyquante2_5cints_3one_1V_2generator4(__pyx_CoroutineO
 }
 static PyObject *__pyx_gb_9pyquante2_5cints_3one_1V_5generator5(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":27
-=======
-/* "cython/cone.pyx":27
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *         return sum(cb*V(pb,a,C) for (cb,pb) in b)
  *     elif a.contracted:
  *         return sum(ca*V(b,pa,C) for (ca,pa) in a)             # <<<<<<<<<<<<<<
@@ -4258,11 +4070,7 @@ static PyObject *__pyx_gb_9pyquante2_5cints_3one_1V_5generator5(__pyx_CoroutineO
   return __pyx_r;
 }
 
-<<<<<<< HEAD:cython/cone_wrap.c
 /* "cython/cone_wrap.pyx":23
-=======
-/* "cython/cone.pyx":23
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *                                        b.origin[0],b.origin[1],b.origin[2])
  * 
  * def V(a,b,C):             # <<<<<<<<<<<<<<
@@ -4320,11 +4128,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_4V(CYTHON_UNUSED PyObject *__py
   __Pyx_INCREF(__pyx_cur_scope->__pyx_v_C);
   __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_C);
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":24
-=======
-  /* "cython/cone.pyx":24
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * 
  * def V(a,b,C):
  *     if b.contracted:             # <<<<<<<<<<<<<<
@@ -4337,11 +4141,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_4V(CYTHON_UNUSED PyObject *__py
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-<<<<<<< HEAD:cython/cone_wrap.c
     /* "cython/cone_wrap.pyx":25
-=======
-    /* "cython/cone.pyx":25
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * def V(a,b,C):
  *     if b.contracted:
  *         return sum(cb*V(pb,a,C) for (cb,pb) in b)             # <<<<<<<<<<<<<<
@@ -4358,11 +4158,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_4V(CYTHON_UNUSED PyObject *__py
     __pyx_t_3 = 0;
     goto __pyx_L0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
     /* "cython/cone_wrap.pyx":24
-=======
-    /* "cython/cone.pyx":24
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * 
  * def V(a,b,C):
  *     if b.contracted:             # <<<<<<<<<<<<<<
@@ -4371,11 +4167,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_4V(CYTHON_UNUSED PyObject *__py
  */
   }
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":26
-=======
-  /* "cython/cone.pyx":26
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *     if b.contracted:
  *         return sum(cb*V(pb,a,C) for (cb,pb) in b)
  *     elif a.contracted:             # <<<<<<<<<<<<<<
@@ -4388,11 +4180,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_4V(CYTHON_UNUSED PyObject *__py
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   if (__pyx_t_2) {
 
-<<<<<<< HEAD:cython/cone_wrap.c
     /* "cython/cone_wrap.pyx":27
-=======
-    /* "cython/cone.pyx":27
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *         return sum(cb*V(pb,a,C) for (cb,pb) in b)
  *     elif a.contracted:
  *         return sum(ca*V(b,pa,C) for (ca,pa) in a)             # <<<<<<<<<<<<<<
@@ -4409,11 +4197,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_4V(CYTHON_UNUSED PyObject *__py
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
     /* "cython/cone_wrap.pyx":26
-=======
-    /* "cython/cone.pyx":26
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *     if b.contracted:
  *         return sum(cb*V(pb,a,C) for (cb,pb) in b)
  *     elif a.contracted:             # <<<<<<<<<<<<<<
@@ -4422,11 +4206,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_4V(CYTHON_UNUSED PyObject *__py
  */
   }
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":28
-=======
-  /* "cython/cone.pyx":28
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *     elif a.contracted:
  *         return sum(ca*V(b,pa,C) for (ca,pa) in a)
  *     return cints.nuclear_attraction(             # <<<<<<<<<<<<<<
@@ -4435,11 +4215,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_4V(CYTHON_UNUSED PyObject *__py
  */
   __Pyx_XDECREF(__pyx_r);
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":29
-=======
-  /* "cython/cone.pyx":29
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *         return sum(ca*V(b,pa,C) for (ca,pa) in a)
  *     return cints.nuclear_attraction(
  *         a.origin[0],a.origin[1],a.origin[2],a.norm,a.powers[0],             # <<<<<<<<<<<<<<
@@ -4479,11 +4255,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_4V(CYTHON_UNUSED PyObject *__py
   __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 29, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":30
-=======
-  /* "cython/cone.pyx":30
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *     return cints.nuclear_attraction(
  *         a.origin[0],a.origin[1],a.origin[2],a.norm,a.powers[0],
  *         a.powers[1],a.powers[2],a.exponent,             # <<<<<<<<<<<<<<
@@ -4509,11 +4281,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_4V(CYTHON_UNUSED PyObject *__py
   __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":31
-=======
-  /* "cython/cone.pyx":31
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *         a.origin[0],a.origin[1],a.origin[2],a.norm,a.powers[0],
  *         a.powers[1],a.powers[2],a.exponent,
  *         b.origin[0],b.origin[1],b.origin[2],b.norm,b.powers[0],             # <<<<<<<<<<<<<<
@@ -4553,11 +4321,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_4V(CYTHON_UNUSED PyObject *__py
   __pyx_t_16 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_16 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 31, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":32
-=======
-  /* "cython/cone.pyx":32
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *         a.powers[1],a.powers[2],a.exponent,
  *         b.origin[0],b.origin[1],b.origin[2],b.norm,b.powers[0],
  *         b.powers[1],b.powers[2],b.exponent,             # <<<<<<<<<<<<<<
@@ -4582,11 +4346,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_4V(CYTHON_UNUSED PyObject *__py
   __pyx_t_19 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_19 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 32, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":33
-=======
-  /* "cython/cone.pyx":33
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *         b.origin[0],b.origin[1],b.origin[2],b.norm,b.powers[0],
  *         b.powers[1],b.powers[2],b.exponent,
  *         C[0],C[1],C[2])             # <<<<<<<<<<<<<<
@@ -4604,11 +4364,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_4V(CYTHON_UNUSED PyObject *__py
   __pyx_t_22 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_22 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 33, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":28
-=======
-  /* "cython/cone.pyx":28
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *     elif a.contracted:
  *         return sum(ca*V(b,pa,C) for (ca,pa) in a)
  *     return cints.nuclear_attraction(             # <<<<<<<<<<<<<<
@@ -4621,11 +4377,7 @@ static PyObject *__pyx_pf_9pyquante2_5cints_3one_4V(CYTHON_UNUSED PyObject *__py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":23
-=======
-  /* "cython/cone.pyx":23
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *                                        b.origin[0],b.origin[1],b.origin[2])
  * 
  * def V(a,b,C):             # <<<<<<<<<<<<<<
@@ -5815,11 +5567,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
   {&__pyx_n_s_close, __pyx_k_close, sizeof(__pyx_k_close), 0, 0, 1, 1},
   {&__pyx_n_s_contracted, __pyx_k_contracted, sizeof(__pyx_k_contracted), 0, 0, 1, 1},
-<<<<<<< HEAD:cython/cone_wrap.c
   {&__pyx_kp_s_cython_cone_wrap_pyx, __pyx_k_cython_cone_wrap_pyx, sizeof(__pyx_k_cython_cone_wrap_pyx), 0, 0, 1, 0},
-=======
-  {&__pyx_kp_s_cython_cone_pyx, __pyx_k_cython_cone_pyx, sizeof(__pyx_k_cython_cone_pyx), 0, 0, 1, 0},
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
   {&__pyx_n_s_exponent, __pyx_k_exponent, sizeof(__pyx_k_exponent), 0, 0, 1, 1},
   {&__pyx_n_s_genexpr, __pyx_k_genexpr, sizeof(__pyx_k_genexpr), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
@@ -5845,11 +5593,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":3
-=======
-  /* "cython/cone.pyx":3
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * cimport cints
  * 
  * def S(a,b):             # <<<<<<<<<<<<<<
@@ -5859,15 +5603,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_tuple_ = PyTuple_Pack(5, __pyx_n_s_a, __pyx_n_s_b, __pyx_n_s_genexpr, __pyx_n_s_genexpr, __pyx_n_s_genexpr); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
-<<<<<<< HEAD:cython/cone_wrap.c
   __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(2, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple_, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_cone_wrap_pyx, __pyx_n_s_S, 3, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) __PYX_ERR(0, 3, __pyx_L1_error)
 
   /* "cython/cone_wrap.pyx":13
-=======
-  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(2, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple_, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_cone_pyx, __pyx_n_s_S, 3, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) __PYX_ERR(0, 3, __pyx_L1_error)
-
-  /* "cython/cone.pyx":13
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *                                        b.origin[0],b.origin[1],b.origin[2])
  * 
  * def T(a,b):             # <<<<<<<<<<<<<<
@@ -5877,15 +5615,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__3 = PyTuple_Pack(5, __pyx_n_s_a, __pyx_n_s_b, __pyx_n_s_genexpr, __pyx_n_s_genexpr, __pyx_n_s_genexpr); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 13, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
-<<<<<<< HEAD:cython/cone_wrap.c
   __pyx_codeobj__4 = (PyObject*)__Pyx_PyCode_New(2, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__3, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_cone_wrap_pyx, __pyx_n_s_T, 13, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__4)) __PYX_ERR(0, 13, __pyx_L1_error)
 
   /* "cython/cone_wrap.pyx":23
-=======
-  __pyx_codeobj__4 = (PyObject*)__Pyx_PyCode_New(2, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__3, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_cone_pyx, __pyx_n_s_T, 13, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__4)) __PYX_ERR(0, 13, __pyx_L1_error)
-
-  /* "cython/cone.pyx":23
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *                                        b.origin[0],b.origin[1],b.origin[2])
  * 
  * def V(a,b,C):             # <<<<<<<<<<<<<<
@@ -5895,11 +5627,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__5 = PyTuple_Pack(6, __pyx_n_s_a, __pyx_n_s_b, __pyx_n_s_C, __pyx_n_s_genexpr, __pyx_n_s_genexpr, __pyx_n_s_genexpr); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 23, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
-<<<<<<< HEAD:cython/cone_wrap.c
   __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__5, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_cone_wrap_pyx, __pyx_n_s_V, 23, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) __PYX_ERR(0, 23, __pyx_L1_error)
-=======
-  __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__5, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_cone_pyx, __pyx_n_s_V, 23, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) __PYX_ERR(0, 23, __pyx_L1_error)
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -6256,11 +5984,7 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":3
-=======
-  /* "cython/cone.pyx":3
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * cimport cints
  * 
  * def S(a,b):             # <<<<<<<<<<<<<<
@@ -6272,11 +5996,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_S, __pyx_t_1) < 0) __PYX_ERR(0, 3, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":13
-=======
-  /* "cython/cone.pyx":13
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *                                        b.origin[0],b.origin[1],b.origin[2])
  * 
  * def T(a,b):             # <<<<<<<<<<<<<<
@@ -6288,11 +6008,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_T, __pyx_t_1) < 0) __PYX_ERR(0, 13, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":23
-=======
-  /* "cython/cone.pyx":23
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  *                                        b.origin[0],b.origin[1],b.origin[2])
  * 
  * def V(a,b,C):             # <<<<<<<<<<<<<<
@@ -6304,11 +6020,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_V, __pyx_t_1) < 0) __PYX_ERR(0, 23, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-<<<<<<< HEAD:cython/cone_wrap.c
   /* "cython/cone_wrap.pyx":1
-=======
-  /* "cython/cone.pyx":1
->>>>>>> 2abe509cf66f41580982d4f113b72af208ebac55:cython/cone.c
  * cimport cints             # <<<<<<<<<<<<<<
  * 
  * def S(a,b):

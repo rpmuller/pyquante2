@@ -1,6 +1,7 @@
 import unittest
 from pyquante2.basis.pgbf import pgbf
 from pyquante2.ints.two import ERI as coul_huz
+from pyquante2.ints.rys import ERI as coul_rys
 from pyquante2.ints.hgp import ERI as coul_hgp
 from pyquante2.cints.two import ERI as coul_chuz
 from pyquante2.cints.hgp import ERI as coul_chgp
@@ -12,6 +13,10 @@ class test_two(unittest.TestCase):
     def test_huz(self):
         self.assertAlmostEqual(coul_huz(s,s,px,px),0.9403159725793302)
         self.assertEqual(coul_huz(s,s,s,px),0)
+
+    def test_rys(self):
+        self.assertAlmostEqual(coul_rys(s,s,px,px),0.9403159725793302)
+        self.assertEqual(coul_rys(s,s,s,px),0)
 
     def test_hgp(self):
         self.assertAlmostEqual(coul_hgp(s,s,px,px),0.9403159725793302)

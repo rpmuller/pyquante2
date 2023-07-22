@@ -23,8 +23,12 @@
 import sys
 
 from math import exp,sqrt,pi,pow
-from pyints import dist2,binomial,gaussian_product_center
+from pyquante2.ints.one import binomial,gaussian_product_center
 import numpy as np
+
+def dist2(xyz1,xyz2):
+    dxyz = np.asarray(xyz1)-np.asarray(xyz2)
+    return np.dot(dxyz,dxyz)
 
 def ERI(a,b,c,d):
     if a.contracted and b.contracted and c.contracted and d.contracted:
@@ -40,20 +44,20 @@ def ERI(a,b,c,d):
     if d.contracted:
         return sum(cd*ERI(pd,c,a,b) for (cd,pd) in d)
     return coulomb_repulsion(
-        aexps,acoefs,anorms,a.origin,a.powers,
-        bexps,bcoefs,bnorms,b.origin,b.powers,
-        cexps,ccoefs,cnorms,c.origin,c.powers,
-        dexps,dcoefs,dnorms,d.origin,d.powers)
+        a.origin,a.norm,a.powers,a.exponent,
+        b.origin,b.norm,b.powers,b.exponent,
+        c.origin,c.norm,c.powers,c.exponent,
+        d.origin,d.norm,d.powers,d.exponent)
 
 def contr_coulomb(aexps,acoefs,anorms,xyza,powa,
                   bexps,bcoefs,bnorms,xyzb,powb,
                   cexps,ccoefs,cnorms,xyzc,powc,
                   dexps,dcoefs,dnorms,xyzd,powd):
     val = 0.
-    for i in xrange(len(aexps)):
-        for j in xrange(len(bexps)):
-            for k in xrange(len(cexps)):
-                for l in xrange(len(dexps)):
+    for i in range(len(aexps)):
+        for j in range(len(bexps)):
+            for k in range(len(cexps)):
+                for l in range(len(dexps)):
                     val = val + acoefs[i]*bcoefs[j]*ccoefs[k]*dcoefs[l]\
                           *coulomb_repulsion(xyza,anorms[i],powa,aexps[i],
                                              xyzb,bnorms[j],powb,bexps[j],
@@ -62,24 +66,34 @@ def contr_coulomb(aexps,acoefs,anorms,xyza,powa,
     return val
     
 
-def coulomb_repulsion((xa,ya,za),norma,(la,ma,na),alphaa,
-                      (xb,yb,zb),normb,(lb,mb,nb),alphab,
-                      (xc,yc,zc),normc,(lc,mc,nc),alphac,
-                      (xd,yd,zd),normd,(ld,md,nd),alphad):
+def coulomb_repulsion(xyza,norma,lmna,alphaa,
+                      xyzb,normb,lmnb,alphab,
+                      xyzc,normc,lmnc,alphac,
+                      xyzd,normd,lmnd,alphad):
     "Form coulomb repulsion integral by Rys quadrature"
+    xa,ya,za = xyza
+    xb,yb,zb = xyzb
+    xc,yc,zc = xyzc
+    xd,yd,zd = xyzd
+
+    la,ma,na = lmna
+    lb,mb,nb = lmnb
+    lc,mc,nc = lmnc
+    ld,md,nd = lmnd
+    
     norder = (la+ma+na+lb+nb+mb+lc+mc+nc+ld+md+nd)/2 + 1  
     A = alphaa+alphab 
     B = alphac+alphad
     rho = A*B/(A+B)
-    xyzp = gaussian_product_center(alphaa,(xa,ya,za),alphab,(xb,yb,zb))
-    xyzq = gaussian_product_center(alphac,(xc,yc,zc),alphad,(xd,yd,zd))
+    xyzp = gaussian_product_center(alphaa,np.asarray(xyza),alphab,np.asarray(xyzb))
+    xyzq = gaussian_product_center(alphac,np.asarray(xyzc),alphad,np.asarray(xyzd))
     rpq2 = dist2(xyzp,xyzq)
     X = rpq2*rho
 
     roots,weights = Roots(norder,X)
 
     sum = 0.
-    for i in xrange(len(roots)):
+    for i in range(len(roots)):
         t = roots[i]
         Ix = Int1d(t,la,lb,lc,ld,xa,xb,xc,xd,
                    alphaa,alphab,alphac,alphad)
@@ -1432,16 +1446,16 @@ def Recur(t,i,j,k,l,xi,xj,xk,xl,alphai,alphaj,alphak,alphal):
     if n > 0: G[1,0] = C*G[0,0]  # ABD eq 15
     if m > 0: G[0,1] = Cp*G[0,0] # ABD eq 16
 
-    for a in xrange(2,n+1):      
+    for a in range(2,n+1):      
         G[a,0] = B1*(a-1)*G[a-2,0] + C*G[a-1,0]
-    for b in xrange(2,m+1):     
+    for b in range(2,m+1):     
         G[0,b] = B1p*(b-1)*G[0,b-2] + Cp*G[0,b-1]
 
     if m==0 or n==0: return G
 
-    for a in xrange(1,n+1):
+    for a in range(1,n+1):
         G[a,1] = a*B0*G[a-1,0] + Cp*G[a,0]
-        for b in xrange(2,m+1):
+        for b in range(2,m+1):
             G[a,b] = B1p*(b-1)*G[a,b-2] + a*B0*G[a-1,b-1] + Cp*G[a,b-1]
 
     return G
@@ -1455,9 +1469,9 @@ def Shift(G,i,k,xij,xkl):
     l = mdim-k-1
 
     ijkl = 0.
-    for m in xrange(l+1):
+    for m in range(l+1):
         ijm0 = 0
-        for n in xrange(j+1): # I(i,j,m,0)<-I(n,0,m,0)
+        for n in range(j+1): # I(i,j,m,0)<-I(n,0,m,0)
             ijm0 += binomial(j,n)*pow(xij,j-n)*G[n+i,m+k]
         ijkl += binomial(l,m)*pow(xkl,l-m)*ijm0 # I(i,j,k,l)<-I(i,j,m,0)
     return ijkl
@@ -1484,17 +1498,17 @@ def test():
     x = PGBF(1.,(0,0,0),(1,0,0))
     x2 = PGBF(1.,(1.,0,0),(1,0,0))
 
-    print "(s,s,s,s)    %12.6f %12.6f" % general_test(s,s,s,s)
-    print "(s,s,s2,s2)  %12.6f %12.6f" % general_test(s,s,s2,s2)
-    print "(s,s2,s3,s4) %12.6f %12.6f" % general_test(s,s2,s3,s4)
-    print "(s,s,x,x)    %12.6f %12.6f" % general_test(s,s,x,x)
-    print "(s,x,s,x)    %12.6f %12.6f" % general_test(s,x,s,x)
-    print "(x,s,x,s)    %12.6f %12.6f" % general_test(x,s,x,s)
-    print "(x,x,x,x)    %12.6f %12.6f" % general_test(x,x,x,x)
-    print "(x2,s,s,s)   %12.6f %12.6f" % general_test(x2,s,s,s)
-    print "(s,x2,s,s)   %12.6f %12.6f" % general_test(s,x2,s,s)
-    print "(s,s,x2,s)   %12.6f %12.6f" % general_test(s,s,x2,s)
-    print "(s,s,s,x2)   %12.6f %12.6f" % general_test(s,s,s,x2)
+    print("(s,s,s,s)    %12.6f %12.6f" % general_test(s,s,s,s))
+    print("(s,s,s2,s2)  %12.6f %12.6f" % general_test(s,s,s2,s2))
+    print("(s,s2,s3,s4) %12.6f %12.6f" % general_test(s,s2,s3,s4))
+    print("(s,s,x,x)    %12.6f %12.6f" % general_test(s,s,x,x))
+    print("(s,x,s,x)    %12.6f %12.6f" % general_test(s,x,s,x))
+    print("(x,s,x,s)    %12.6f %12.6f" % general_test(x,s,x,s))
+    print("(x,x,x,x)    %12.6f %12.6f" % general_test(x,x,x,x))
+    print("(x2,s,s,s)   %12.6f %12.6f" % general_test(x2,s,s,s))
+    print("(s,x2,s,s)   %12.6f %12.6f" % general_test(s,x2,s,s))
+    print("(s,s,x2,s)   %12.6f %12.6f" % general_test(s,s,x2,s))
+    print("(s,s,s,x2)   %12.6f %12.6f" % general_test(s,s,s,x2))
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 # PyQuante 2 Todo List
 
 ## Move over from pyquante1:
-Test routine for all python and c integral routines.
+Test routine for all python and c integral routines for contracted bfs.
 rys/crys
 libint
 
