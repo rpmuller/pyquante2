@@ -24,7 +24,26 @@ import sys
 
 from math import exp,sqrt,pi,pow
 from pyints import dist2,binomial,gaussian_product_center
-from NumWrap import zeros
+import numpy as np
+
+def ERI(a,b,c,d):
+    if a.contracted and b.contracted and c.contracted and d.contracted:
+        acoefs,anorms,aexps = a.cne_list()
+        bcoefs,bnorms,bexps = b.cne_list()
+        ccoefs,cnorms,cexps = c.cne_list()
+        dcoefs,dnorms,dexps = d.cne_list()
+        return contr_coulomb(
+            aexps,acoefs,anorms,a.origin,a.powers,
+            bexps,bcoefs,bnorms,b.origin,b.powers,
+            cexps,ccoefs,cnorms,c.origin,c.powers,
+            dexps,dcoefs,dnorms,d.origin,d.powers)
+    if d.contracted:
+        return sum(cd*ERI(pd,c,a,b) for (cd,pd) in d)
+    return coulomb_repulsion(
+        aexps,acoefs,anorms,a.origin,a.powers,
+        bexps,bcoefs,bnorms,b.origin,b.powers,
+        cexps,ccoefs,cnorms,c.origin,c.powers,
+        dexps,dcoefs,dnorms,d.origin,d.powers)
 
 def contr_coulomb(aexps,acoefs,anorms,xyza,powa,
                   bexps,bcoefs,bnorms,xyzb,powb,
@@ -1402,7 +1421,7 @@ def Recur(t,i,j,k,l,xi,xj,xk,xl,alphai,alphaj,alphak,alphal):
     Px = (alphai*xi+alphaj*xj)/A
     Qx = (alphak*xk+alphal*xl)/B
 
-    G = zeros((n+1,m+1),'d')
+    G = np.zeros((n+1,m+1),'d')
 
     C,Cp,B0,B1,B1p = RecurFactorsGamess(t,A,B,Px,Qx,xi,xk)
 
