@@ -1,8 +1,10 @@
 import unittest
 from numpy import array
 from pyquante2 import pgbf,cgbf
-from pyquante2.cone import S,T,V
-from pyquante2.ctwo import ERI,ERI_hgp,vrr,vrr_recursive
+from pyquante2.cints.one import S,T,V
+from pyquante2.cints.two import ERI
+from pyquante2.cints.two import ERI as ERI_hgp
+from pyquante2.cints.hgp import vrr,vrr_recursive
 from pyquante2.ints.hgp import vrr as pyvrr
 s = pgbf(1)
 s2 = cgbf(exps=[1],coefs=[1])
