@@ -1,0 +1,76 @@
+---
+# yamllint disable rule:line-length
+name: CI
+
+# yamllint disable-line rule:truthy
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: Test Python ${{ matrix.python-version }} / ${{ matrix.env-type.env-type-name }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        # yamllint disable rule:braces
+        env-type:
+          - { env-type-name: venv, shell: bash }
+          - { env-type-name: conda, shell: 'bash -l {0}' }
+          # yamllint enable rule:braces
+    defaults:
+      run:
+        shell: ${{ matrix.env-type.shell }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+        if: ${{ matrix.env-type.env-type-name == 'venv' }}
+      - name: Set up Python ${{ matrix.python-version }} with conda
+        uses: conda-incubator/setup-miniconda@29c004f57289f8b93aaebc627f7c4e0b6543e222 # v2.2.0
+        with:
+          activate-environment: test
+          auto-activate-base: false
+          auto-update-conda: true
+          miniforge-version: latest
+          python-version: ${{ matrix.python-version }}
+          show-channel-urls: true
+        if: ${{ matrix.env-type.env-type-name == 'conda' }}
+      - name: Update pip and setuptools
+        run: python -m pip install -U pip setuptools
+      - name: Print pip config
+        run: python -m pip config list
+      - name: Install test dependencies
+        run: python -m pip install pytest-cov
+      - name: Install package
+        run: |
+          python -m pip install -vvv .
+          # Importing the Cython inside the source tree is broken unless the
+          # compiled products are next to the source code, symlinked or
+          # otherwise.
+          python setup.py build_ext -i
+          PACKAGE_INSTALL_DIR=$(python -c 'import pyquante2 as _; print(_.__path__[0])')
+          find $PACKAGE_INSTALL_DIR -type f | sort
+      - name: Print Python environment
+        run: |
+          python -m pip list
+      - name: Print conda environment
+        run: conda list
+        if: ${{ matrix.env-type.env-type-name == 'conda' }}
+      - name: Print conda info
+        run: conda info
+        if: ${{ matrix.env-type.env-type-name == 'conda' }}
+      - name: Print conda config
+        run: conda config --show
+        if: ${{ matrix.env-type.env-type-name == 'conda' }}
+      - name: Run tests
+        run: |
+          # PACKAGE_INSTALL_DIR=$(python -c 'import pyquante2 as _; print(_.__path__[0])')
+          # # Testing the installed package requires moving out of the source
+          # # directory.  There are problems with the pytest cache when trying
+          # # to run from a non-writable dir.
+          # cd ~
+          # python -m pytest -v --cov=pyquante2 --cov-report=xml ${PACKAGE_INSTALL_DIR}
+          # Test the source tree rather than the installed package.
+          python -m pytest -v --cov=pyquante2 --cov-report=xml .
