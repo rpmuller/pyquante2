@@ -46,11 +46,9 @@ jobs:
       - name: Install package
         run: |
           python -m pip install -vvv .
-          # # Importing the Cython inside the source tree is broken unless the
-          # # compiled products are next to the source code, symlinked or
-          # # otherwise.
-          # python setup.py build_ext -i
-          PACKAGE_INSTALL_DIR=$(python -c 'import pyquante2 as _; print(_.__path__[0])')
+          # Trying to run this inside the source tree will look for the
+          # compiled products inside the source tree and will fail
+          pushd ~ && PACKAGE_INSTALL_DIR=$(python -c 'import pyquante2 as _; print(_.__path__[0])') && popd
           find $PACKAGE_INSTALL_DIR -type f | sort
       - name: Print Python environment
         run: |
