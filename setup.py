@@ -19,7 +19,7 @@ if use_cython:
     ext_modules += [
         Extension("pyquante2.cints.one",["cython/cone_wrap.pyx","cython/cints.c"]),
         Extension("pyquante2.cints.two",["cython/ctwo_wrap.pyx","cython/cints.c"]),
-        Extension("pyquante2.cints.hgp",["cython/chgp_wrap.pyx","cython/chgp.c"]),
+        Extension("pyquante2.cints.hgp",["cython/chgp_wrap.pyx","cython/chgp.c","cython/cints.c"]),
         Extension("pyquante2.cints.rys",["cython/crys_wrap.pyx","cython/crys.c"]),
         Extension("pyquante2.cbecke",["cython/cbecke.pyx"],
                    include_dirs=[np.get_include()])
@@ -29,7 +29,7 @@ else:
     ext_modules += [
         Extension("pyquante2.cints.one",["cython/cone_wrap.c","cython/cints.c"]),
         Extension("pyquante2.cints.two",["cython/ctwo_wrap.c","cython/cints.c"]),
-        Extension("pyquante2.cints.hgp",["cython/chgp_wrap.c","cython/chgp.c"]),
+        Extension("pyquante2.cints.hgp",["cython/chgp_wrap.c","cython/chgp.c","cython/cints.c"]),
         Extension("pyquante2.cints.rys",["cython/crys_wrap.c","cython/crys.c"]),
         ]
 
