@@ -1,5 +1,24 @@
 [build-system]
 requires = [
+    "cython<3",
+    "numpy",
     "setuptools",
+]
+
+[project]
+name = "pyquante2"
+version = "0.1"
+authors = [
+    {name = "Rick Muller", email = "rpmuller@gmail.com"}
+]
+description = "Python Quantum Chemistry, version 2.0"
+readme = "README.md"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
     "numpy",
 ]
