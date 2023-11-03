@@ -7,7 +7,7 @@ on: [push, pull_request]
 
 jobs:
   test:
-    name: Test ${{ matrix.os }} / Python ${{ matrix.python-version }} / ${{ matrix.env-type.env-type-name }}
+    name: Test ${{ matrix.os }} / ${{ matrix.python-version }} / Cython ${{ matrix.cythonize }} / ${{ matrix.env-type.env-type-name }}
     strategy:
       matrix:
         os:
@@ -19,6 +19,7 @@ jobs:
           - { env-type-name: venv, shell: bash }
           - { env-type-name: conda, shell: 'bash -l {0}' }
           # yamllint enable rule:braces
+        cythonize: [true, false]
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -42,6 +43,10 @@ jobs:
         if: ${{ matrix.env-type.env-type-name == 'conda' }}
       - name: Update pip and setuptools
         run: python -m pip install -U pip setuptools
+      - name: Install Cython
+        run: |
+          python -m pip install 'Cython<3'
+        if: ${{ matrix.cythonize }}
       - name: Print pip config
         run: python -m pip config list
       - name: Install test dependencies
