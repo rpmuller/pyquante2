@@ -33,9 +33,6 @@ if use_cython:
     )
     ext_modules = cythonize(ext_modules)
 
-with open("README.md") as file:
-    long_description = file.read()
-
 setup(
     name="pyquante2",
     install_requires=["numpy"],
