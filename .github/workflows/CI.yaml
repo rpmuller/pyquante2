@@ -43,13 +43,9 @@ jobs:
         run: python -m pip config list
       - name: Install test dependencies
         run: python -m pip install pytest-cov
-      - name: Install package
+      - name: Install package for testing
         run: |
-          python -m pip install -vvv .
-          # Trying to run this inside the source tree will look for the
-          # compiled products inside the source tree and will fail
-          pushd ~ && PACKAGE_INSTALL_DIR=$(python -c 'import pyquante2 as _; print(_.__path__[0])') && popd
-          find $PACKAGE_INSTALL_DIR -type f | sort
+          python -m pip install -vvv -e .
       - name: Print Python environment
         run: |
           python -m pip list
@@ -64,11 +60,12 @@ jobs:
         if: ${{ matrix.env-type.env-type-name == 'conda' }}
       - name: Run tests
         run: |
-          # PACKAGE_INSTALL_DIR=$(python -c 'import pyquante2 as _; print(_.__path__[0])')
-          # # Testing the installed package requires moving out of the source
-          # # directory.  There are problems with the pytest cache when trying
-          # # to run from a non-writable dir.
-          # cd ~
-          # python -m pytest -v --cov=pyquante2 --cov-report=xml ${PACKAGE_INSTALL_DIR}
-          # Test the source tree rather than the installed package.
           python -m pytest -v --cov=pyquante2 --cov-report=xml .
+      - name: Install package for import checks
+        run: |
+          python -m pip install -vvv .
+      - name: Check installation of compiled modules
+        run: |
+          cd ~
+          python -c 'import pyquante2 as _; print(_.__path__[0])'
+          python -c 'from pyquante2.ints import integrals; from pyquante2.grid import grid'
