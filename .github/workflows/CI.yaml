@@ -7,16 +7,20 @@ on: [push, pull_request]
 
 jobs:
   test:
-    name: Test Python ${{ matrix.python-version }} / ${{ matrix.env-type.env-type-name }}
-    runs-on: ubuntu-latest
+    name: Test ${{ matrix.os }} / Python ${{ matrix.python-version }} / ${{ matrix.env-type.env-type-name }}
     strategy:
       matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
         python-version: ["3.8", "3.9", "3.10", "3.11"]
         # yamllint disable rule:braces
         env-type:
           - { env-type-name: venv, shell: bash }
           - { env-type-name: conda, shell: 'bash -l {0}' }
           # yamllint enable rule:braces
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
         shell: ${{ matrix.env-type.shell }}
