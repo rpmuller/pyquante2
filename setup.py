@@ -2,43 +2,36 @@
 
 from setuptools import setup
 from setuptools.extension import Extension
-import numpy as np
 
 try:
-    from Cython.Distutils import build_ext
+    from Cython.Build import cythonize
 except ImportError:
+    file_ext = "c"
     use_cython = False
 else:
+    import numpy as np
+
+    file_ext = "pyx"
     use_cython = True
 
 
-cmdclass = {}
-ext_modules = []
+ext_modules = [
+    Extension("pyquante2.cints.one", [f"cython/cone_wrap.{file_ext}", "cython/cints.c"]),
+    Extension("pyquante2.cints.two", [f"cython/ctwo_wrap.{file_ext}", "cython/cints.c"]),
+    Extension(
+        "pyquante2.cints.hgp",
+        [f"cython/chgp_wrap.{file_ext}", "cython/chgp.c", "cython/cints.c"],
+    ),
+    Extension("pyquante2.cints.rys", [f"cython/crys_wrap.{file_ext}", "cython/crys.c"]),
+]
 
 if use_cython:
-    ext_modules += [
-        Extension("pyquante2.cints.one", ["cython/cone_wrap.pyx", "cython/cints.c"]),
-        Extension("pyquante2.cints.two", ["cython/ctwo_wrap.pyx", "cython/cints.c"]),
-        Extension(
-            "pyquante2.cints.hgp",
-            ["cython/chgp_wrap.pyx", "cython/chgp.c", "cython/cints.c"],
-        ),
-        Extension("pyquante2.cints.rys", ["cython/crys_wrap.pyx", "cython/crys.c"]),
+    ext_modules.append(
         Extension(
             "pyquante2.cbecke", ["cython/cbecke.pyx"], include_dirs=[np.get_include()]
-        ),
-    ]
-    cmdclass.update({"build_ext": build_ext})
-else:
-    ext_modules += [
-        Extension("pyquante2.cints.one", ["cython/cone_wrap.c", "cython/cints.c"]),
-        Extension("pyquante2.cints.two", ["cython/ctwo_wrap.c", "cython/cints.c"]),
-        Extension(
-            "pyquante2.cints.hgp",
-            ["cython/chgp_wrap.c", "cython/chgp.c", "cython/cints.c"],
-        ),
-        Extension("pyquante2.cints.rys", ["cython/crys_wrap.c", "cython/crys.c"]),
-    ]
+        )
+    )
+    ext_modules = cythonize(ext_modules)
 
 with open("README.md") as file:
     long_description = file.read()
@@ -58,6 +51,5 @@ setup(
         "pyquante2.scf",
         "pyquante2.viewer",
     ],
-    cmdclass=cmdclass,
     ext_modules=ext_modules,
 )
