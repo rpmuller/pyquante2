@@ -58,18 +58,5 @@ for ext_module in ext_modules:
 
 setup(
     name="pyquante2",
-    install_requires=["numpy"],
-    packages=[
-        "pyquante2",
-        "pyquante2.basis",
-        "pyquante2.dft",
-        "pyquante2.geo",
-        "pyquante2.graphics",
-        "pyquante2.grid",
-        "pyquante2.ints",
-        "pyquante2.pt",
-        "pyquante2.scf",
-        "pyquante2.viewer",
-    ],
     ext_modules=ext_modules,
 )

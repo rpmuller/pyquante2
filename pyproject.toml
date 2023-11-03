@@ -2,7 +2,7 @@
 requires = [
     "cython<3",
     "numpy",
-    "setuptools",
+    "setuptools>=61.0",
 ]
 
 [project]
@@ -21,4 +21,18 @@ classifiers = [
 ]
 dependencies = [
     "numpy",
+]
+
+[tool.setuptools]
+packages = [
+    "pyquante2",
+    "pyquante2.basis",
+    "pyquante2.dft",
+    "pyquante2.geo",
+    "pyquante2.graphics",
+    "pyquante2.grid",
+    "pyquante2.ints",
+    "pyquante2.pt",
+    "pyquante2.scf",
+    "pyquante2.viewer",
 ]
