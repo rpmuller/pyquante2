@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-
+from pathlib import Path
 from setuptools import setup
 from setuptools.extension import Extension
 
@@ -49,6 +48,13 @@ if USE_CYTHON:
         )
     )
     ext_modules = cythonize(ext_modules, annotate=True)
+
+# Make intermediate directories so that `setup.py build_ext -i` works.
+_PWD = Path(".").resolve()
+for ext_module in ext_modules:
+    # The last component is the compiled library itself.
+    path = _PWD.joinpath(*ext_module.name.split(".")[:-1])
+    path.mkdir(parents=True, exist_ok=True)
 
 setup(
     name="pyquante2",
