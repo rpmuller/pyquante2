@@ -20,6 +20,20 @@ jobs:
           - { env-type-name: conda, shell: 'bash -l {0}' }
           # yamllint enable rule:braces
         cythonize: [true, false]
+        # Skip some overkill jobs.
+        exclude:
+          - os: ubuntu-latest
+            env-type: { env-type-name: venv, shell: bash }
+            cythonize: false
+          - os: ubuntu-latest
+            env-type: { env-type-name: conda, shell: 'bash -l {0}' }
+            cythonize: true
+          - os: macos-latest
+            env-type: { env-type-name: conda, shell: 'bash -l {0}' }
+            cythonize: false
+          - os: macos-latest
+            env-type: { env-type-name: venv, shell: bash }
+            cythonize: true
     runs-on: ${{ matrix.os }}
     defaults:
       run:
