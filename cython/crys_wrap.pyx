@@ -11,7 +11,7 @@ def ERI(a,b,c,d):
         bcoefs,bnorms,bexps = b.cne_list()
         ccoefs,cnorms,cexps = c.cne_list()
         dcoefs,dnorms,dexps = d.cne_list()
-        return contr_coulomb(
+        return crys.contr_coulomb(
 	    len(acoefs),aexps.data.as_doubles,acoefs.data.as_doubles,anorms.data.as_doubles,
             a.origin[0],a.origin[1],a.origin[2],a.powers[0],a.powers[1],a.powers[2],
 	    len(bcoefs),bexps.data.as_doubles,bcoefs.data.as_doubles,bnorms.data.as_doubles,
@@ -22,7 +22,7 @@ def ERI(a,b,c,d):
             d.origin[0],d.origin[1],d.origin[2],d.powers[0],d.powers[1],d.powers[2])
     if d.contracted:
         return sum(cd*ERI(pd,c,a,b) for (cd,pd) in d)
-    return coulomb_repulsion(
+    return crys.coulomb_repulsion(
         a.origin[0],a.origin[1],a.origin[2],a.norm,a.powers[0],a.powers[1],a.powers[2],a.exponent,
         b.origin[0],b.origin[1],b.origin[2],b.norm,b.powers[0],b.powers[1],b.powers[2],b.exponent,
         c.origin[0],c.origin[1],c.origin[2],c.norm,c.powers[0],c.powers[1],c.powers[2],c.exponent,

@@ -1,65 +1,62 @@
-#!/usr/bin/env python
-
+from pathlib import Path
 from setuptools import setup
 from setuptools.extension import Extension
-import numpy as np
 
 try:
-    from Cython.Distutils import build_ext
+    from Cython.Build import cythonize
 except ImportError:
-    use_cython = False
+    FILE_EXT = "c"
+    USE_CYTHON = False
 else:
-    use_cython = True
+    import numpy as np
+
+    FILE_EXT = "pyx"
+    USE_CYTHON = True
 
 
-cmdclass = {}
-ext_modules = []
+_NUMPY_MACROS = [("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]
+ext_modules = [
+    Extension(
+        "pyquante2.cints.one",
+        [f"cython/cone_wrap.{FILE_EXT}", "cython/cints.c"],
+        define_macros=_NUMPY_MACROS,
+    ),
+    Extension(
+        "pyquante2.cints.two",
+        [f"cython/ctwo_wrap.{FILE_EXT}", "cython/cints.c"],
+        define_macros=_NUMPY_MACROS,
+    ),
+    Extension(
+        "pyquante2.cints.hgp",
+        [f"cython/chgp_wrap.{FILE_EXT}", "cython/chgp.c", "cython/cints.c"],
+        define_macros=_NUMPY_MACROS,
+    ),
+    Extension(
+        "pyquante2.cints.rys",
+        [f"cython/crys_wrap.{FILE_EXT}", "cython/crys.c"],
+        define_macros=_NUMPY_MACROS,
+    ),
+]
 
-if use_cython:
-    ext_modules += [
-        Extension("pyquante2.cints.one",["cython/cone_wrap.pyx","cython/cints.c"]),
-        Extension("pyquante2.cints.two",["cython/ctwo_wrap.pyx","cython/cints.c"]),
-        Extension("pyquante2.cints.hgp",["cython/chgp_wrap.pyx","cython/chgp.c"]),
-        Extension("pyquante2.cints.rys",["cython/crys_wrap.pyx","cython/crys.c"]),
-        Extension("pyquante2.cbecke",["cython/cbecke.pyx"],
-                   include_dirs=[np.get_include()])
-        ]
-    cmdclass.update({'build_ext': build_ext})
-else:
-    ext_modules += [
-        Extension("pyquante2.cints.one",["cython/cone_wrap.c","cython/cints.c"]),
-        Extension("pyquante2.cints.two",["cython/ctwo_wrap.c","cython/cints.c"]),
-        Extension("pyquante2.cints.hgp",["cython/chgp_wrap.c","cython/chgp.c"]),
-        Extension("pyquante2.cints.rys",["cython/crys_wrap.c","cython/crys.c"]),
-        ]
+if USE_CYTHON:
+    ext_modules.append(
+        Extension(
+            "pyquante2.cbecke",
+            ["cython/cbecke.pyx"],
+            define_macros=_NUMPY_MACROS,
+            include_dirs=[np.get_include()],
+        )
+    )
+    ext_modules = cythonize(ext_modules, annotate=True)
 
-with open('README.md') as file:
-    long_description = file.read()
+# Make intermediate directories so that `setup.py build_ext -i` works.
+_PWD = Path(".").resolve()
+for ext_module in ext_modules:
+    # The last component is the compiled library itself.
+    path = _PWD.joinpath(*ext_module.name.split(".")[:-1])
+    path.mkdir(parents=True, exist_ok=True)
 
-setup(name='pyquante2',
-      version='0.1',
-      description='Python Quantum Chemistry, version 2.0',
-      long_description = long_description,
-      author='Rick Muller',
-      author_email='rpmuller@gmail.com',
-      url='http://github.com/rpmuller/pyquante2',
-      install_requires=['numpy'],
-      packages=['pyquante2',
-                'pyquante2.basis',
-                'pyquante2.dft',
-                'pyquante2.geo',
-                'pyquante2.graphics',
-                'pyquante2.grid',
-                'pyquante2.ints',
-                'pyquante2.pt',
-                'pyquante2.scf',
-                'pyquante2.viewer',
-                ],
-      classifiers = ["Development Status :: 3 - Alpha",
-                     "License :: OSI Approved :: BSD License",
-                     "Programming Language :: Python",
-                     "Topic :: Scientific/Engineering",
-                     ],
-      cmdclass = cmdclass,
-      ext_modules = ext_modules,
-      )
+setup(
+    name="pyquante2",
+    ext_modules=ext_modules,
+)

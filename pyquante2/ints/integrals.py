@@ -2,7 +2,7 @@
 General module for integral generation and access.
 """
 try:
-    from pyquante2.ctwo import ERI_hgp as ERI
+    from pyquante2.cints.hgp import ERI
 except:
     print("Couldn't find cython int routine")
     from pyquante2.ints.hgp import ERI

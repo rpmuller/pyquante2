@@ -1,0 +1,37 @@
+[build-system]
+requires = [
+    "numpy",
+    "setuptools>=61.0",
+]
+
+[project]
+name = "pyquante2"
+version = "0.1"
+authors = [
+    {name = "Rick Muller", email = "rpmuller@gmail.com"}
+]
+description = "Python Quantum Chemistry, version 2.0"
+readme = "README.md"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "numpy",
+]
+
+[tool.setuptools]
+packages = [
+    "pyquante2",
+    "pyquante2.basis",
+    "pyquante2.dft",
+    "pyquante2.geo",
+    "pyquante2.graphics",
+    "pyquante2.grid",
+    "pyquante2.ints",
+    "pyquante2.pt",
+    "pyquante2.scf",
+    "pyquante2.viewer",
+]
