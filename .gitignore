@@ -10,5 +10,4 @@ profile.out
 *.vtk
 prof
 docs/_build
-cython/cbecke.c
 pyquante2.egg-info/

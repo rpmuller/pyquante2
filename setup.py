@@ -2,14 +2,14 @@ from pathlib import Path
 from setuptools import setup
 from setuptools.extension import Extension
 
+import numpy as np
+
 try:
     from Cython.Build import cythonize
 except ImportError:
     FILE_EXT = "c"
     USE_CYTHON = False
 else:
-    import numpy as np
-
     FILE_EXT = "pyx"
     USE_CYTHON = True
 
@@ -36,17 +36,15 @@ ext_modules = [
         [f"cython/crys_wrap.{FILE_EXT}", "cython/crys.c"],
         define_macros=_NUMPY_MACROS,
     ),
+    Extension(
+        "pyquante2.cbecke",
+        [f"cython/cbecke.{FILE_EXT}"],
+        define_macros=_NUMPY_MACROS,
+        include_dirs=[np.get_include()],
+    ),
 ]
 
 if USE_CYTHON:
-    ext_modules.append(
-        Extension(
-            "pyquante2.cbecke",
-            ["cython/cbecke.pyx"],
-            define_macros=_NUMPY_MACROS,
-            include_dirs=[np.get_include()],
-        )
-    )
     ext_modules = cythonize(ext_modules, annotate=True)
 
 # Make intermediate directories so that `setup.py build_ext -i` works.
