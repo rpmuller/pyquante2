@@ -981,10 +981,10 @@ static const char *__pyx_filename;
 
 static const char *__pyx_f[] = {
   "cython/crys_wrap.pyx",
-  "venv_311_cython/lib/python3.11/site-packages/Cython/Includes/cpython/array.pxd",
-  "venv_311_cython/lib/python3.11/site-packages/Cython/Includes/cpython/type.pxd",
-  "venv_311_cython/lib/python3.11/site-packages/Cython/Includes/cpython/bool.pxd",
-  "venv_311_cython/lib/python3.11/site-packages/Cython/Includes/cpython/complex.pxd",
+  "array.pxd",
+  "type.pxd",
+  "bool.pxd",
+  "complex.pxd",
 };
 
 /*--- Type declarations ---*/

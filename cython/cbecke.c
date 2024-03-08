@@ -1021,9 +1021,9 @@ static const char *__pyx_filename;
 
 static const char *__pyx_f[] = {
   "cython/cbecke.pyx",
-  "venv_311_cython/lib/python3.11/site-packages/numpy/__init__.pxd",
+  "__init__.pxd",
   "stringsource",
-  "venv_311_cython/lib/python3.11/site-packages/Cython/Includes/cpython/type.pxd",
+  "type.pxd",
 };
 /* MemviewSliceStruct.proto */
 struct __pyx_memoryview_obj;

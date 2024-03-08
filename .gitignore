@@ -9,5 +9,6 @@ profile.out
 *.png
 *.vtk
 prof
+dist/
 docs/_build
 pyquante2.egg-info/
