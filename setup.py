@@ -1,44 +1,62 @@
+import os.path
+import sys
 from pathlib import Path
 from setuptools import setup
 from setuptools.extension import Extension
+from setuptools.command.build_ext import build_ext
 
 import numpy as np
 
 try:
     from Cython.Build import cythonize
+
+    FILE_EXT = "pyx"
+    USE_CYTHON = True
+    print("Cython available")
 except ImportError:
     FILE_EXT = "c"
     USE_CYTHON = False
-else:
-    FILE_EXT = "pyx"
-    USE_CYTHON = True
+    print("Cython not available")
 
 
 _NUMPY_MACROS = [("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]
 ext_modules = [
     Extension(
         "pyquante2.cints.one",
-        [f"cython/cone_wrap.{FILE_EXT}", "cython/cints.c"],
+        [
+            os.path.join("cython", f"cone_wrap.{FILE_EXT}"),
+            os.path.join("cython", "cints.c"),
+        ],
         define_macros=_NUMPY_MACROS,
     ),
     Extension(
         "pyquante2.cints.two",
-        [f"cython/ctwo_wrap.{FILE_EXT}", "cython/cints.c"],
+        [
+            os.path.join("cython", f"ctwo_wrap.{FILE_EXT}"),
+            os.path.join("cython", "cints.c"),
+        ],
         define_macros=_NUMPY_MACROS,
     ),
     Extension(
         "pyquante2.cints.hgp",
-        [f"cython/chgp_wrap.{FILE_EXT}", "cython/chgp.c", "cython/cints.c"],
+        [
+            os.path.join("cython", f"chgp_wrap.{FILE_EXT}"),
+            os.path.join("cython", "chgp.c"),
+            os.path.join("cython", "cints.c"),
+        ],
         define_macros=_NUMPY_MACROS,
     ),
     Extension(
         "pyquante2.cints.rys",
-        [f"cython/crys_wrap.{FILE_EXT}", "cython/crys.c"],
+        [
+            os.path.join("cython", f"crys_wrap.{FILE_EXT}"),
+            os.path.join("cython", "crys.c"),
+        ],
         define_macros=_NUMPY_MACROS,
     ),
     Extension(
         "pyquante2.cbecke",
-        [f"cython/cbecke.{FILE_EXT}"],
+        [os.path.join("cython", f"cbecke.{FILE_EXT}")],
         define_macros=_NUMPY_MACROS,
         include_dirs=[np.get_include()],
     ),
@@ -54,7 +72,32 @@ for ext_module in ext_modules:
     path = _PWD.joinpath(*ext_module.name.split(".")[:-1])
     path.mkdir(parents=True, exist_ok=True)
 
+
+class optional_build_ext(build_ext):
+    """build_ext that allows installation to continue if Extensions can't be built.
+
+    This is useful for when there is code logic that will instead route to a
+    pure Python implementation.
+    """
+
+    def build_extension(self, ext):
+        self.couldnt_build = False
+        try:
+            super().build_extension(ext)
+        except:
+            self.couldnt_build = True
+            print(
+                "Couldn't compile extension, will fall back to pure Python implementations",
+                file=sys.stderr,
+            )
+
+    def copy_extensions_to_source(self):
+        if not self.couldnt_build:
+            super().copy_extensions_to_source()
+
+
 setup(
     name="pyquante2",
     ext_modules=ext_modules,
+    cmdclass={"build_ext": optional_build_ext},
 )
