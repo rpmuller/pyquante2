@@ -4,13 +4,15 @@ General module for integral generation and access.
 try:
     from pyquante2.cints.hgp import ERI
 except:
-    print("Couldn't find cython int routine")
+    import sys
+    print("Couldn't find cython int routine", file=sys.stderr)
     from pyquante2.ints.hgp import ERI
 
 try:
     from pyquante2.cints.one import S,T,V
 except:
-    print("Couldn't find cython int routine")
+    import sys
+    print("Couldn't find cython int routine", file=sys.stderr)
     from pyquante2.ints.one import S,T,V
 
 from pyquante2.utils import pairs
