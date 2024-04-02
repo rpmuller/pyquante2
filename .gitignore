@@ -9,6 +9,6 @@ profile.out
 *.png
 *.vtk
 prof
+dist/
 docs/_build
-cython/cbecke.c
 pyquante2.egg-info/

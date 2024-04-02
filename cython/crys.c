@@ -30,7 +30,10 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-static double contr_coulomb(int lena,double *aexps,double *acoefs,double *anorms,
+static double roots[MAXROOTS],weights[MAXROOTS],G[MAXROOTS][MAXROOTS];
+static double B00,B1,B1p,C,Cp;
+
+double contr_coulomb(int lena,double *aexps,double *acoefs,double *anorms,
 		     double xa,double ya,double za,int la,int ma,int na,
 		     int lenb,double *bexps,double *bcoefs,double *bnorms,
 		     double xb,double yb,double zb,int lb,int mb,int nb,
@@ -52,7 +55,7 @@ static double contr_coulomb(int lena,double *aexps,double *acoefs,double *anorms
   return val;
 }
     
-static double coulomb_repulsion(double xa,double ya,double za,double norma,
+double coulomb_repulsion(double xa,double ya,double za,double norma,
 			 int la,int ma,int na,double alphaa,
 			 double xb,double yb,double zb,double normb,
 			 int lb,int mb,int nb,double alphab,
@@ -95,7 +98,7 @@ static double coulomb_repulsion(double xa,double ya,double za,double norma,
   return 2*sqrt(rho/M_PI)*norma*normb*normc*normd*sum; /* ABD eq 5 & 9 */
 }
 
-static void Roots(int n, double X){
+void Roots(int n, double X){
   if (n <= 3)
     Root123(n,X);
   else if (n==4) 
@@ -108,7 +111,7 @@ static void Roots(int n, double X){
 }
 
 
-static void Root123(int n, double X){
+void Root123(int n, double X){
 
   double R12, PIE4, R22, W22, R13, R23, W23, R33, W33;
   double RT1=0,RT2=0,RT3=0,WW1=0,WW2=0,WW3=0;
@@ -565,7 +568,7 @@ static void Root123(int n, double X){
   return;
 }
 
-static void Root4(double X){
+void Root4(double X){
   double R14,PIE4,R24,W24,R34,W34,R44,W44;
   double RT1=0,RT2=0,RT3=0,RT4=0,WW1=0,WW2=0,WW3=0,WW4=0;
   double Y,E;
@@ -931,7 +934,7 @@ static void Root4(double X){
   return;
 }
 
-static void Root5(double X){
+void Root5(double X){
   double R15,PIE4,R25,W25,R35,W35,R45,W45,R55,W55;
   double RT1=0,RT2=0,RT3=0,RT4=0,RT5=0,
     WW1=0,WW2=0,WW3=0,WW4=0,WW5=0;
@@ -1436,12 +1439,12 @@ static void Root5(double X){
   return;
 }
 
-static void Root6(int n,double X){
+void Root6(int n,double X){
   printf("crys.c:Root6 not implemented yet\n");
   return ;
 }
 
-static double Int1d(double t,int ix,int jx,int kx, int lx,
+double Int1d(double t,int ix,int jx,int kx, int lx,
 	     double xi,double xj, double xk,double xl,
 	     double alphai,double alphaj,double alphak,double alphal){
   double Ix;
@@ -1451,7 +1454,7 @@ static double Int1d(double t,int ix,int jx,int kx, int lx,
   return Ix;
 }
 
-static void RecurFactors(double t,double A,double B,
+void RecurFactors(double t,double A,double B,
 		  double Px,double Qx,double xi,double xk){
   /* ABD eqs 12-14 */
   double fff;
@@ -1464,7 +1467,7 @@ static void RecurFactors(double t,double A,double B,
   return;
 }
 
-static void RecurFactorsGamess(double t,double A,double B,
+void RecurFactorsGamess(double t,double A,double B,
 			double Px,double Qx,double xi,double xk){
   /* Analogous versions taken from Gamess source code */
   double fff;
@@ -1477,7 +1480,7 @@ static void RecurFactorsGamess(double t,double A,double B,
   return;
 }
 
-static void Recur(double t, int i, int j, int k, int l,
+void Recur(double t, int i, int j, int k, int l,
 	   double xi, double xj, double xk, double xl,
 	   double alphai, double alphaj, double alphak, double alphal){
   /* Form G(n,m)=I(n,0,m,0) intermediate values for a Rys polynomial */
@@ -1514,7 +1517,7 @@ static void Recur(double t, int i, int j, int k, int l,
     return;
 }
 
-static double Shift(int i, int j, int k, int l, double xij, double xkl){
+double Shift(int i, int j, int k, int l, double xij, double xkl){
   /* Compute and  output I(i,j,k,l) from I(i+j,0,k+l,0) (G) */
   /*  xij = xi-xj, xkl = xk-xl */
 
@@ -1532,19 +1535,18 @@ static double Shift(int i, int j, int k, int l, double xij, double xkl){
 }
 
 /* Util functions: */
-static double product_center_1D(double alphaa, double xa, 
+double product_center_1D(double alphaa, double xa, 
 			 double alphab, double xb){
   return (alphaa*xa+alphab*xb)/(alphaa+alphab);
 }
 
-static double dist2(double x1, double y1, double z1, double x2, double y2, double z2){
+double dist2(double x1, double y1, double z1, double x2, double y2, double z2){
   return (x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)+(z1-z2)*(z1-z2);
 }
 
-static int binomial(int a, int b){return fact(a)/(fact(b)*fact(a-b));}
+int binomial(int a, int b){return fact(a)/(fact(b)*fact(a-b));}
 
-static int fact(int n){
+int fact(int n){
   if (n <= 1) return 1;
   return n*fact(n-1);
 }
-
