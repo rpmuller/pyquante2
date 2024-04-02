@@ -1,5 +1,6 @@
 import os.path
 import sys
+from os import getenv
 from pathlib import Path
 from setuptools import setup
 from setuptools.extension import Extension
@@ -7,16 +8,28 @@ from setuptools.command.build_ext import build_ext
 
 import numpy as np
 
+CYTHON_DISABLED = getenv("PYQUANTE_CYTHON_DISABLED", "False").lower() in (
+    "true",
+    "1",
+    "t",
+)
+
 try:
     from Cython.Build import cythonize
 
     FILE_EXT = "pyx"
-    USE_CYTHON = True
+    CYTHON_AVAILABLE = True
     print("Cython available")
 except ImportError:
     FILE_EXT = "c"
-    USE_CYTHON = False
+    CYTHON_AVAILABLE = False
     print("Cython not available")
+
+if CYTHON_AVAILABLE and not CYTHON_DISABLED:
+    print("Cython available and requested")
+    USE_CYTHON = True
+else:
+    USE_CYTHON = False
 
 
 _NUMPY_MACROS = [("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]
