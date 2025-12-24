@@ -1,6 +1,6 @@
 .PHONY: build test
 build:
-	pip install -e ".[dev]"
+	uv pip install -e ".[dev]"
 
 test:
-	pytest --doctest-modules --ignore=othertests
+	uv run pytest --doctest-modules --ignore=othertests

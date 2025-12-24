@@ -12,4 +12,3 @@ prof
 docs/_build
 cython/cbecke.c
 pyquante2.egg-info/
-UNKNOWN.egg-info/
