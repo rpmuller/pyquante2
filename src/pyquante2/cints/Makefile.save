@@ -1,0 +1,4 @@
+all: chgp_wrap.c cone_wrap.c crys_wrap.c ctwo_wrap.c
+
+%.c: %.pyx
+	cython $^
