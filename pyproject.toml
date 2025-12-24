@@ -5,7 +5,7 @@ build-backend="setuptools.build_meta"
 [project]
 name = "pyquante2"
 version = "0.1.0"
-description = "Add your description here"
+description = "Python quantum chemistry routines"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
