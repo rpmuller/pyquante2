@@ -19,14 +19,14 @@ def ERI(a,b,c,d):
     """
     >>> from pyquante2.basis.pgbf import pgbf
     >>> s = pgbf(1)
-    >>> isclose(ERI_hgp(s,s,s,s),1.128379)
+    >>> isclose(ERI(s,s,s,s),1.128379)
     True
     >>> from pyquante2.basis.cgbf import cgbf
     >>> s = cgbf(exps=[1],coefs=[1])
-    >>> isclose(ERI_hgp(s,s,s,s),1.128379)
+    >>> isclose(ERI(s,s,s,s),1.128379)
     True
     >>> s2 = cgbf((0,0,1),(0,0,0),[1],[1])
-    >>> isclose(ERI_hgp(s,s,s2,s2),0.842701)
+    >>> isclose(ERI(s,s,s2,s2),0.842701)
     True
     """ 
     # This should be faster if I can get it to work, but having trouble passing
@@ -42,7 +42,7 @@ def ERI(a,b,c,d):
             c.origin,cnorms,c.powers,cexps,ccoefs,
             d.origin,dnorms,d.powers,dexps,dcoefs)
     if d.contracted:
-        return sum(cd*ERI_hgp(pd,c,a,b) for (cd,pd) in d)
+        return sum(cd*ERI(pd,c,a,b) for (cd,pd) in d)
     return hrr(a.origin,a.norm,a.powers,a.exponent,
                b.origin,b.norm,b.powers,b.exponent,
                c.origin,c.norm,c.powers,c.exponent,

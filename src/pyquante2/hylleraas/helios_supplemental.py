@@ -151,7 +151,7 @@ def hterm_cox_sutcliffe(l,m,n,l2,m2,n2):
         c = x*(-6-10*m-10*l-8*m*l+2*m*M-M-m*M-6*l*l+2*n*M+5*K*M
                -5*m*m*M+3*K*m*m*M+4*K*l*m*M+2*m*n*M+2*K*l*n*M
                +2*K*m*n*M+7*K*m*M+2*K*n*M+7*K*l*M-6*m*m
-               +3*K*l*l*M+2*l*n*M+4*m*l*M-l*M-4l*l*M)
+               +3*K*l*l*M+2*l*n*M+4*m*l*M-l*M-4*l*l*M)
     elif delta == (2,-1,0):
         c = 2*m*(l+2)*(l+1)*(K*M-2-M)/M
     elif delta == (-1,2,0):
@@ -306,12 +306,12 @@ def check_pekeris_H(Ho,So,H,S):
     for i in range(7):
         for j in range(i+1):
             if Ho[i,j] != H[i,j]:
-                print "H mismatch ",i,j,Ho[i,j],H[i,j]
+                print("H mismatch ",i,j,Ho[i,j],H[i,j])
                 ierr = ierr + 1
             if So[i,j] != S[i,j]:
-                print "S mismatch ",i,j,So[i,j],S[i,j]
+                print("S mismatch ",i,j,So[i,j],S[i,j])
                 ierr = ierr + 1
-    print "There are a total of ",ierr," errors"
+    print("There are a total of ",ierr," errors")
     return
 
 def pekeris7x7(Z):
@@ -384,8 +384,8 @@ def pekeris7x7(Z):
 def symmetrize(M):
     rows,cols = M.shape
     if rows != cols:
-        print "Error: symmetrize only works for square matrices!"
-        print rows,cols
+        print( "Error: symmetrize only works for square matrices!")
+        print( rows,cols)
         sys.exit()
     n = rows
     for i in range(n):
@@ -395,24 +395,24 @@ def symmetrize(M):
 
 def check_symmetry(M):
     rows,cols = M.shape
-    if rows != cols: print "check_symmetry: The matrix is not square!"
+    if rows != cols: print( "check_symmetry: The matrix is not square!")
     for i in range(rows):
         for j in range(cols):
             if M[i,j] != M[j,i]:
-                print "check_symmetry: Mismatch",i,j,M[i,j],M[j,i]
+                print( "check_symmetry: Mismatch",i,j,M[i,j],M[j,i])
     return
 
 def testtransform():
     A = arange(9,typecode=Float)
     A = reshape(A,(3,3))
     B = ones((3,3),Float)
-    print transform(A,B)
+    print( transform(A,B))
 
 def test_inv_sqrt():
     A = zeros((3,3),Float)
     A[0,0] = A[1,1] = A[2,2] = 3.
     A[1,2] = A[2,1] = A[0,1] = A[1,0] = 0.5
-    print A
+    print( A)
     X = inv_sqrt(A)
-    print transform(A,X)
+    print( transform(A,X))
 

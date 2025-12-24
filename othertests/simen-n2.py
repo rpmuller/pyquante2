@@ -1,6 +1,6 @@
 import numpy as np
 from pyquante2 import *
-from pyquante.scf.iterators import AveragingIterator
+from pyquante2.scf.iterators import AveragingIterator
 import matplotlib.pyplot as plt
 
 #

@@ -10,9 +10,10 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "numpy",
+    "pip>=25.3",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest"]
+dev = ["pytest", "matplotlib"]
 
 

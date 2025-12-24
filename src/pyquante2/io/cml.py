@@ -6,13 +6,13 @@ files. It currently uses an intermediate representation to store the data
 rather than pyquante2 data structures.
 """
 
-import cStringIO
+import io
 import numpy
 import xml.etree.ElementTree as ET
 from pyquante2.geo.elements import sym2no,mass,rvdw
 
 # For testing purposes
-waters_cml = cStringIO.StringIO("""\
+waters_cml = io.StringIO("""\
 <cml>
 <molecule>
   <name>Water</name>
@@ -338,10 +338,10 @@ def subelement(parent,name,text=None,**kwargs):
 def test():
     waters = read(waters_cml)
     for mol in get_molecules(waters):
-        print "Mol: "
+        print("Mol: ")
         for atom in get_atoms(mol):
             ET.dump(atom)
-        print center_of_mass(mol)
+        print(center_of_mass(mol))
     return
 
 def tocml(atoms,uc=None,units='cartesian',**kwargs):

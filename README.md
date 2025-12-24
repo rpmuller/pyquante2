@@ -2,18 +2,11 @@
 PyQuante is an open-source suite of programs for developing quantum chemistry methods. The program is written in the Python programming language, but has many “rate-determining” modules also written in C for speed. The resulting code, though not as fast as Jaguar, NWChem, Gaussian, or MPQC, is much easier to understand and modify. The goal of this software is not necessarily to provide a working quantum chemistry program (although it will hopefully do that), but rather to provide a well-engineered set of tools so that scientists can construct their own quantum chemistry programs without going through the tedium of having to write every low-level routine.
 
 ## Installation
-I try to keep the required packages minimal (mostly just numpy). If you're building from source, you'll also need cython and a c compiler. However, I strongly recommend using conda.
-
-## Installation via conda
-There are now [conda installers](http://anaconda.org/rpmuller) for the full pyquante2 package on linux and mac, and a pure python version (that will be much slower) available on windows. To do this, just
-
-    % conda install -c rpmuller pyquante2
-
-on linux/mac, or
-
-    % conda install -c rpmuller pyquante2_pure
-
-on windows.
+I've rewritten the routines to build using the PEP 517/518 processes. You should be able to build using
+    % pip install -e ".[dev]"
+and to test using
+    % pytest --doctest-modules
+The build procedure does not automatically run cython. You can rebuild the cython wrappers and routines by typing `make` in the `cython` subdirectory.
 
 ## Why rewrite PyQuante?
 [PyQuante](http://pyquante.sf.net) is a Quantum Chemistry Suite

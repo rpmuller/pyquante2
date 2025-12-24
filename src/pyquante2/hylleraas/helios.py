@@ -26,16 +26,16 @@ n  Matrix Size    He
 14   252       2.17522925889
 17   444       2.17522937679
 
->>> two_electron_solve(1,5,0)
--0.52763068141531577
->>> two_electron_solve(2,5,0)
--2.9036889861207293
->>> two_electron_solve(1,9,0)
--0.52775001651538511
->>> two_electron_solve(2,9,0)
--2.9037233890716729
->>> two_electron_solve(2,11,1)
--2.1752209796141289
+>>> np.isclose(two_electron_solve(1,5,0),-0.52763068141531577)
+True
+>>> np.isclose(two_electron_solve(2,5,0),-2.9036889861207293)
+True
+>>> np.isclose(two_electron_solve(1,9,0),-0.52775001651538511)
+True
+>>> np.isclose(two_electron_solve(2,9,0),-2.9037233890716729)
+True
+>>> np.isclose(two_electron_solve(2,11,1),-2.1752209796141289)
+True
 """
 import numpy as np
 from pyquante2.utils import geigh
@@ -54,7 +54,7 @@ def kval(l,m,n,spin):
         #k = w*(w+2)*(2*w-1)/24. + (1-pow(-1,w))/16. + l*(m+n) + m
         k = w*(w+2)*(2*w-1)/24. - (1-pow(-1,w))/16. + l*(m+n) + m
     else:
-        print "kval: Error -- unknown spin"
+        print("kval: Error -- unknown spin")
         sys.exit()
     # k should now be an integer
     k = int(k)
@@ -81,7 +81,7 @@ def korder(wmax,spin):
                     if 0<=l<m:
                         klist.append((l,m,n))
     else:
-        print "korder: ERROR improper spin state"
+        print("korder: ERROR improper spin state")
         sys.exit()
     return klist
 
@@ -296,7 +296,7 @@ def pekeris(Z,wmax,spin):
                 b = b + b2
                 c = c + c2
             else:
-                print "pekeris: ERROR should not be here"
+                print("pekeris: ERROR should not be here")
                 sys.exit()
             H[i,j] = a*Z + b
             S[i,j] = c
@@ -323,7 +323,7 @@ def two_electron_solve(atomic_number,maximum_order,spin):
     E,V = geigh(H,S)
     epsilon = E[0]
     E2 = [-Ei**2 for Ei in E]
-    #print "Energy (h) for order %d: %15.12f %15.12f" % (len(E),E2[0],epsilon)
+    #print("Energy (h) for order %d: %15.12f %15.12f" % (len(E),E2[0],epsilon))
     return E2[0]
 
 # Main program starts here:
