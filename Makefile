@@ -1,3 +1,4 @@
+.PHONY: build test
 build:
 	pip install -e ".[dev]"
 
