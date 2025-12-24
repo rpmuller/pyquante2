@@ -2,6 +2,8 @@ from setuptools import setup, Extension
 import numpy as np
 
 setup(
+    name = "pyquante2",
+    version = "0.1.0",
     ext_modules=[
         Extension("pyquante2.cints.one", 
                   ["src/pyquante2/cints/cone_wrap.c","src/pyquante2/cints/cints.c"]),
