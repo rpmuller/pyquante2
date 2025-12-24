@@ -9,6 +9,7 @@ description = "Python quantum chemistry routines"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "ipykernel>=7.1.0",
     "numpy",
     "pip>=25.3",
 ]
