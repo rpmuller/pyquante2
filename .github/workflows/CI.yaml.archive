@@ -1,0 +1,93 @@
+---
+# yamllint disable rule:line-length
+name: CI
+
+# yamllint disable-line rule:truthy
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: Test ${{ matrix.os }} / ${{ matrix.python-version }} / Cython ${{ matrix.cythonize }} / ${{ matrix.env-type.env-type-name }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        # yamllint disable rule:braces
+        env-type:
+          - { env-type-name: venv, shell: bash }
+          - { env-type-name: conda, shell: 'bash -l {0}' }
+          # yamllint enable rule:braces
+        cythonize: [true, false]
+        # Skip some overkill jobs.
+        exclude:
+          - os: ubuntu-latest
+            env-type: { env-type-name: venv, shell: bash }
+            cythonize: false
+          - os: ubuntu-latest
+            env-type: { env-type-name: conda, shell: 'bash -l {0}' }
+            cythonize: true
+          - os: macos-latest
+            env-type: { env-type-name: conda, shell: 'bash -l {0}' }
+            cythonize: false
+          - os: macos-latest
+            env-type: { env-type-name: venv, shell: bash }
+            cythonize: true
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: ${{ matrix.env-type.shell }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+        if: ${{ matrix.env-type.env-type-name == 'venv' }}
+      - name: Set up Python ${{ matrix.python-version }} with conda
+        uses: conda-incubator/setup-miniconda@29c004f57289f8b93aaebc627f7c4e0b6543e222 # v2.2.0
+        with:
+          activate-environment: test
+          auto-activate-base: false
+          auto-update-conda: true
+          miniforge-version: latest
+          python-version: ${{ matrix.python-version }}
+          show-channel-urls: true
+        if: ${{ matrix.env-type.env-type-name == 'conda' }}
+      - name: Update pip and setuptools
+        run: python -m pip install -U pip setuptools
+      - name: Install Cython
+        run: |
+          python -m pip install 'Cython<3'
+        if: ${{ matrix.cythonize }}
+      - name: Print pip config
+        run: python -m pip config list
+      - name: Install test dependencies
+        run: python -m pip install pytest-cov
+      - name: Install package for testing
+        run: |
+          python -m pip install -vvv -e .
+      - name: Print Python environment
+        run: |
+          python -m pip list
+      - name: Print conda environment
+        run: conda list
+        if: ${{ matrix.env-type.env-type-name == 'conda' }}
+      - name: Print conda info
+        run: conda info
+        if: ${{ matrix.env-type.env-type-name == 'conda' }}
+      - name: Print conda config
+        run: conda config --show
+        if: ${{ matrix.env-type.env-type-name == 'conda' }}
+      - name: Run tests
+        run: |
+          python -m pytest -v --cov=pyquante2 --cov-report=xml .
+      - name: Install package for import checks
+        run: |
+          python -m pip install -vvv .
+      - name: Check installation of compiled modules
+        run: |
+          cd ~
+          python -c 'import pyquante2 as _; print(_.__path__[0])'
+          python -c 'from pyquante2.ints import integrals; from pyquante2.grid import grid'
