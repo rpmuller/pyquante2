@@ -37,7 +37,7 @@ jobs:
         # This single command triggers the PEP 517 build.
         # It reads pyproject.toml, creates an isolated env, installs build deps (Cython),
         # compiles the extension, and installs the package.
-        run: python -m pip install -v .
+        run: python -m pip install -e ".[dev]"
 
       - name: Run tests
         run: |
