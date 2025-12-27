@@ -42,6 +42,7 @@ jobs:
       - name: Run tests
         run: |
           mkdir test_run
+          cd test_run
           python -m pytest -v --pyargs pyquante2 --doctest-modules
 
       - name: Check compiled extension import
