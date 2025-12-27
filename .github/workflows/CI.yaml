@@ -41,7 +41,9 @@ jobs:
 
       - name: Run tests
         run: |
-          python -m pytest -v --doctest-modules --ignore=attic
+          #python -m pytest -v --doctest-modules --ignore=attic
+          mkdir test_run
+          python -m pytest -v --pyargs pyquante2 --doctest-modules ../tests
 
       - name: Check compiled extension import
         # A sanity check to ensure the C-extensions were actually built and are importable
