@@ -1,9 +1,9 @@
 .PHONY: build test
 build:
-	uv pip install -e ".[dev]"
+	python -m pip install -e ".[dev]"
 
 test:
-	uv run pytest --doctest-modules --ignore=attic
+	python -m pytest --doctest-modules --ignore=attic
 
 install_test: # not tested yet
 	twine upload --repository testpypi dist/*
