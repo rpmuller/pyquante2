@@ -37,11 +37,11 @@ jobs:
         # This single command triggers the PEP 517 build.
         # It reads pyproject.toml, creates an isolated env, installs build deps (Cython),
         # compiles the extension, and installs the package.
-        run: python -m pip install -e ".[dev]"
+        run: python -m pip install . -vvv 
 
       - name: Run tests
         run: |
-          python -m pytest -v --cov=pyquante2 --cov-report=xml
+          python -m pytest -v --doctest-modules --ignore=attic
 
       - name: Check compiled extension import
         # A sanity check to ensure the C-extensions were actually built and are importable
