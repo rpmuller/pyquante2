@@ -41,7 +41,6 @@ jobs:
 
       - name: Run tests
         run: |
-          #python -m pytest -v --doctest-modules --ignore=attic
           mkdir test_run
           python -m pytest -v --pyargs pyquante2 --doctest-modules
 
