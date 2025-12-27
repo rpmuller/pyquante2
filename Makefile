@@ -1,6 +1,7 @@
 .PHONY: build test
 build:
-	python -m pip install -e ".[dev]"
+	#python -m pip install -e ".[dev]"
+	python -m build -v
 
 test:
 	python -m pytest --doctest-modules --ignore=attic
