@@ -38,7 +38,7 @@ jobs:
           mkdir test_run
           cd test_run
           ls ../
-          python -m pytest -v --pyargs pyquante2 --doctest-modules 
+          python -m pytest -v --pyargs pyquante2 --doctest-modules ../tests
 
       - name: Check compiled extension import
         # A sanity check to ensure the C-extensions were actually built and are importable
