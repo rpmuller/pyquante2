@@ -7,7 +7,7 @@ name = "pyquante2"
 version = "0.1.0"
 description = "Python quantum chemistry routines"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.11"
 dependencies = [
     "ipykernel>=7.1.0",
     "numpy",
