@@ -29,15 +29,9 @@ jobs:
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
 
-      - name: Install test dependencies
+      - name: Install package and test dependencies
         # Adjust this if you keep test deps in pyproject.toml (e.g. project.optional-dependencies)
-        run: python -m pip install pytest numpy matplotlib build
-
-      - name: Build pyquante2
-        run: python -m build
-
-      - name: Install pyquante2
-        run: python -m pip install dist/*.whl
+        run: python -m pip install ".[test]"
 
       - name: Run tests
         run: |
