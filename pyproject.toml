@@ -15,7 +15,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "matplotlib"]
+dev = ["pytest", "matplotlib", "numpy"]
 test = ["pytest", "matplotlib", "numpy"]
 
 [tool.pytest.ini_options]
