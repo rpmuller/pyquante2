@@ -33,8 +33,11 @@ jobs:
         # Adjust this if you keep test deps in pyproject.toml (e.g. project.optional-dependencies)
         run: python -m pip install pytest numpy matplotlib build
 
-      - name: Build package
-        run: python -m pip install -e .
+      - name: Build pyquante2
+        run: python -m build
+
+      - name: Install pyquante2
+        run: python -m pip install dist/*.whl
 
       - name: Run tests
         run: |
