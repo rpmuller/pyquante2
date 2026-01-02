@@ -9,14 +9,13 @@ description = "Python quantum chemistry routines"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "ipykernel>=7.1.0",
-    "numpy",
-    "pip>=25.3",
+    "numpy>=1.20",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "matplotlib", "numpy", "build"]
-test = ["pytest", "matplotlib", "numpy", "build"]
+jupyter = ["ipykernel>=7.1.0"]
+dev = ["pytest", "matplotlib", "build", "ipykernel"]
+test = ["pytest", "matplotlib", "build"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

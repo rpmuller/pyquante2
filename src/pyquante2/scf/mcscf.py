@@ -58,12 +58,15 @@ wave function. However, you can implement a general MC-SCF wave
 function by implementing a more complicated routine to update
 the CI coefficients. 
 """
+import logging
 import numpy as np
 from pyquante2 import molecule
 from pyquante2.geo.samples import h,h2,lih,li
 from pyquante2.basis.basisset import basisset
 from pyquante2.utils import geigh,ao2mo
 from pyquante2.ints.integrals import onee_integrals, twoe_integrals
+
+logger = logging.getLogger(__name__)
 
 try:
     np.set_printoptions(legacy='1.13')
@@ -121,20 +124,20 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False,
 
     if verbose:
         np.set_printoptions(precision=4)
-        print("**** PyQuante GVB ****")
-        print(geo)
-        print("Nuclear repulsion energy: %.3f" % Enuke)
-        print("Basis set: %s" % basisname)
-        print("  ncore/open/pair: %d,%d,%d" % (ncore,nopen,npair))
-        print("  occ/bf/orb: %d,%d,%d" % (nocc,len(bfs),norb))
+        logger.info("**** PyQuante GVB ****")
+        logger.info(f"{geo}")
+        logger.info("Nuclear repulsion energy: %.3f" % Enuke)
+        logger.info("Basis set: %s" % basisname)
+        logger.info("  ncore/open/pair: %d,%d,%d" % (ncore,nopen,npair))
+        logger.info("  occ/bf/orb: %d,%d,%d" % (nocc,len(bfs),norb))
         for i in range(nsh):
-            print("Shell %d" % i)
-            print("  occupation = %.2f" % f[i])
-            print("  orbitals in shell %s" % orbs_per_shell[i])
-            print("  couplings to other shells %s" % zip(a[i,:],b[i,:]))
-        print("Starting guess at orbitals:\n%s"%U)
-        print("Shell array: %s" % shell)
-        print("****")
+            logger.info("Shell %d" % i)
+            logger.info("  occupation = %.2f" % f[i])
+            logger.info("  orbitals in shell %s" % orbs_per_shell[i])
+            logger.info("  couplings to other shells %s" % zip(a[i,:],b[i,:]))
+        logger.info(f"Starting guess at orbitals:\n{U}")
+        logger.info("Shell array: %s" % shell)
+        logger.info("****")
 
     Eold = 0
     for it in range(maxiter):
@@ -163,14 +166,14 @@ def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False,
         f,a,b = fab(ncore,nopen,npair,coeffs)
 
         if verbose:
-            print ("---- %d :  %10.4f %10.4f %10.4f %10.4f" % ((it+1),E,Enuke,Eone,Etwo))
+            logger.info("---- %d :  %10.4f %10.4f %10.4f %10.4f" % ((it+1),E,Enuke,Eone,Etwo))
         if np.isclose(E,Eold):
             if verbose:
-                print("Energy converged")
+                logger.info("Energy converged")
             break
         Eold = E
     else:
-        print("Maximum iterations (%d) reached without convergence" % (maxiter))
+        logger.warning("Maximum iterations (%d) reached without convergence" % (maxiter))
     if return_orbs:
         return E,U
     return E
@@ -223,8 +226,8 @@ def ROTION(Uocc,h,Js,Ks,f,a,b,nocc,shell,verbose=False):
             Delta[i,j] = D0
             Delta[j,i] = -D0
     if verbose:
-        print("ROTION Delta Matrix")
-        print(Delta)
+        logger.info("ROTION Delta Matrix")
+        logger.info(f"{Delta}")
     if nsh > 1:
         eD = expm(Delta)
         Uocc = np.dot(Uocc,eD)
@@ -274,7 +277,7 @@ def expm(M,tol=1e-6,maxit=30):
             break
         eM += factor*X
     else:
-        print("expm remainder = \n%s" % X)
+        logger.warning("expm remainder = \n%s" % X)
         raise Exception("Maximum iterations reached in expm")
     return eM
 
@@ -339,11 +342,11 @@ def update_gvb_ci_coeffs(Uocc,h,Js,Ks,f,a,b,ncore,nopen,npair,orbs_per_shell,
         H[0,0] = H11
         H[1,1] = H22
         if verbose:
-            print("GVB CI Matrix for pair %d\n%s" % (i,H))
+            logger.info("GVB CI Matrix for pair %d\n%s" % (i,H))
         E,C = np.linalg.eigh(H)
         if verbose:
-            print("GVB CI Eigenvector for pair %d\n%s" % (i,C))
-            print("GVB CI Eigenvalues for pair %d\n%s" % (i,E))
+            logger.info("GVB CI Eigenvector for pair %d\n%s" % (i,C))
+            logger.info("GVB CI Eigenvalues for pair %d\n%s" % (i,E))
         coeffs[2*i:(2*i+2)] = C[0]
     return coeffs
 
@@ -517,8 +520,8 @@ if __name__ == '__main__':
     o_gvb = orbman(orbs,basisset(h_m,'6-31g'),h_m)
 
     for i in [0,1]:
-        print("Orbital %d after HF" % i)
+        logger.info("Orbital %d after HF" % i)
         o_hf[i]
-        print("  GVB")
+        logger.info("  GVB")
         o_gvb[i]
     

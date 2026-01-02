@@ -1,83 +1,25 @@
 """
 General module for integral generation and access.
 """
+import logging
+
+logger = logging.getLogger(__name__)
+
 try:
     from pyquante2.cints.hgp import ERI
 except ImportError:
-    print("Couldn't find cython int routine")
+    logger.debug("Couldn't find cython int routine, using pure Python")
     from pyquante2.ints.hgp import ERI
 
 try:
     from pyquante2.cints.one import S,T,V
 except ImportError:
-    print("Couldn't find cython int routine")
+    logger.debug("Couldn't find cython one-electron routine, using pure Python")
     from pyquante2.ints.one import S,T,V
 
 from pyquante2.utils import pairs
 from itertools import product
 import numpy as np
-
-# This is the old part of the code. It has now been replaced with the one
-#  below it, which takes 8x as much space, but is significantly faster.
-#  It's also more elegant code.
-class twoe_integrals_compressed(object):
-    """
-    >>> from pyquante2.geo.samples import h
-    >>> from pyquante2.basis.basisset import basisset
-    >>> bfs = basisset(h,'sto3g')
-    >>> twoe_integrals_compressed(bfs)
-    array([ 0.77460594])
-    """
-    def __init__(self,bfs):
-        nbf = self.nbf = len(bfs)
-        self.totlen = nbf*(nbf+1)*(nbf*nbf+nbf+2)//8
-        self._2e_ints = np.empty(self.totlen,'d')
-        
-        for i,j,k,l in iiterator(nbf):
-            self._2e_ints[iindex(i,j,k,l)] = ERI(bfs[i],bfs[j],bfs[k],bfs[l])
-        return
-    def __getitem__(self,pos): return self._2e_ints[iindex(*pos)]
-    def __repr__(self): return repr(self._2e_ints)
-
-    def fetch_2jk(self,i,j):
-        nbf = self.nbf
-        temp = np.empty(nbf**2,'d')
-        kl = 0
-        for k,l in product(range(nbf),repeat=2):
-            temp[kl] = 2*self[i,j,k,l]-self[i,k,j,l]
-            kl += 1
-        return temp
-
-    def fetch_j(self,i,j):
-        nbf = self.nbf
-        temp = np.empty(nbf**2,'d')
-        kl = 0
-        for k,l in product(range(nbf),repeat=2):
-            temp[kl] = self[i,j,k,l]
-            kl += 1
-        return temp
-
-    def fetch_k(self,i,j):
-        nbf = self.nbf
-        temp = np.empty(nbf**2,'d')
-        kl = 0
-        for k,l in product(range(nbf),repeat=2):
-            temp[kl] = self[i,k,j,l]
-            kl += 1
-        return temp
-
-    def make_operator(self,D,fetcher):
-        nbf = self.nbf
-        D1 = np.reshape(D,(nbf*nbf,))
-        G = np.empty((nbf,nbf),'d')
-        for i,j in pairs(range(nbf)):
-            temp = fetcher(i,j) # replace temp with fetcher()
-            G[i,j] = G[j,i] = np.dot(D1,temp)
-        return G
-
-    def get_2jk(self,D): return self.make_operator(D,self.fetch_2jk)
-    def get_j(self,D): return self.make_operator(D,self.fetch_j)
-    def get_k(self,D): return self.make_operator(D,self.fetch_k)
 
 class twoe_integrals(object):
     """

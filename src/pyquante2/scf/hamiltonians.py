@@ -1,8 +1,11 @@
+import logging
 from pyquante2.grid.grid import grid
 from pyquante2.ints.integrals import onee_integrals,twoe_integrals
 from pyquante2.utils import trace2, geigh
 from pyquante2.scf.iterators import SCFIterator,USCFIterator,AveragingIterator,ROHFIterator
 import numpy as np
+
+logger = logging.getLogger(__name__)
 
 class hamiltonian(object):
     name = 'abstract'
@@ -119,7 +122,7 @@ class dft(rhf):
         H = H + 2*J + Vxc
         self.energy += Ej+Exc
         
-        if self.verbose: print(self.energy,E1,Ej,Exc,E0)
+        if self.verbose: logger.info(f"Energy: {self.energy}, E1: {E1}, Ej: {Ej}, Exc: {Exc}, E0: {E0}")
         E,c = geigh(H,self.i1.S)
         self.orbe = E
         self.orbs = c

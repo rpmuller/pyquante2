@@ -7,7 +7,18 @@ from pyquante2.geo.elements import sym2no
 from pyquante2.viewer.trackball_camera import TrackballCamera
 
 try:
-    from pyglet.gl import *
+    from pyglet.gl import (
+        glBegin, glEnd, glVertex3f, glColor3f, glPushMatrix, glPopMatrix,
+        glTranslatef, glRotatef, glMatrixMode, glLoadIdentity, glViewport,
+        glEnable, glDisable, glClear, glNewList, glEndList, glCallList,
+        glLineWidth, glMaterialfv, glLightfv, glLightf,
+        gluNewQuadric, gluQuadricDrawStyle, gluSphere, gluCylinder, gluPerspective, gluLookAt,
+        GL_LINES, GL_LIGHTING, GL_LINE_SMOOTH, GL_DEPTH_TEST, GL_CULL_FACE, GL_PROJECTION,
+        GL_MODELVIEW, GL_COMPILE, GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT,
+        GL_FRONT, GL_DIFFUSE, GL_SHININESS, GL_SPECULAR, GL_LIGHT0, GL_POSITION,
+        GL_CONSTANT_ATTENUATION, GL_LINEAR_ATTENUATION, GLU_LINE, GLU_FILL,
+        GLfloat, Config
+    )
     from pyglet import window
 except ImportError:
     pass

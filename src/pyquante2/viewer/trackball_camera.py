@@ -85,7 +85,10 @@ import math
 import copy
 
 try:
-    from pyglet.gl import *
+    from pyglet.gl import (
+        glMatrixMode, glLoadIdentity, glMultMatrixf, gluLookAt,
+        GL_MODELVIEW, GLfloat
+    )
 except ImportError:
     pass
 

@@ -1,10 +1,13 @@
 """
 utils.py - Simple utilility funtions used in pyquante2.
 """
+import logging
 import numpy as np
 from math import factorial,lgamma
 from itertools import combinations_with_replacement,combinations
 from functools import reduce
+
+logger = logging.getLogger(__name__)
 
 def pairs(it): return combinations_with_replacement(it,2)
 def upairs(it): return combinations(it,2)
@@ -49,21 +52,6 @@ def Fgamma(m,x):
     x = max(x,SMALL)
     return 0.5*pow(x,-m-0.5)*gamm_inc(m+0.5,x)
 
-# def gamm_inc_scipy(a,x):
-#     """
-#     Demonstration on how to replace the gamma calls with scipy.special functions.
-#     By default, pyquante only requires numpy, but this may change as scipy
-#     builds become more stable.
-#     >>> np.isclose(gamm_inc_scipy(0.5,1),1.49365)
-#     True
-#     >>> np.isclose(gamm_inc_scipy(1.5,2),0.6545103)
-#     True
-#     >>> np.isclose(gamm_inc_scipy(2.5,1e-12),0)
-#     True
-#     """
-#     from scipy.special import gamma,gammainc
-#     return gamma(a)*gammainc(a,x)
-    
 def gamm_inc(a,x):
     """
     Incomple gamma function \gamma; computed from NumRec routine gammp.
@@ -100,7 +88,7 @@ def _gser(a,x):
         sum=sum+delt
         if abs(delt) < abs(sum)*EPS: break
     else:
-        print('a too large, ITMAX too small in gser')
+        logger.warning('a too large, ITMAX too small in gser')
     gamser=sum*np.exp(-x+a*np.log(x)-gln)
     return gamser,gln
 
@@ -127,7 +115,7 @@ def _gcf(a,x):
         h=h*delt
         if abs(delt-1.) < EPS: break
     else:
-        print('a too large, ITMAX too small in gcf')
+        logger.warning('a too large, ITMAX too small in gcf')
     gammcf=np.exp(-x+a*np.log(x)-gln)*h
     return gammcf,gln
 
@@ -232,9 +220,6 @@ def colorscale(mag, cmin, cmax):
     red = min((max((4*(x-0.25), 0.)), 1.))
     green = min((max((4*abs(x-0.5)-1., 0.)), 1.))
     return red, green, blue
-
-#Todo: replace with np.isclose
-#def isnear(a,b,tol=1e-6): return abs(a-b) < tol
 
 if __name__ == '__main__':
     import doctest

@@ -4,13 +4,16 @@ only storing the points and the weights, and we will use other data objects to
 store, say, the density, the basis functions, or the various gradients at each
 point.
 """
+import logging
 import numpy as np
 from pyquante2.grid.atomic_grid import atomic_grid
+
+logger = logging.getLogger(__name__)
 
 try:
     from pyquante2.cbecke import becke_reweight_atoms
 except ImportError:
-    print("Couldn't find cython becke routine")
+    logger.debug("Couldn't find cython becke routine, using pure Python")
     from pyquante2.grid.becke import becke_reweight_atoms
 
 

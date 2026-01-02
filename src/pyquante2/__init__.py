@@ -3,7 +3,10 @@ from pyquante2.basis.cgbf import cgbf,sto
 from pyquante2.basis.pgbf import pgbf
 from pyquante2.dft.dft import get_xc
 from pyquante2.geo.molecule import molecule
-from pyquante2.geo.samples import *
+from pyquante2.geo.samples import (
+    h, h2, h2o, oh, he, he_triplet, ne, ar, li, li_p, li_m, lih, co, ch4, c6h6,
+    aspirin, caffeine, hmx, petn, prozac, rdx, taxol, tylenol, viagara, zoloft
+)
 from pyquante2.graphics.vtkplot import vtk_orbs
 from pyquante2.grid.grid import grid
 from pyquante2.ints.one import S,T,V
