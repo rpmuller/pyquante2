@@ -67,7 +67,7 @@ from pyquante2.ints.integrals import onee_integrals, twoe_integrals
 
 try:
     np.set_printoptions(legacy='1.13')
-except:
+except TypeError:
     pass
 
 def gvb(geo,npair=0,basisname='sto3g',maxiter=25,verbose=False,

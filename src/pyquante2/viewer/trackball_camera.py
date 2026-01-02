@@ -86,7 +86,7 @@ import copy
 
 try:
     from pyglet.gl import *
-except:
+except ImportError:
     pass
 
 def glf(x): return (GLfloat * len(x))(*x)

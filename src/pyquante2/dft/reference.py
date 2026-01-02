@@ -3618,7 +3618,7 @@ def parsedata(dataname):
     while True:
         try:
             line = next(f)
-        except:
+        except StopIteration:
             break
         if line.lstrip().startswith('rhoa'):
             rhoa,rhob,sigaa,sigab,sigbb = parseline(line,'xfxfxfxfxf')

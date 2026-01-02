@@ -9,7 +9,7 @@ from pyquante2.grid.atomic_grid import atomic_grid
 
 try:
     from pyquante2.cbecke import becke_reweight_atoms
-except:
+except ImportError:
     print("Couldn't find cython becke routine")
     from pyquante2.grid.becke import becke_reweight_atoms
 

@@ -9,7 +9,7 @@ from pyquante2.viewer.trackball_camera import TrackballCamera
 try:
     from pyglet.gl import *
     from pyglet import window
-except:
+except ImportError:
     pass
 
 

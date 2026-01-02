@@ -3,13 +3,13 @@ General module for integral generation and access.
 """
 try:
     from pyquante2.cints.hgp import ERI
-except:
+except ImportError:
     print("Couldn't find cython int routine")
     from pyquante2.ints.hgp import ERI
 
 try:
     from pyquante2.cints.one import S,T,V
-except:
+except ImportError:
     print("Couldn't find cython int routine")
     from pyquante2.ints.one import S,T,V
 

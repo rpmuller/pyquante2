@@ -1,7 +1,7 @@
 import numpy as np
 try:
     import pylab as pl
-except:
+except ImportError:
     pass
 
 def lineplot_orbs(points,orbs,bfs,doshow=False,

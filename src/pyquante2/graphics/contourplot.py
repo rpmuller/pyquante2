@@ -3,7 +3,7 @@
 import numpy as np
 try:
     import pylab as pl
-except:
+except ImportError:
     pass
 
 def contourplot(plane,atoms,orb,bfs,val=0,npts=50,doshow=False,
