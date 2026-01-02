@@ -4,7 +4,7 @@ build:
 	python -m build -v
 
 test:
-	python -m pytest --doctest-modules --ignore=attic
+	uv run pytest --doctest-modules --ignore=attic
 
 install_test: # not tested yet
 	twine upload --repository testpypi dist/*
