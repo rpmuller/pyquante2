@@ -49,25 +49,25 @@
 
 ---
 
-### 5. Wildcard Imports (Medium Priority)
+### 5. ~~Wildcard Imports~~ (DONE)
 
-- [ ] `src/pyquante2/__init__.py:6` - `from pyquante2.geo.samples import *`
-- [ ] `src/pyquante2/viewer/viewer.py:10` - `from pyglet.gl import *`
-- [ ] `src/pyquante2/viewer/trackball_camera.py:88` - `from pyglet.gl import *`
+- [x] `src/pyquante2/__init__.py:6` - `from pyquante2.geo.samples import *` - already fixed with explicit imports
+- [x] `src/pyquante2/viewer/viewer.py:10` - `from pyglet.gl import *` - replaced with explicit GL imports
+- [x] `src/pyquante2/viewer/trackball_camera.py:88` - `from pyglet.gl import *` - replaced with specific imports
 
-**Fix:** Import specific names or add `__all__` to samples module
+**Fix:** Import specific names or add `__all__` to samples module ✅
 
 ---
 
-### 6. Replace Print Statements with Logging (Medium Priority)
+### 6. ~~Replace Print Statements with Logging~~ (DONE)
 
-- [ ] `src/pyquante2/scf/hamiltonians.py:122` - `print(self.energy,E1,Ej,Exc,E0)`
-- [ ] `src/pyquante2/grid/grid.py:13` - `print("Couldn't find cython becke routine")`
-- [ ] `src/pyquante2/ints/integrals.py:7,13` - `print("Couldn't find cython int routine")`
-- [ ] `src/pyquante2/utils.py:103,130` - `print()` in gamma functions
-- [ ] Multiple instances in `src/pyquante2/scf/mcscf.py`
+- [x] `src/pyquante2/scf/hamiltonians.py:122` - replaced with `logger.info()`
+- [x] `src/pyquante2/grid/grid.py:13` - already fixed with `logger.debug()`
+- [x] `src/pyquante2/ints/integrals.py:7,13` - already fixed with `logger.debug()`
+- [x] `src/pyquante2/utils.py:103,130` - no print statements found (already removed or not present)
+- [x] Multiple instances in `src/pyquante2/scf/mcscf.py` - replaced 16+ print statements with logging
 
-**Fix:**
+**Fix:** ✅ All print statements replaced with logging
 ```python
 import logging
 logger = logging.getLogger(__name__)
@@ -137,8 +137,11 @@ No type hints in any module. Priority files:
 
 - [ ] Update README.md (references Python 2.7, outdated install instructions)
 - [ ] Add module-level docstrings to all modules
+
 - [ ] Add NumPy-style docstrings to public functions
 - [ ] Add `__all__` to `__init__.py`
+
+
 
 ---
 
