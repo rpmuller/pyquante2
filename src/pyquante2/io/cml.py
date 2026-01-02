@@ -268,7 +268,7 @@ def get_records_with_tag(inp,tag):
     Given a filename or an element tree in *inp*, return all records
     matching *tag*
     """
-    if type(inp) == type(''): # Assume inp is a filename
+    if isinstance(inp, str):  # Assume inp is a filename
         inp = read_cml(inp)
     return inp.findall(".//%s" % tag)
 

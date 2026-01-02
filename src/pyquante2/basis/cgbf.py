@@ -22,7 +22,7 @@ class cgbf(object):
     True
     """
     contracted = True
-    def __init__(self,origin=(0,0,0),powers=(0,0,0),exps=[],coefs=[]):
+    def __init__(self,origin=(0,0,0),powers=(0,0,0),exps=None,coefs=None):
         assert len(origin)==3
         assert len(powers)==3
 
@@ -34,12 +34,16 @@ class cgbf(object):
         self.pnorms = array.array('d')
         self.pexps = array.array('d')
 
+        if exps is None:
+            exps = []
+        if coefs is None:
+            coefs = []
+
         for expn,coef in zip(exps,coefs):
             self.add_pgbf(expn,coef,False)
 
         if self.pgbfs:
             self.normalize()
-        return
 
     def __getitem__(self,item): return list(zip(self.coefs,self.pgbfs)).__getitem__(item)
     def __call__(self,*args,**kwargs): return sum(c*p(*args,**kwargs) for c,p in self)

@@ -8,7 +8,7 @@
 | Missing type hints | All modules | Medium |
 | Test coverage gaps | Multiple modules | High |
 | Print statements (should use logging) | 20+ | Medium |
-| Mutable default arguments | 3 | Medium |
+| ~~Mutable default arguments~~ | ~~3~~ | ~~Medium~~ DONE |
 | Documentation gaps | Multiple | Medium |
 | API design inconsistencies | 5 | Low |
 
@@ -30,48 +30,22 @@
 
 ---
 
-### 2. Mutable Default Arguments (Medium Priority)
+### 2. ~~Mutable Default Arguments~~ (DONE)
 
-- [ ] `src/pyquante2/geo/molecule.py:39` - `def __init__(self, atomlist=[], ...)`
-- [ ] `src/pyquante2/basis/cgbf.py:25` - `def __init__(..., exps=[], coefs=[])`
-
-**Fix:**
-```python
-# Instead of:
-def __init__(self, atomlist=[]):
-
-# Use:
-def __init__(self, atomlist=None):
-    if atomlist is None:
-        atomlist = []
-```
+- [x] `src/pyquante2/geo/molecule.py:39` - `atomlist=None`
+- [x] `src/pyquante2/basis/cgbf.py:25` - `exps=None, coefs=None`
 
 ---
 
-### 3. Resource Leak in File I/O (Medium Priority)
+### 3. ~~Resource Leak in File I/O~~ (DONE)
 
-- [ ] `src/pyquante2/geo/molecule.py:214-220` - `read_xyz()` doesn't use context manager
-
-**Fix:**
-```python
-# Instead of:
-def read_xyz(fname):
-    f = open(fname)
-    ...
-
-# Use:
-def read_xyz(fname):
-    with open(fname) as f:
-        ...
-```
+- [x] `src/pyquante2/geo/molecule.py:214-220` - now uses `with open(fname) as f:`
 
 ---
 
-### 4. Deprecated Type Checking (Low Priority)
+### 4. ~~Deprecated Type Checking~~ (DONE)
 
-- [ ] `src/pyquante2/io/cml.py:271` - uses `type(inp) == type('')`
-
-**Fix:** Use `isinstance(inp, str)`
+- [x] `src/pyquante2/io/cml.py:271` - now uses `isinstance(inp, str)`
 
 ---
 

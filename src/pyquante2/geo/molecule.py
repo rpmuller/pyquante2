@@ -36,7 +36,7 @@ class molecule(object):
     >>> h2.nocc()
     1
     """
-    def __init__(self,atomlist=[],**kwargs):
+    def __init__(self,atomlist=None,**kwargs):
         self.atoms = []
         self.charge = int(kwargs.get('charge',settings.molecular_charge))
         self.multiplicity = kwargs.get('multiplicity')
@@ -44,7 +44,7 @@ class molecule(object):
 
         self.units = kwargs.get('units',settings.units).lower()
 
-        if atomlist:
+        if atomlist is not None:
             for atuple in atomlist:
                 self.atoms.append(atom(*atuple,units=self.units))
         if self.multiplicity is None:
@@ -212,11 +212,11 @@ class molecule(object):
         return self.atoms[index].tag(index)
 
 def read_xyz(fname):
-    f = open(fname)
-    line = f.readline()
-    nat = int(line.strip())
-    comment = f.readline()
-    lines = [f.readline() for i in range(nat)]
+    with open(fname) as f:
+        line = f.readline()
+        nat = int(line.strip())
+        comment = f.readline()
+        lines = [f.readline() for i in range(nat)]
     return read_xyz_lines(lines)
 
 def read_xyz_lines(lines,**kwargs):
