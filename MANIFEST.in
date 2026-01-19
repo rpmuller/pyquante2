@@ -1,2 +1,6 @@
 recursive-include src/pyquante2/cints *.c
 recursive-include src/pyquante2/cints *.h
+include LICENSE
+include README.md
+include CLAUDE.md
+include pyproject.toml

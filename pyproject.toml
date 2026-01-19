@@ -4,18 +4,40 @@ build-backend="setuptools.build_meta"
 
 [project]
 name = "pyquante2"
-version = "0.1.0"
+version = "0.2.0"
 description = "Python quantum chemistry routines"
 readme = "README.md"
 requires-python = ">=3.11"
+license = {text = "BSD-3-Clause"}
+authors = [
+    {name = "Rick Muller", email = "rpmuller@gmail.com"}
+]
+keywords = ["quantum-chemistry", "chemistry", "computational-chemistry", "hartree-fock", "dft", "molecular-orbital"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: C",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Physics",
+]
 dependencies = [
     "numpy>=1.20",
 ]
 
 [project.optional-dependencies]
 jupyter = ["ipykernel>=7.1.0"]
-dev = ["pytest", "matplotlib", "build", "ipykernel"]
+dev = ["pytest", "matplotlib", "build", "ipykernel", "twine"]
 test = ["pytest", "matplotlib", "build"]
+
+[project.urls]
+Homepage = "https://github.com/rpmuller/pyquante2"
+Repository = "https://github.com/rpmuller/pyquante2"
+"Bug Tracker" = "https://github.com/rpmuller/pyquante2/issues"
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

@@ -1,4 +1,6 @@
 build
+dist
+.venv
 make.out
 profile.out
 .DS_Store
@@ -12,3 +14,5 @@ prof
 docs/_build
 cython/cbecke.c
 pyquante2.egg-info/
+.pypirc
+test_install_env/
