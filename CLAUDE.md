@@ -6,6 +6,8 @@ This file provides guidance for Claude Code when working with the pyquante2 code
 
 PyQuante2 is a Python quantum chemistry suite for developing and testing quantum chemistry methods. It includes implementations of Hartree-Fock (RHF, UHF), DFT, and MP2, with optional Cython extensions for performance-critical routines.
 
+**Status:** Published on PyPI as `pyquante2` (current version: 0.2.0)
+
 ## Project Structure
 
 ```
@@ -24,7 +26,12 @@ pyquante2/
 │   └── viewer/          # Molecular viewer
 ├── tests/               # Test suite
 ├── attic/               # Archived/deprecated code
-└── docs/                # Documentation
+├── docs/                # Documentation
+├── CHANGELOG.md         # Release history
+├── VERSION_MANAGEMENT.md # Version bump checklist
+├── FUTURE_TASKS.md      # Planned improvements
+├── CODE_REVIEW.md       # Code quality findings
+└── TODO.md              # Original task list
 ```
 
 ## Development Commands
@@ -42,8 +49,14 @@ uv run pytest
 # Run tests with doctests
 uv run pytest --doctest-modules --ignore=attic
 
-# Build package
-make build
+# Build package for PyPI
+make clean          # Clean old builds
+make build          # Build wheel + source distribution
+uv run twine check dist/*  # Verify package
+
+# Publish to PyPI (see VERSION_MANAGEMENT.md first!)
+make install_test   # Upload to TestPyPI
+make install        # Upload to PyPI
 ```
 
 ## Testing
@@ -72,7 +85,7 @@ make build
 ## Dependencies
 
 - Core: numpy, ipykernel
-- Dev/Test: pytest, matplotlib, build
+- Dev/Test: pytest, matplotlib, build, twine
 - Build: setuptools, Cython (for C extensions)
 
 ## Notes
@@ -80,3 +93,6 @@ make build
 - Cython extensions in `src/pyquante2/cints/` are optional but improve performance
 - The `attic/` directory contains archived code - ignore when searching
 - Uses `uv` for package management (uv.lock present)
+- **Before version bumps:** Review `VERSION_MANAGEMENT.md` checklist
+- **For future tasks:** See `FUTURE_TASKS.md`
+- **PyPI package:** Available at https://pypi.org/project/pyquante2/
